@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -15,7 +14,7 @@ const Chat = () => {
       
       <main className="flex-grow py-8 px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="mb-8">
+          <div className="mb-8 hidden sm:block">
             <h1 className="text-3xl font-serif font-bold text-lawxpert-navy dark:text-white">
               LawXpert Legal Assistant
             </h1>
