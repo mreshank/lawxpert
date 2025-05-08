@@ -124,7 +124,7 @@ const ChatInterface = ({ compact = false }: ChatInterfaceProps) => {
         )}
       
         <TabsContent value="chat" className="flex-1 flex flex-col m-0 overflow-hidden">
-          <div className={`chat-messages bg-gray-50 dark:bg-gray-800/20 overflow-y-auto flex-1 p-4 ${compact ? 'h-[190px]' : ''}`}>
+          <div className={`chat-messages bg-gray-50 dark:bg-gray-800/20 overflow-y-auto flex-1 p-4 ${compact ? 'h-[250px]' : ''}`}>
             {compact ? (
               // Show only last 3 messages in compact mode
               messages.slice(-3).map((message, index) => (
@@ -161,7 +161,7 @@ const ChatInterface = ({ compact = false }: ChatInterfaceProps) => {
             <div ref={messagesEndRef} />
           </div>
           
-          <form onSubmit={handleSendMessage} className="chat-input-container bg-white border-t p-4">
+          <form onSubmit={handleSendMessage} className={`chat-input-container bg-white border-t ${compact ? 'p-2' : 'p-4'}`}>
             <div className="flex space-x-2">
               {!compact && (
                 <Button 
@@ -180,17 +180,17 @@ const ChatInterface = ({ compact = false }: ChatInterfaceProps) => {
                 onChange={(e) => setInputMessage(e.target.value)}
                 placeholder={`Ask a legal question...`}
                 disabled={isLoading}
-                className="flex-1"
+                className={`flex-1 ${compact ? 'h-9 text-sm' : ''}`}
               />
               
               <Button 
                 type="submit"
                 variant="default" 
-                size="icon"
+                size={compact ? "sm" : "icon"}
                 disabled={!inputMessage.trim() || isLoading}
                 className="bg-blue-600 hover:bg-blue-700"
               >
-                <Send size={18} />
+                <Send size={compact ? 16 : 18} />
               </Button>
             </div>
             {!compact && (

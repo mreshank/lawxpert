@@ -5,8 +5,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DashboardStats from "@/components/DashboardStats";
 import ChatInterface from "@/components/ChatInterface";
+import LegalResourcesWidget from "@/components/LegalResourcesWidget";
 import { Link } from "react-router-dom";
-import { FileText, MessageSquare, Users, Calendar, Briefcase, FileBarChart } from "lucide-react";
+import { FileText, MessageSquare, Users, Calendar, Briefcase, FileBarChart, BookOpen } from "lucide-react";
 
 const Dashboard = () => {
   const [activeWidget, setActiveWidget] = useState<string | null>(null);
@@ -70,7 +71,7 @@ const Dashboard = () => {
               </Card>
               
               {/* AI Assistant Widget */}
-              <Card>
+              <Card className="mb-6">
                 <CardHeader className="flex flex-row items-center justify-between">
                   <CardTitle>AI Legal Assistant</CardTitle>
                   <Link to="/chat" className="text-sm text-blue-600 hover:underline">View full chat</Link>
@@ -79,6 +80,13 @@ const Dashboard = () => {
                   <div className="h-[350px] overflow-hidden">
                     <ChatInterface compact={true} />
                   </div>
+                </CardContent>
+              </Card>
+              
+              {/* Legal Documentation Widget */}
+              <Card>
+                <CardContent className="p-0">
+                  <LegalResourcesWidget />
                 </CardContent>
               </Card>
             </div>
@@ -209,9 +217,9 @@ const Dashboard = () => {
                       <Briefcase className="h-6 w-6 mb-2" />
                       <span className="text-sm">Find Lawyer</span>
                     </Link>
-                    <Link to="#" className="bg-gray-50 dark:bg-gray-800 p-3 rounded-md flex flex-col items-center justify-center text-center hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                      <FileBarChart className="h-6 w-6 mb-2" />
-                      <span className="text-sm">Case Analysis</span>
+                    <Link to="/legal-documentation" className="bg-gray-50 dark:bg-gray-800 p-3 rounded-md flex flex-col items-center justify-center text-center hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                      <BookOpen className="h-6 w-6 mb-2" />
+                      <span className="text-sm">Legal Resources</span>
                     </Link>
                   </div>
                 </CardContent>

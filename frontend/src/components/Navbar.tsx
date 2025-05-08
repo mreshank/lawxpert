@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useLanguage } from "@/contexts/LanguageContext";
+import translate from "@/utils/translations";
 
 // SVG Icons
 const UserIcon = () => (
@@ -49,6 +51,16 @@ const ScaleIcon = () => (
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { language, cycleLanguage } = useLanguage();
+  
+  const getLanguageLabel = () => {
+    switch (language) {
+      case 'en': return 'EN';
+      case 'hi': return 'हि';
+      case 'hinglish': return 'हE';
+    }
+  };
+
   // This would come from auth context in the real implementation
 
   return (
@@ -66,21 +78,24 @@ const Navbar = () => {
             </Link>
             
             {/* Desktop Navigation Links */}
-            <div className="hidden md:flex ml-10 space-x-8">
+            <div className="hidden md:flex ml-10 space-x-8--x space-x-2">
               <Link to="/" className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600">
-                Home
+                {translate('home', language)}
               </Link>
               <Link to="/chat" className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600">
-                AI Assistant
+                {translate('aiAssistant', language)}
               </Link>
               <Link to="/lawyers" className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600">
-                Find Lawyers
+                {translate('findLawyers', language)}
               </Link>
               <Link to="/documents" className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600">
-                Documents
+                {translate('documents', language)}
+              </Link>
+              <Link to="/legal-documentation" className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600">
+                {translate('legalResources', language)}
               </Link>
               <Link to="/dashboard" className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600">
-                Dashboard
+                {translate('dashboard', language)}
               </Link>
             </div>
           </div>
@@ -91,9 +106,15 @@ const Navbar = () => {
               <SunIcon />
             </Button>
             
-            <Button variant="ghost" size="icon" className="text-gray-600">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="text-gray-600" 
+              onClick={cycleLanguage}
+              title={`Switch to ${language === 'en' ? 'Hindi' : language === 'hi' ? 'Hinglish' : 'English'}`}
+            >
               <div className="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center">
-                <span className="text-sm">🌐</span>
+                <span className="text-sm font-medium">{getLanguageLabel()}</span>
               </div>
             </Button>
 
@@ -106,14 +127,14 @@ const Navbar = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem>
-                    <Link to="/profile" className="w-full">Profile</Link>
+                    <Link to="/profile" className="w-full">{translate('profile', language)}</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link to="/admin" className="w-full">Admin Dashboard</Link>
+                    <Link to="/admin" className="w-full">{translate('adminDashboard', language)}</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <button className="w-full text-left" onClick={() => setIsLoggedIn(false)}>
-                      Log Out
+                      {translate('logout', language)}
                     </button>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -121,10 +142,10 @@ const Navbar = () => {
             ) : (
               <div className="flex items-center space-x-2">
                 <Button variant="outline" asChild className="border-gray-300">
-                  <Link to="/login">Login</Link>
+                  <Link to="/login">{translate('login', language)}</Link>
                 </Button>
                 <Button className="bg-blue-600 hover:bg-blue-700" asChild>
-                  <Link to="/register">Sign Up</Link>
+                  <Link to="/register">{translate('signup', language)}</Link>
                 </Button>
               </div>
             )}
@@ -154,35 +175,42 @@ const Navbar = () => {
             className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
             onClick={() => setIsOpen(false)}
           >
-            Home
+            {translate('home', language)}
           </Link>
           <Link
             to="/chat"
             className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
             onClick={() => setIsOpen(false)}
           >
-            AI Assistant
+            {translate('aiAssistant', language)}
           </Link>
           <Link
             to="/lawyers"
             className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
             onClick={() => setIsOpen(false)}
           >
-            Find Lawyers
+            {translate('findLawyers', language)}
           </Link>
           <Link
             to="/documents"
             className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
             onClick={() => setIsOpen(false)}
           >
-            Documents
+            {translate('documents', language)}
+          </Link>
+          <Link
+            to="/legal-documentation"
+            className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+            onClick={() => setIsOpen(false)}
+          >
+            {translate('legalResources', language)}
           </Link>
           <Link
             to="/dashboard"
             className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
             onClick={() => setIsOpen(false)}
           >
-            Dashboard
+            {translate('dashboard', language)}
           </Link>
 
           {isLoggedIn ? (
@@ -192,14 +220,14 @@ const Navbar = () => {
                 className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                 onClick={() => setIsOpen(false)}
               >
-                Profile
+                {translate('profile', language)}
               </Link>
               <Link
                 to="/admin"
                 className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                 onClick={() => setIsOpen(false)}
               >
-                Admin Dashboard
+                {translate('adminDashboard', language)}
               </Link>
               <button
                 className="block w-full text-left px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
@@ -208,7 +236,7 @@ const Navbar = () => {
                   setIsOpen(false);
                 }}
               >
-                Log Out
+                {translate('logout', language)}
               </button>
             </>
           ) : (
@@ -218,14 +246,14 @@ const Navbar = () => {
                 className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                 onClick={() => setIsOpen(false)}
               >
-                Login
+                {translate('login', language)}
               </Link>
               <Link
                 to="/register"
                 className="block px-4 py-2 text-base font-medium text-blue-600 bg-gray-50 hover:bg-gray-100"
                 onClick={() => setIsOpen(false)}
               >
-                Sign Up
+                {translate('signup', language)}
               </Link>
             </>
           )}
