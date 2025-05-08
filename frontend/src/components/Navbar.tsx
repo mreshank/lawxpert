@@ -79,6 +79,9 @@ const Navbar = () => {
               <Link to="/documents" className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600">
                 Documents
               </Link>
+              <Link to="/dashboard" className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600">
+                Dashboard
+              </Link>
             </div>
           </div>
 
@@ -173,6 +176,13 @@ const Navbar = () => {
             onClick={() => setIsOpen(false)}
           >
             Documents
+          </Link>
+          <Link
+            to="/dashboard"
+            className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+            onClick={() => setIsOpen(false)}
+          >
+            Dashboard
           </Link>
 
           {isLoggedIn ? (

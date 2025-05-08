@@ -13,6 +13,7 @@ import Register from "./pages/Register";
 import Documents from "./pages/Documents";
 import NotFound from "./pages/NotFound";
 import LawyerMarketplace from "./pages/LawyerMarketplace";
+import Dashboard from "./pages/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/documents" element={<Documents />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

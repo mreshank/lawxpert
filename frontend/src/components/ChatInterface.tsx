@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,7 +17,11 @@ const initialChatHistory: ChatMessageType[] = [
   },
 ];
 
-const ChatInterface = () => {
+interface ChatInterfaceProps {
+  compact?: boolean;
+}
+
+const ChatInterface = ({ compact = false }: ChatInterfaceProps) => {
   const [messages, setMessages] = useState<ChatMessageType[]>(initialChatHistory);
   const [inputMessage, setInputMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -86,48 +89,64 @@ const ChatInterface = () => {
   };
 
   return (
-    <div className="chat-container bg-white dark:bg-gray-900 border rounded-lg shadow-lg">
+    <div className="chat-container bg-white dark:bg-gray-900 border rounded-lg shadow-lg h-full">
       <Tabs defaultValue="chat" className="w-full h-full flex flex-col">
-        <div className="border-b px-4 py-2 bg-white">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="bg-blue-600 w-8 h-8 rounded flex items-center justify-center text-white font-bold">
-                LX
+        {!compact && (
+          <div className="border-b px-4 py-2 bg-white">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <div className="bg-blue-600 w-8 h-8 rounded flex items-center justify-center text-white font-bold">
+                  LX
+                </div>
+                <h3 className="font-medium text-gray-800">LawXpert AI Assistant</h3>
               </div>
-              <h3 className="font-medium text-gray-800">LawXpert AI Assistant</h3>
-            </div>
-            
-            <div className="flex items-center">
-              <TabsList className="grid w-[200px] grid-cols-2">
-                <TabsTrigger value="chat">Chat</TabsTrigger>
-                <TabsTrigger value="documents">Documents</TabsTrigger>
-              </TabsList>
               
-              <div className="ml-4">
-                <Select value={language} onValueChange={setLanguage}>
-                  <SelectTrigger className="w-[120px]">
-                    <SelectValue placeholder="Language" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="english">English</SelectItem>
-                    <SelectItem value="hindi">हिन्दी (Hindi)</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="flex items-center">
+                <TabsList className="grid w-[200px] grid-cols-2">
+                  <TabsTrigger value="chat">Chat</TabsTrigger>
+                  <TabsTrigger value="documents">Documents</TabsTrigger>
+                </TabsList>
+                
+                <div className="ml-4">
+                  <Select value={language} onValueChange={setLanguage}>
+                    <SelectTrigger className="w-[120px]">
+                      <SelectValue placeholder="Language" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="english">English</SelectItem>
+                      <SelectItem value="hindi">हिन्दी (Hindi)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       
         <TabsContent value="chat" className="flex-1 flex flex-col m-0 overflow-hidden">
-          <div className="chat-messages bg-gray-50 dark:bg-gray-800/20 overflow-y-auto flex-1 p-4">
-            {messages.map((message, index) => (
-              <ChatMessage 
-                key={index}
-                content={message.content}
-                role={message.role}
-                timestamp={message.timestamp}
-              />
-            ))}
+          <div className={`chat-messages bg-gray-50 dark:bg-gray-800/20 overflow-y-auto flex-1 p-4 ${compact ? 'h-[190px]' : ''}`}>
+            {compact ? (
+              // Show only last 3 messages in compact mode
+              messages.slice(-3).map((message, index) => (
+                <ChatMessage 
+                  key={index}
+                  content={message.content}
+                  role={message.role}
+                  timestamp={message.timestamp}
+                  compact={compact}
+                />
+              ))
+            ) : (
+              // Show all messages in full mode
+              messages.map((message, index) => (
+                <ChatMessage 
+                  key={index}
+                  content={message.content}
+                  role={message.role}
+                  timestamp={message.timestamp}
+                />
+              ))
+            )}
             
             {isLoading && (
               <div className="self-start bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg rounded-tl-none p-4 max-w-[85%] md:max-w-[70%] ml-4 mt-4">
@@ -144,20 +163,22 @@ const ChatInterface = () => {
           
           <form onSubmit={handleSendMessage} className="chat-input-container bg-white border-t p-4">
             <div className="flex space-x-2">
-              <Button 
-                type="button"
-                variant="outline" 
-                size="icon"
-                onClick={toggleVoiceInput}
-                className={isListening ? "bg-red-100 text-red-500 border-red-200" : ""}
-              >
-                {isListening ? <MicOff size={18} /> : <Mic size={18} />}
-              </Button>
+              {!compact && (
+                <Button 
+                  type="button"
+                  variant="outline" 
+                  size="icon"
+                  onClick={toggleVoiceInput}
+                  className={isListening ? "bg-red-100 text-red-500 border-red-200" : ""}
+                >
+                  {isListening ? <MicOff size={18} /> : <Mic size={18} />}
+                </Button>
+              )}
               
               <Input
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
-                placeholder={`Type your legal query ${language === 'hindi' ? 'हिंदी में' : 'in English'}...`}
+                placeholder={`Ask a legal question...`}
                 disabled={isLoading}
                 className="flex-1"
               />
@@ -172,9 +193,11 @@ const ChatInterface = () => {
                 <Send size={18} />
               </Button>
             </div>
-            <div className="mt-2 text-xs text-gray-500 dark:text-gray-400 text-center">
-              This is not a substitute for professional legal advice. Consult a lawyer for legal matters.
-            </div>
+            {!compact && (
+              <div className="mt-2 text-xs text-gray-500 dark:text-gray-400 text-center">
+                This is not a substitute for professional legal advice. Consult a lawyer for legal matters.
+              </div>
+            )}
           </form>
         </TabsContent>
         
