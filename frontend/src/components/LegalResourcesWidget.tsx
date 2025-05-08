@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BookOpen, FileText, ArrowRight, HelpCircle, Search } from "lucide-react";
 import { Link } from "react-router-dom";
+import TranslatedText from "@/components/TranslatedText";
+import { useTranslation } from "@/hooks/useTranslation";
 
 // Sample popular FAQs
 const POPULAR_FAQS = [
@@ -73,28 +75,37 @@ const POPULAR_CATEGORIES = [
 ];
 
 const LegalResourcesWidget = () => {
+  const { t } = useTranslation();
+  
   return (
     <Card className="h-full">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <div>
           <CardTitle className="text-lg flex items-center">
             <BookOpen className="mr-2 h-5 w-5" />
-            Legal Resources
+            <TranslatedText textKey="legalResources" />
           </CardTitle>
           <CardDescription>
-            Find legal guides, FAQs, and documentation
+            <TranslatedText 
+              textKey="search" 
+              as="span" 
+            /> <TranslatedText textKey="legalResources" as="span" className="lowercase" />
           </CardDescription>
         </div>
         <Link to="/legal-documentation" className="text-sm text-blue-600 hover:underline whitespace-nowrap">
-          View All
+          <TranslatedText textKey="viewAll" />
         </Link>
       </CardHeader>
       <CardContent className="pb-2">
         <Tabs defaultValue="faqs" className="w-full">
           <TabsList className="grid w-full grid-cols-3 mb-4">
             <TabsTrigger value="faqs">FAQs</TabsTrigger>
-            <TabsTrigger value="guides">Guides</TabsTrigger>
-            <TabsTrigger value="categories">Categories</TabsTrigger>
+            <TabsTrigger value="guides">
+              <TranslatedText textKey="search" as="span" />
+            </TabsTrigger>
+            <TabsTrigger value="categories">
+              <TranslatedText textKey="categories" />
+            </TabsTrigger>
           </TabsList>
           
           <TabsContent value="faqs" className="m-0">
@@ -105,7 +116,9 @@ const LegalResourcesWidget = () => {
                     <p className="font-medium text-sm line-clamp-2">{faq.question}</p>
                     <div className="flex items-center justify-between mt-1">
                       <Badge variant="outline" className="text-xs">{faq.category}</Badge>
-                      <span className="text-xs text-gray-500">{faq.views.toLocaleString()} views</span>
+                      <span className="text-xs text-gray-500">
+                        {faq.views.toLocaleString()} <TranslatedText textKey="views" as="span" />
+                      </span>
                     </div>
                   </Link>
                 </li>
@@ -124,7 +137,9 @@ const LegalResourcesWidget = () => {
                     </div>
                     <div className="flex items-center justify-between mt-2">
                       <Badge variant="outline" className="text-xs">{guide.category}</Badge>
-                      <Badge variant="secondary" className="text-xs capitalize">{guide.level}</Badge>
+                      <Badge variant="secondary" className="text-xs capitalize">
+                        <TranslatedText textKey={guide.level as any} />
+                      </Badge>
                     </div>
                   </Link>
                 </li>
@@ -141,7 +156,9 @@ const LegalResourcesWidget = () => {
                   className="bg-gray-50 dark:bg-gray-800 p-3 rounded-md flex flex-col items-center justify-center text-center hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                 >
                   <span className="font-medium text-sm">{category.name}</span>
-                  <span className="text-xs text-gray-500 mt-1">{category.count} articles</span>
+                  <span className="text-xs text-gray-500 mt-1">
+                    {category.count} <TranslatedText textKey="views" as="span" />
+                  </span>
                 </Link>
               ))}
             </div>
@@ -152,13 +169,13 @@ const LegalResourcesWidget = () => {
         <div className="flex items-center text-blue-600 text-sm">
           <HelpCircle className="h-4 w-4 mr-1" />
           <Link to="/chat" className="hover:underline">
-            Ask Legal Questions
+            <TranslatedText textKey="askQuestion" />
           </Link>
         </div>
         <div className="flex items-center text-blue-600 text-sm">
           <Search className="h-4 w-4 mr-1" />
           <Link to="/legal-documentation" className="hover:underline">
-            Search Documentation
+            <TranslatedText textKey="search" /> <TranslatedText textKey="documents" as="span" className="lowercase" />
           </Link>
         </div>
       </CardFooter>

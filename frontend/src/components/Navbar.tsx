@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useLanguage } from "@/contexts/LanguageContext";
-import translate from "@/utils/translations";
+import useTranslation from "@/hooks/useTranslation";
+import TranslatedText from "@/components/TranslatedText";
 
 // SVG Icons
 const UserIcon = () => (
@@ -52,6 +53,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { language, cycleLanguage } = useLanguage();
+  const { t } = useTranslation();
   
   const getLanguageLabel = () => {
     switch (language) {
@@ -80,22 +82,22 @@ const Navbar = () => {
             {/* Desktop Navigation Links */}
             <div className="hidden md:flex ml-10 space-x-8--x space-x-2">
               <Link to="/" className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600">
-                {translate('home', language)}
+                <TranslatedText textKey="home" />
               </Link>
               <Link to="/chat" className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600">
-                {translate('aiAssistant', language)}
+                <TranslatedText textKey="aiAssistant" />
               </Link>
               <Link to="/lawyers" className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600">
-                {translate('findLawyers', language)}
+                <TranslatedText textKey="findLawyers" />
               </Link>
               <Link to="/documents" className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600">
-                {translate('documents', language)}
+                <TranslatedText textKey="documents" />
               </Link>
               <Link to="/legal-documentation" className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600">
-                {translate('legalResources', language)}
+                <TranslatedText textKey="legalResources" />
               </Link>
               <Link to="/dashboard" className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600">
-                {translate('dashboard', language)}
+                <TranslatedText textKey="dashboard" />
               </Link>
             </div>
           </div>
@@ -127,14 +129,18 @@ const Navbar = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem>
-                    <Link to="/profile" className="w-full">{translate('profile', language)}</Link>
+                    <Link to="/profile" className="w-full">
+                      <TranslatedText textKey="profile" />
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link to="/admin" className="w-full">{translate('adminDashboard', language)}</Link>
+                    <Link to="/admin" className="w-full">
+                      <TranslatedText textKey="adminDashboard" />
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <button className="w-full text-left" onClick={() => setIsLoggedIn(false)}>
-                      {translate('logout', language)}
+                      <TranslatedText textKey="logout" />
                     </button>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -142,10 +148,14 @@ const Navbar = () => {
             ) : (
               <div className="flex items-center space-x-2">
                 <Button variant="outline" asChild className="border-gray-300">
-                  <Link to="/login">{translate('login', language)}</Link>
+                  <Link to="/login">
+                    <TranslatedText textKey="login" />
+                  </Link>
                 </Button>
                 <Button className="bg-blue-600 hover:bg-blue-700" asChild>
-                  <Link to="/register">{translate('signup', language)}</Link>
+                  <Link to="/register">
+                    <TranslatedText textKey="signup" />
+                  </Link>
                 </Button>
               </div>
             )}
@@ -175,42 +185,42 @@ const Navbar = () => {
             className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
             onClick={() => setIsOpen(false)}
           >
-            {translate('home', language)}
+            <TranslatedText textKey="home" />
           </Link>
           <Link
             to="/chat"
             className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
             onClick={() => setIsOpen(false)}
           >
-            {translate('aiAssistant', language)}
+            <TranslatedText textKey="aiAssistant" />
           </Link>
           <Link
             to="/lawyers"
             className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
             onClick={() => setIsOpen(false)}
           >
-            {translate('findLawyers', language)}
+            <TranslatedText textKey="findLawyers" />
           </Link>
           <Link
             to="/documents"
             className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
             onClick={() => setIsOpen(false)}
           >
-            {translate('documents', language)}
+            <TranslatedText textKey="documents" />
           </Link>
           <Link
             to="/legal-documentation"
             className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
             onClick={() => setIsOpen(false)}
           >
-            {translate('legalResources', language)}
+            <TranslatedText textKey="legalResources" />
           </Link>
           <Link
             to="/dashboard"
             className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
             onClick={() => setIsOpen(false)}
           >
-            {translate('dashboard', language)}
+            <TranslatedText textKey="dashboard" />
           </Link>
 
           {isLoggedIn ? (
@@ -220,14 +230,14 @@ const Navbar = () => {
                 className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                 onClick={() => setIsOpen(false)}
               >
-                {translate('profile', language)}
+                <TranslatedText textKey="profile" />
               </Link>
               <Link
                 to="/admin"
                 className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                 onClick={() => setIsOpen(false)}
               >
-                {translate('adminDashboard', language)}
+                <TranslatedText textKey="adminDashboard" />
               </Link>
               <button
                 className="block w-full text-left px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
@@ -236,7 +246,7 @@ const Navbar = () => {
                   setIsOpen(false);
                 }}
               >
-                {translate('logout', language)}
+                <TranslatedText textKey="logout" />
               </button>
             </>
           ) : (
@@ -246,14 +256,14 @@ const Navbar = () => {
                 className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                 onClick={() => setIsOpen(false)}
               >
-                {translate('login', language)}
+                <TranslatedText textKey="login" />
               </Link>
               <Link
                 to="/register"
                 className="block px-4 py-2 text-base font-medium text-blue-600 bg-gray-50 hover:bg-gray-100"
                 onClick={() => setIsOpen(false)}
               >
-                {translate('signup', language)}
+                <TranslatedText textKey="signup" />
               </Link>
             </>
           )}
