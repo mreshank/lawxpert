@@ -95,7 +95,7 @@ const ChatInterface = ({ compact = false }: ChatInterfaceProps) => {
   
   // Auto-scroll to bottom on new messages
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [messages]);
 
   // Check if the API key is configured in the environment
