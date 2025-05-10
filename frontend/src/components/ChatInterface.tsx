@@ -326,8 +326,9 @@ const ChatInterface = ({ compact = false }: ChatInterfaceProps) => {
                   LawXpert AI Assistant
                 </h3>
               </div>
+              <div className="max-md:flex md:hidden flex-1" />
 
-              <div className="flex items-center">
+              <div className="flex items-center self-end">
                 <TabsList className="grid w-[200px] grid-cols-2">
                   <TabsTrigger value="chat">Chat</TabsTrigger>
                   <TabsTrigger value="documents">Documents</TabsTrigger>
