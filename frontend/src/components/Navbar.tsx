@@ -1,21 +1,46 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useLanguage } from "@/contexts/LanguageContext";
 import useTranslation from "@/hooks/useTranslation";
 import TranslatedText from "@/components/TranslatedText";
 
 // SVG Icons
 const UserIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
     <circle cx="12" cy="7" r="4"></circle>
   </svg>
 );
 
 const SunIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <circle cx="12" cy="12" r="5"></circle>
     <line x1="12" y1="1" x2="12" y2="3"></line>
     <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -29,7 +54,17 @@ const SunIcon = () => (
 );
 
 const MenuIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <line x1="3" y1="12" x2="21" y2="12"></line>
     <line x1="3" y1="6" x2="21" y2="6"></line>
     <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -37,14 +72,34 @@ const MenuIcon = () => (
 );
 
 const XIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <line x1="18" y1="6" x2="6" y2="18"></line>
     <line x1="6" y1="6" x2="18" y2="18"></line>
   </svg>
 );
 
 const ScaleIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="M12 3v18M8 7l4-4 4 4M8 21l4-4 4 4M3 9h18M7 13l-4-4 4-4M21 13l-4-4 4-4"></path>
   </svg>
 );
@@ -54,22 +109,25 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { language, cycleLanguage } = useLanguage();
   const { t } = useTranslation();
-  
+
   const getLanguageLabel = () => {
     switch (language) {
-      case 'en': return 'EN';
-      case 'hi': return 'हि';
-      case 'hinglish': return 'हE';
+      case "en":
+        return "EN";
+      case "hi":
+        return "हि";
+      case "hinglish":
+        return "हE";
     }
   };
 
   // This would come from auth context in the real implementation
 
   return (
-    <nav className="bg-white shadow-sm border-b">
+    <nav className="bg-white shadow-sm border-b fixed--x w-full z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          <div className="flex items-center">
+          <div className="flex items-center flex-1">
             <Link to="/" className="flex items-center">
               <div className="bg-blue-600 w-10 h-10 rounded flex items-center justify-center text-white font-bold mr-2">
                 <ScaleIcon />
@@ -78,45 +136,71 @@ const Navbar = () => {
                 LegalConnect
               </span>
             </Link>
-            
+
             {/* Desktop Navigation Links */}
-            <div className="hidden md:flex ml-10 space-x-8--x space-x-2">
-              <Link to="/" className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600">
+            <div className="max-md:hidden md:flex ml-10 space-x-4 flex-1">
+              <Link
+                to="/"
+                className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
+              >
                 <TranslatedText textKey="home" />
               </Link>
-              <Link to="/chat" className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600">
+              <Link
+                to="/chat"
+                className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
+              >
                 <TranslatedText textKey="aiAssistant" />
               </Link>
-              <Link to="/lawyers" className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600">
+              <Link
+                to="/lawyers"
+                className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
+              >
                 <TranslatedText textKey="findLawyers" />
               </Link>
-              <Link to="/documents" className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600">
+              <Link
+                to="/documents"
+                className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
+              >
                 <TranslatedText textKey="documents" />
               </Link>
-              <Link to="/legal-documentation" className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600">
+              <Link
+                to="/legal-documentation"
+                className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
+              >
                 <TranslatedText textKey="legalResources" />
               </Link>
-              <Link to="/dashboard" className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600">
+              <Link
+                to="/dashboard"
+                className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
+              >
                 <TranslatedText textKey="dashboard" />
               </Link>
             </div>
           </div>
 
           {/* Desktop Right Side */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="max-md:hidden md:flex items-center space-x-4">
             <Button variant="ghost" size="icon" className="text-gray-600">
               <SunIcon />
             </Button>
-            
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="text-gray-600" 
+
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-gray-600"
               onClick={cycleLanguage}
-              title={`Switch to ${language === 'en' ? 'Hindi' : language === 'hi' ? 'Hinglish' : 'English'}`}
+              title={`Switch to ${
+                language === "en"
+                  ? "Hindi"
+                  : language === "hi"
+                  ? "Hinglish"
+                  : "English"
+              }`}
             >
               <div className="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center">
-                <span className="text-sm font-medium">{getLanguageLabel()}</span>
+                <span className="text-sm font-medium">
+                  {getLanguageLabel()}
+                </span>
               </div>
             </Button>
 
@@ -139,7 +223,10 @@ const Navbar = () => {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <button className="w-full text-left" onClick={() => setIsLoggedIn(false)}>
+                    <button
+                      className="w-full text-left"
+                      onClick={() => setIsLoggedIn(false)}
+                    >
                       <TranslatedText textKey="logout" />
                     </button>
                   </DropdownMenuItem>
@@ -167,19 +254,19 @@ const Navbar = () => {
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-800 hover:bg-gray-100"
             >
-              {isOpen ? (
-                <XIcon />
-              ) : (
-                <MenuIcon />
-              )}
+              {isOpen ? <XIcon /> : <MenuIcon />}
             </button>
           </div>
         </div>
       </div>
 
       {/* Mobile menu */}
-      <div className={`${isOpen ? "block" : "hidden"} md:hidden bg-white shadow-lg`}>
-        <div className="pt-2 pb-4 space-y-1">
+      <div
+        className={`${
+          isOpen ? "block" : "hidden"
+        } md:hidden bg-white shadow-lg relative`}
+      >
+        <div className="pt-2 pb-4 space-y-1--x absolute top-0 left-0 w-full bg-white/50 backdrop-blur-md shadow-lg">
           <Link
             to="/"
             className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
@@ -260,7 +347,7 @@ const Navbar = () => {
               </Link>
               <Link
                 to="/register"
-                className="block px-4 py-2 text-base font-medium text-blue-600 bg-gray-50 hover:bg-gray-100"
+                className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                 onClick={() => setIsOpen(false)}
               >
                 <TranslatedText textKey="signup" />
@@ -268,6 +355,10 @@ const Navbar = () => {
             </>
           )}
         </div>
+        <div
+          className="absolute top-0 left-0 w-full h-full bg-black/50 backdrop-blur-md"
+          onClick={() => setIsOpen(false)}
+        />
       </div>
     </nav>
   );
