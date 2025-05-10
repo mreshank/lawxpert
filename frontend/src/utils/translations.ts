@@ -133,6 +133,46 @@ export type TranslationKey =
   | 'detectLanguage'
   | 'manuallyTranslate'
   | 'translate'
+  
+  // Footer component
+  | 'footer_about'
+  | 'footer_resources'
+  | 'footer_faq'
+  | 'footer_glossary'
+  | 'footer_contact'
+  | 'footer_legal'
+  | 'footer_privacy'
+  | 'footer_terms'
+  | 'footer_disclaimer'
+  | 'footer_copyright'
+  | 'footer_disclaimer_text'
+  
+  // Login Form
+  | 'login_title'
+  | 'login_description'
+  | 'login_email'
+  | 'login_emailPlaceholder'
+  | 'login_password'
+  | 'login_forgotPassword'
+  | 'login_button'
+  | 'login_signing'
+  | 'login_noAccount'
+  | 'login_success'
+  | 'login_error'
+  
+  // Chat Interface
+  | 'chat_title'
+  | 'chat_tab'
+  | 'chat_documents_tab'
+  | 'chat_language'
+  | 'chat_inputPlaceholder'
+  | 'chat_disclaimer'
+  | 'chat_welcomeMessage'
+  | 'chat_documentsTitle'
+  | 'chat_documentGenerate'
+  | 'chat_documentDescription'
+  | 'chat_voiceOn'
+  | 'chat_voiceOff'
   ;
 
 const translations: Record<TranslationKey, Record<Language, string>> = {
@@ -722,6 +762,182 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
     en: 'Translate',
     hi: 'अनुवाद करें',
     hinglish: 'Translate Karo'
+  },
+  
+  // Footer component
+  footer_about: {
+    en: 'About Us',
+    hi: 'हमारे बारे में',
+    hinglish: 'Hamare Bare Mein'
+  },
+  footer_resources: {
+    en: 'Resources',
+    hi: 'संसाधन',
+    hinglish: 'Resources'
+  },
+  footer_faq: {
+    en: 'FAQ',
+    hi: 'पूछे जाने वाले प्रश्न',
+    hinglish: 'FAQ'
+  },
+  footer_glossary: {
+    en: 'Legal Glossary',
+    hi: 'कानूनी शब्दावली',
+    hinglish: 'Legal Glossary'
+  },
+  footer_contact: {
+    en: 'Contact Us',
+    hi: 'संपर्क करें',
+    hinglish: 'Contact Karein'
+  },
+  footer_legal: {
+    en: 'Legal',
+    hi: 'कानूनी',
+    hinglish: 'Legal'
+  },
+  footer_privacy: {
+    en: 'Privacy Policy',
+    hi: 'गोपनीयता नीति',
+    hinglish: 'Privacy Policy'
+  },
+  footer_terms: {
+    en: 'Terms of Service',
+    hi: 'सेवा की शर्तें',
+    hinglish: 'Terms of Service'
+  },
+  footer_disclaimer: {
+    en: 'Legal Disclaimer',
+    hi: 'कानूनी अस्वीकरण',
+    hinglish: 'Legal Disclaimer'
+  },
+  footer_copyright: {
+    en: '© {0} LawXpert. All rights reserved.',
+    hi: '© {0} लॉएक्सपर्ट. सर्वाधिकार सुरक्षित.',
+    hinglish: '© {0} LawXpert. All rights reserved.'
+  },
+  footer_disclaimer_text: {
+    en: 'LawXpert is not a law firm and does not provide legal advice. The information provided is for general informational purposes only.',
+    hi: 'लॉएक्सपर्ट एक कानूनी फर्म नहीं है और कानूनी सलाह प्रदान नहीं करता है। प्रदान की गई जानकारी केवल सामान्य सूचनात्मक उद्देश्यों के लिए है।',
+    hinglish: 'LawXpert ek law firm nahi hai aur legal advice nahi deta hai. Information sirf general jankaari ke liye di gayi hai.'
+  },
+  
+  // Login Form
+  login_title: {
+    en: 'Login to LawXpert',
+    hi: 'लॉएक्सपर्ट में लॉगिन करें',
+    hinglish: 'LawXpert mein Login karein'
+  },
+  login_description: {
+    en: 'Enter your email and password to access your account',
+    hi: 'अपने खाते तक पहुंचने के लिए अपना ईमेल और पासवर्ड दर्ज करें',
+    hinglish: 'Apne account tak pahunchne ke liye email aur password darj karein'
+  },
+  login_email: {
+    en: 'Email',
+    hi: 'ईमेल',
+    hinglish: 'Email'
+  },
+  login_emailPlaceholder: {
+    en: 'name@example.com',
+    hi: 'नाम@उदाहरण.कॉम',
+    hinglish: 'name@example.com'
+  },
+  login_password: {
+    en: 'Password',
+    hi: 'पासवर्ड',
+    hinglish: 'Password'
+  },
+  login_forgotPassword: {
+    en: 'Forgot password?',
+    hi: 'पासवर्ड भूल गए?',
+    hinglish: 'Password bhool gaye?'
+  },
+  login_button: {
+    en: 'Sign In',
+    hi: 'साइन इन करें',
+    hinglish: 'Sign In karein'
+  },
+  login_signing: {
+    en: 'Signing In...',
+    hi: 'साइन इन हो रहा है...',
+    hinglish: 'Sign In ho raha hai...'
+  },
+  login_noAccount: {
+    en: 'Don\'t have an account? Sign up',
+    hi: 'खाता नहीं है? साइन अप करें',
+    hinglish: 'Account nahi hai? Sign up karein'
+  },
+  login_success: {
+    en: 'Login successful',
+    hi: 'लॉगिन सफल रहा',
+    hinglish: 'Login successful'
+  },
+  login_error: {
+    en: 'Login failed. Please try again.',
+    hi: 'लॉगिन विफल रहा। कृपया पुनः प्रयास करें।',
+    hinglish: 'Login fail ho gaya. Phir se try karein.'
+  },
+  
+  // Chat Interface
+  chat_title: {
+    en: 'LawXpert AI Assistant',
+    hi: 'लॉएक्सपर्ट AI सहायक',
+    hinglish: 'LawXpert AI Assistant'
+  },
+  chat_tab: {
+    en: 'Chat',
+    hi: 'चैट',
+    hinglish: 'Chat'
+  },
+  chat_documents_tab: {
+    en: 'Documents',
+    hi: 'दस्तावेज़',
+    hinglish: 'Documents'
+  },
+  chat_language: {
+    en: 'Language',
+    hi: 'भाषा',
+    hinglish: 'Language'
+  },
+  chat_inputPlaceholder: {
+    en: 'Ask a legal question...',
+    hi: 'कोई कानूनी प्रश्न पूछें...',
+    hinglish: 'Koi legal question puchein...'
+  },
+  chat_disclaimer: {
+    en: 'This is not a substitute for professional legal advice. Consult a lawyer for legal matters.',
+    hi: 'यह पेशेवर कानूनी सलाह का विकल्प नहीं है। कानूनी मामलों के लिए वकील से परामर्श करें।',
+    hinglish: 'Yeh professional legal advice ka substitute nahi hai. Legal matters ke liye lawyer se consult karein.'
+  },
+  chat_welcomeMessage: {
+    en: 'Hello! I\'m your LawXpert legal assistant. How can I help you with your legal queries today?',
+    hi: 'नमस्ते! मैं आपका लॉएक्सपर्ट कानूनी सहायक हूँ। आज मैं आपके कानूनी प्रश्नों में कैसे मदद कर सकता हूँ?',
+    hinglish: 'Hello! Main aapka LawXpert legal assistant hoon. Aaj main aapke legal questions mein kaise help kar sakta hoon?'
+  },
+  chat_documentsTitle: {
+    en: 'Generate Legal Documents',
+    hi: 'कानूनी दस्तावेज़ तैयार करें',
+    hinglish: 'Legal Documents Generate karein'
+  },
+  chat_documentGenerate: {
+    en: 'Fill a form to generate a document',
+    hi: 'दस्तावेज़ तैयार करने के लिए एक फॉर्म भरें',
+    hinglish: 'Document generate karne ke liye form bharein'
+  },
+  chat_documentDescription: {
+    en: 'Fill a form to generate a document',
+    hi: 'दस्तावेज़ तैयार करने के लिए एक फॉर्म भरें',
+    hinglish: 'Document generate karne ke liye form bharein'
+  },
+  chat_voiceOn: {
+    en: 'Voice input would be enabled in the final app',
+    hi: 'अंतिम ऐप में वॉयस इनपुट सक्षम किया जाएगा',
+    hinglish: 'Final app mein voice input enable kiya jayega'
+  },
+  chat_voiceOff: {
+    en: 'Voice input stopped',
+    hi: 'वॉयस इनपुट बंद किया गया',
+    hinglish: 'Voice input band kiya gaya'
   },
 };
 

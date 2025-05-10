@@ -4,6 +4,21 @@
 
 **URL**: https://lovable.dev/projects/3078e036-429f-48db-8c73-8bfeac779019
 
+## Setting Up the AI Assistant (Important)
+
+This project uses OpenRouter API for the AI legal assistant functionality. To make it work:
+
+1. Sign up for an account on [OpenRouter](https://openrouter.ai/)
+2. Get your API key from the OpenRouter dashboard
+3. Create a `.env` file in the root of the project
+4. Add your API key to the `.env` file:
+
+```
+VITE_OPENROUTER_API_KEY=your-api-key-here
+```
+
+You can use the `src/env.example` file as a template. **Without this step, the AI assistant will not work.**
+
 ## How can I edit this code?
 
 There are several ways of editing your application.

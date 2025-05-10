@@ -16,6 +16,7 @@ import NotFound from "./pages/NotFound";
 import LawyerMarketplace from "./pages/LawyerMarketplace";
 import Dashboard from "./pages/Dashboard";
 import LegalDocumentation from "./pages/LegalDocumentation";
+import TestMarkdown from './test-markdown';
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ const App = () => (
               <Route path="/documents" element={<Documents />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/legal-documentation" element={<LegalDocumentation />} />
+              <Route path="/test-markdown" element={<TestMarkdown />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
