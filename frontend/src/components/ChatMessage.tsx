@@ -62,14 +62,14 @@ const ChatMessage = ({ content, role, timestamp = new Date(), compact = false }:
       </div>
       
       {isUser ? (
-        <div className={cn("prose max-w-none", 
+        <div className={cn("prose max-w-none overflow-auto ", 
           compact ? "prose-xs" : "prose-sm", 
           isUser ? "prose-invert" : ""
         )}>
           {content}
         </div>
       ) : (
-        <div className={cn("prose max-w-none", 
+        <div className={cn("prose max-w-none overflow-auto ", 
           compact ? "prose-xs" : "prose-sm",
           "markdown-content"
         )}>

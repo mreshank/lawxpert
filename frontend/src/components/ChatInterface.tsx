@@ -318,7 +318,7 @@ const ChatInterface = ({ compact = false }: ChatInterfaceProps) => {
         {!compact && (
           <div className="border-b px-4 py-2 bg-white">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
+              <div className="max-md:hidden md:flex items-center space-x-2">
                 <div className="bg-blue-600 w-8 h-8 rounded flex items-center justify-center text-white font-bold">
                   LX
                 </div>
