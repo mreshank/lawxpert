@@ -9,7 +9,7 @@ const Index = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      <main className="flex-grow">
+      <main className="flex-grow pt-16">
         {/* Hero Section */}
         <section className="bg-gradient-to-r from-blue-800 to-red-900 py-20 px-4 text-white">
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
