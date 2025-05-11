@@ -1,6 +1,6 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -126,7 +126,7 @@ const Navbar: React.FC = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
@@ -151,6 +151,26 @@ const Navbar: React.FC = () => {
               >
                 <TranslatedText textKey="home" />
               </Link>
+
+              <Link
+                to="/lawyers"
+                className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
+              >
+                <TranslatedText textKey="findLawyers" />
+              </Link>
+
+              <Link
+                to="/legal-documentation"
+                className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
+              >
+                <TranslatedText textKey="legalResources" />
+              </Link>
+              <Link
+                to="/documents"
+                className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
+              >
+                <TranslatedText textKey="documents" />
+              </Link>
               {user && (
                 <Link
                   to="/chat"
@@ -159,30 +179,14 @@ const Navbar: React.FC = () => {
                   <TranslatedText textKey="aiAssistant" />
                 </Link>
               )}
-              <Link
-                to="/lawyers"
-                className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
-              >
-                <TranslatedText textKey="findLawyers" />
-              </Link>
-              <Link
-                to="/documents"
-                className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
-              >
-                <TranslatedText textKey="documents" />
-              </Link>
-              <Link
-                to="/legal-documentation"
-                className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
-              >
-                <TranslatedText textKey="legalResources" />
-              </Link>
-              <Link
-                to="/dashboard"
-                className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
-              >
-                <TranslatedText textKey="dashboard" />
-              </Link>
+              {user && (
+                <Link
+                  to="/dashboard"
+                  className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
+                >
+                  <TranslatedText textKey="dashboard" />
+                </Link>
+              )}
             </div>
           </div>
 
@@ -214,7 +218,7 @@ const Navbar: React.FC = () => {
 
             {user ? (
               <div className="flex items-center space-x-4">
-                <span className="text-gray-500">{user.user.name}</span>
+                <span className="text-gray-500">{user?.user?.firstName}</span>
                 <button
                   onClick={handleLogout}
                   className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -266,6 +270,29 @@ const Navbar: React.FC = () => {
           >
             <TranslatedText textKey="home" />
           </Link>
+
+          <Link
+            to="/lawyers"
+            className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+            onClick={() => setIsOpen(false)}
+          >
+            <TranslatedText textKey="findLawyers" />
+          </Link>
+
+          <Link
+            to="/legal-documentation"
+            className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+            onClick={() => setIsOpen(false)}
+          >
+            <TranslatedText textKey="legalResources" />
+          </Link>
+          <Link
+            to="/documents"
+            className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+            onClick={() => setIsOpen(false)}
+          >
+            <TranslatedText textKey="documents" />
+          </Link>
           {user && (
             <Link
               to="/chat"
@@ -275,34 +302,15 @@ const Navbar: React.FC = () => {
               <TranslatedText textKey="aiAssistant" />
             </Link>
           )}
-          <Link
-            to="/lawyers"
-            className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-            onClick={() => setIsOpen(false)}
-          >
-            <TranslatedText textKey="findLawyers" />
-          </Link>
-          <Link
-            to="/documents"
-            className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-            onClick={() => setIsOpen(false)}
-          >
-            <TranslatedText textKey="documents" />
-          </Link>
-          <Link
-            to="/legal-documentation"
-            className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-            onClick={() => setIsOpen(false)}
-          >
-            <TranslatedText textKey="legalResources" />
-          </Link>
-          <Link
-            to="/dashboard"
-            className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-            onClick={() => setIsOpen(false)}
-          >
-            <TranslatedText textKey="dashboard" />
-          </Link>
+          {user && (
+            <Link
+              to="/dashboard"
+              className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+              onClick={() => setIsOpen(false)}
+            >
+              <TranslatedText textKey="dashboard" />
+            </Link>
+          )}
 
           {user ? (
             <>

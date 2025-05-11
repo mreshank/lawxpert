@@ -1,12 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import authService, { AuthResponse } from '../services/authService';
+import authService, { AuthResponse, RegisterData } from '../services/authService';
+import axios from 'axios';
 
 interface AuthContextType {
   user: AuthResponse | null;
   loading: boolean;
   isAdmin: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  register: (data: RegisterData) => Promise<void>;
   logout: () => void;
 }
 
@@ -18,26 +19,57 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    const user = authService.getCurrentUser();
-    setUser(user);
-    setIsAdmin(authService.isAdmin());
-    setLoading(false);
+    const initAuth = async () => {
+      try {
+        const user = authService.getCurrentUser();
+        if (user?.token) {
+          // Set default authorization header
+          axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
+          setUser(user);
+          setIsAdmin(authService.isAdmin());
+        }
+      } catch (error) {
+        console.error('Auth initialization error:', error);
+        authService.logout();
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initAuth();
   }, []);
 
   const login = async (email: string, password: string) => {
-    const response = await authService.login({ email, password });
-    setUser(response);
-    setIsAdmin(authService.isAdmin());
+    try {
+      const response = await authService.login({ email, password });
+      if (response.token) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${response.token}`;
+        setUser(response);
+        setIsAdmin(authService.isAdmin());
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
+    }
   };
 
-  const register = async (name: string, email: string, password: string) => {
-    const response = await authService.register({ name, email, password });
-    setUser(response);
-    setIsAdmin(authService.isAdmin());
+  const register = async (data: RegisterData) => {
+    try {
+      const response = await authService.register(data);
+      if (response.token) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${response.token}`;
+        setUser(response);
+        setIsAdmin(authService.isAdmin());
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      throw error;
+    }
   };
 
   const logout = () => {
     authService.logout();
+    delete axios.defaults.headers.common['Authorization'];
     setUser(null);
     setIsAdmin(false);
   };

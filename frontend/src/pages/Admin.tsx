@@ -1,10 +1,8 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DashboardStats from "@/components/DashboardStats";
 import { Download, Upload, Users, MessageCircle } from "lucide-react";
@@ -41,8 +39,6 @@ const Admin = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
-      
       <main className="flex-grow py-8 px-4 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto">
           <div className="mb-8">
