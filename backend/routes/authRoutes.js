@@ -19,7 +19,7 @@ const auth = (req, res, next) => {
   }
   if (!token) return res.status(401).json({ error: 'No token' });
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || "9NUG9mteauGQbEKGAqbehYZDeqwTP3WZJzuNQtYf");
     req.user = decoded;
     next();
   } catch (err) {

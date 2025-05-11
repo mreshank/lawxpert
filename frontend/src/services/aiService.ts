@@ -4,7 +4,7 @@ import { Language } from "@/contexts/LanguageContext";
 // OpenRouter API configuration
 const API_URL = "https://openrouter.ai/api/v1/chat/completions";
 // Use Vite's environment variable format (must be prefixed with VITE_)
-const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY || "";
+const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY || "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";
 
 // Check if we have a valid API key
 const hasValidApiKey = (): boolean => {

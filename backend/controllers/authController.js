@@ -62,7 +62,7 @@ exports.register = async (req, res) => {
         email: user.email,
         role: user.role
       },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET || "9NUG9mteauGQbEKGAqbehYZDeqwTP3WZJzuNQtYf",
       { expiresIn: '7d' }
     );
 
@@ -118,7 +118,7 @@ exports.login = async (req, res) => {
         email: user.email,
         role: user.role
       },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET || "9NUG9mteauGQbEKGAqbehYZDeqwTP3WZJzuNQtYf",
       { expiresIn: '7d' }
     );
 
