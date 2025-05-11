@@ -6,7 +6,7 @@
   "scripts": {
     "i": "npm run install:all",
 
-    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install && cd ..",
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install && cd ../",
 
     "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
     "start:backend": "cd backend && npm run dev",
