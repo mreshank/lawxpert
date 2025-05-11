@@ -15,7 +15,7 @@ const Index = () => {
                 AI-Powered Legal Assistance for Everyone
               </h1>
               <p className="text-xl mb-8">
-                Get instant answers to legal questions, generate documents, and understand your rights - all in simple language.
+                Get instant answers to legal questions and understand your rights - all in simple language. Easily connect with experienced lawyers for personalized help.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg px-8 py-6 h-auto">
@@ -80,9 +80,9 @@ const Index = () => {
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-green-600 mx-auto mb-6">
                   <FileText size={28} />
                 </div>
-                <h3 className="text-xl font-bold mb-3">Document Generation</h3>
+                <h3 className="text-xl font-bold mb-3">Lawyer Marketplace</h3>
                 <p className="text-gray-600">
-                  Create legal documents like FIRs, RTI applications, and notices
+                  Find and hire experienced lawyers for your legal needs, from property disputes to family matters and more.
                 </p>
               </div>
               
@@ -132,9 +132,9 @@ const Index = () => {
                 <div className="w-16 h-16 bg-green-100 rounded-lg flex items-center justify-center text-green-600 mb-6">
                   <FileText size={28} />
                 </div>
-                <h3 className="text-xl font-bold mb-4">Document Generation</h3>
+                <h3 className="text-xl font-bold mb-4">Lawyer Marketplace</h3>
                 <p className="text-gray-600">
-                  Generate legal documents like FIRs, RTI applications, legal notices, and affidavits in minutes.
+                  Browse, compare, and hire lawyers across India for any legal issue. Verified profiles, transparent fees, and direct chat.
                 </p>
               </div>
               
@@ -180,7 +180,7 @@ const Index = () => {
                     <div className="mr-4 text-green-500 flex-shrink-0">
                       <FileCheck size={20} />
                     </div>
-                    <p className="text-gray-700">Generate properly formatted legal documents</p>
+                    <p className="text-gray-700">Find and hire the right lawyer for your case</p>
                   </li>
                   <li className="flex">
                     <div className="mr-4 text-green-500 flex-shrink-0">

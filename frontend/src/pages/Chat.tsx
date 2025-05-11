@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "@/components/Footer";
 import ChatInterface from "@/components/ChatInterface";
-import DocumentGenerator from "@/components/DocumentGenerator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -10,7 +9,6 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Chat = () => {
-  const [selectedDocument, setSelectedDocument] = useState<string | null>(null);
   const { language, cycleLanguage } = useLanguage();
   const { user, loading } = useAuth();
   const navigate = useNavigate();
@@ -73,68 +71,53 @@ const Chat = () => {
             </Button>
           </div>
           
-          {selectedDocument ? (
-            <div>
-              <button 
-                onClick={() => setSelectedDocument(null)}
-                className="mb-6 text-lawxpert-navy dark:text-lawxpert-gold flex items-center"
-              >
-                <svg className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                {language === 'en' ? "Back to Assistant" : language === 'hi' ? "सहायक पर वापस जाएं" : "Assistant par wapas jayen"}
-              </button>
-              <DocumentGenerator documentType={selectedDocument} />
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 gap-8">
-              <ChatInterface />
-              
-              {/* Lawyer marketplace promo banner */}
-              <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 mt-4 border border-blue-100 dark:border-blue-800">
-                <div className="flex flex-col sm:flex-row justify-between items-center">
-                  <div>
-                    <h3 className="font-medium text-blue-800 dark:text-blue-300">
-                      {language === 'en' 
-                        ? "Need personalized legal help?"
-                        : language === 'hi'
-                          ? "व्यक्तिगत कानूनी सहायता चाहिए?"
-                          : "Personalized legal help chahiye?"}
-                    </h3>
-                    <p className="text-sm text-blue-600 dark:text-blue-400 mt-1">
-                      {language === 'en' 
-                        ? "Connect with experienced lawyers in our marketplace"
-                        : language === 'hi'
-                          ? "हमारे मार्केटप्लेस में अनुभवी वकीलों से जुड़ें"
-                          : "Hamare marketplace mein experienced lawyers se connect karein"}
-                    </p>
-                  </div>
-                  <Link 
-                    to="/lawyers" 
-                    className="mt-3 sm:mt-0 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center"
-                  >
+          <div className="grid grid-cols-1 gap-8">
+            <ChatInterface />
+            
+            {/* Lawyer marketplace promo banner */}
+            <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 mt-4 border border-blue-100 dark:border-blue-800">
+              <div className="flex flex-col sm:flex-row justify-between items-center">
+                <div>
+                  <h3 className="font-medium text-blue-800 dark:text-blue-300">
                     {language === 'en' 
-                      ? "Find a Lawyer"
+                      ? "Need personalized legal help?"
                       : language === 'hi'
-                        ? "वकील खोजें"
-                        : "Lawyer Dhundhen"}
-                    <svg className="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                  </Link>
+                        ? "व्यक्तिगत कानूनी सहायता चाहिए?"
+                        : "Personalized legal help chahiye?"}
+                  </h3>
+                  <p className="text-sm text-blue-600 dark:text-blue-400 mt-1">
+                    {language === 'en' 
+                      ? "Connect with experienced lawyers in our marketplace"
+                      : language === 'hi'
+                        ? "हमारे मार्केटप्लेस में अनुभवी वकीलों से जुड़ें"
+                        : "Hamare marketplace mein experienced lawyers se connect karein"}
+                  </p>
                 </div>
-              </div>
-              
-              {/* Disclaimer */}
-              <div className="text-center text-xs text-gray-500 border-t pt-4">
-                {language === 'en' 
-                  ? "Disclaimer: The information provided is for general informational purposes only and not legal advice. Always consult with a qualified lawyer for your specific situation."
-                  : language === 'hi'
-                    ? "अस्वीकरण: प्रदान की गई जानकारी केवल सामान्य जानकारी के लिए है और कानूनी सलाह नहीं है। हमेशा अपनी विशिष्ट स्थिति के लिए एक योग्य वकील से परामर्श करें।"
-                    : "Disclaimer: Di gayi jaankari sirf general information ke liye hai aur legal advice nahi hai. Apni specific situation ke liye hamesha qualified lawyer se consult karein."}
+                <Link 
+                  to="/lawyers" 
+                  className="mt-3 sm:mt-0 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center"
+                >
+                  {language === 'en' 
+                    ? "Find a Lawyer"
+                    : language === 'hi'
+                      ? "वकील खोजें"
+                      : "Lawyer Dhundhen"}
+                  <svg className="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </Link>
               </div>
             </div>
-          )}
+            
+            {/* Disclaimer */}
+            <div className="text-center text-xs text-gray-500 border-t pt-4">
+              {language === 'en' 
+                ? "Disclaimer: The information provided is for general informational purposes only and not legal advice. Always consult with a qualified lawyer for your specific situation."
+                : language === 'hi'
+                  ? "अस्वीकरण: प्रदान की गई जानकारी केवल सामान्य जानकारी के लिए है और कानूनी सलाह नहीं है। हमेशा अपनी विशिष्ट स्थिति के लिए एक योग्य वकील से परामर्श करें।"
+                  : "Disclaimer: Di gayi jaankari sirf general information ke liye hai aur legal advice nahi hai. Apni specific situation ke liye hamesha qualified lawyer se consult karein."}
+            </div>
+          </div>
         </div>
       </main>
       

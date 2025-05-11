@@ -25,8 +25,6 @@ const AppRoutes = () => {
         <Route path="/chat" element={<Chat />} />
         <Route path="/lawyers" element={<LawyerMarketplace />} />
         <Route path="/admin" element={<Admin />} />
-        <Route path="/documents" element={<Documents />} />
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/legal-documentation" element={<LegalDocumentation />} />
         <Route path="/test-markdown" element={<TestMarkdown />} />
         <Route path="*" element={<NotFound />} />

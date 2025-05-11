@@ -315,11 +315,6 @@ const ChatInterface = ({ compact = false }: ChatInterfaceProps) => {
     setMessages(getInitialChatHistory(language));
   };
 
-  const handleDocumentSelect = (docType: string) => {
-    // In a real app, this would open a form with fields for the selected document
-    toast.info(`${docType} document generation form would open here`);
-  };
-
   return (
     <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg ${compact ? 'h-[500px]' : 'h-[600px]'} flex flex-col`}>
       <Tabs
@@ -344,7 +339,6 @@ const ChatInterface = ({ compact = false }: ChatInterfaceProps) => {
               <div className="flex items-center self-end">
                 <TabsList className="grid w-[200px] grid-cols-2">
                   <TabsTrigger value="chat">Chat</TabsTrigger>
-                  <TabsTrigger value="documents">Documents</TabsTrigger>
                 </TabsList>
 
                 <div className="ml-4">
@@ -484,108 +478,6 @@ const ChatInterface = ({ compact = false }: ChatInterfaceProps) => {
               </div>
             )}
           </form>
-        </TabsContent>
-
-        <TabsContent
-          value="documents"
-          className="flex-1 m-0 p-6 overflow-auto bg-gray-50"
-        >
-          <h3 className="text-lg font-medium mb-4 text-gray-800">
-            {language === "en"
-              ? "Generate Legal Documents"
-              : language === "hi"
-              ? "कानूनी दस्तावेज़ तैयार करें"
-              : "Legal Documents Generate Karen"}
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {[
-              {
-                en: "FIR (First Information Report)",
-                hi: "प्रथम सूचना रिपोर्ट (FIR)",
-                hinglish: "FIR (First Information Report)",
-              },
-              {
-                en: "RTI Application",
-                hi: "आरटीआई आवेदन",
-                hinglish: "RTI Application",
-              },
-              {
-                en: "Legal Notice",
-                hi: "कानूनी नोटिस",
-                hinglish: "Legal Notice",
-              },
-              { en: "Affidavit", hi: "शपथ पत्र", hinglish: "Affidavit" },
-            ].map((doc) => (
-              <Button
-                key={doc[language]}
-                variant="outline"
-                className="h-auto py-6 justify-start gap-4 hover:bg-gray-50 dark:hover:bg-gray-800 bg-white"
-                onClick={() => handleDocumentSelect(doc[language])}
-              >
-                <File size={24} className="text-blue-600" />
-                <div className="text-left">
-                  <div className="font-medium text-gray-800">
-                    {doc[language]}
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    {language === "en"
-                      ? "Fill a form to generate a document"
-                      : language === "hi"
-                      ? "दस्तावेज़ तैयार करने के लिए फॉर्म भरें"
-                      : "Document generate karne ke liye form bharen"}
-                  </div>
-                </div>
-              </Button>
-            ))}
-          </div>
-        </TabsContent>
-
-        <TabsContent
-          value="resources"
-          className="flex-1 m-0 p-6 overflow-auto bg-gray-50"
-        >
-          <h3 className="text-lg font-medium mb-4 text-gray-800">
-            {language === "en"
-              ? "Legal Resources"
-              : language === "hi"
-              ? "कानूनी संसाधन"
-              : "Legal Resources"}
-          </h3>
-
-          {Object.entries(legalResources).map(([category, resources]) => (
-            <div key={category} className="mb-6">
-              <h4 className="text-md font-medium text-gray-800 mb-2">
-                {category}
-              </h4>
-              <div className="bg-white rounded-lg shadow-sm border p-4">
-                <ul className="space-y-2">
-                  {Object.entries(resources).map(([name, url]) => (
-                    <li key={name}>
-                      <a
-                        href={url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline flex items-center"
-                      >
-                        <svg
-                          className="w-4 h-4 mr-2"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 10-2 0v3a1 1 0 102 0v-3zm2-3a1 1 0 00-1 1v5a1 1 0 102 0v-5a1 1 0 00-1-1zm4-1a1 1 0 10-2 0v6a1 1 0 102 0V8z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        {name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          ))}
         </TabsContent>
       </Tabs>
     </div>

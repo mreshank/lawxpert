@@ -90,37 +90,6 @@ const Dashboard = () => {
             
             {/* Right column - Quick access widgets */}
             <div className="col-span-3 lg:col-span-1 space-y-6">
-              {/* Recent Documents */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <FileText className="mr-2 h-5 w-5" />
-                    Recent Documents
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-3">
-                    {recentDocuments.map(doc => (
-                      <li key={doc.id} className="bg-gray-50 dark:bg-gray-800 p-3 rounded-md flex justify-between items-center">
-                        <div>
-                          <p className="font-medium">{doc.name}</p>
-                          <span className="text-xs text-gray-500 dark:text-gray-400">{doc.date}</span>
-                        </div>
-                        <span className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 px-2 py-1 rounded">
-                          {doc.type}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                  <Link 
-                    to="/documents" 
-                    className="block text-center mt-4 text-sm text-blue-600 hover:underline"
-                  >
-                    View all documents
-                  </Link>
-                </CardContent>
-              </Card>
-              
               {/* Upcoming Consultations */}
               <Card>
                 <CardHeader>
@@ -192,33 +161,6 @@ const Dashboard = () => {
                   >
                     View all lawyers
                   </Link>
-                </CardContent>
-              </Card>
-              
-              {/* Quick Actions */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Quick Actions</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 gap-3">
-                    <Link to="/documents" className="bg-gray-50 dark:bg-gray-800 p-3 rounded-md flex flex-col items-center justify-center text-center hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                      <FileText className="h-6 w-6 mb-2" />
-                      <span className="text-sm">Generate Document</span>
-                    </Link>
-                    <Link to="/chat" className="bg-gray-50 dark:bg-gray-800 p-3 rounded-md flex flex-col items-center justify-center text-center hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                      <MessageSquare className="h-6 w-6 mb-2" />
-                      <span className="text-sm">Ask Legal Question</span>
-                    </Link>
-                    <Link to="/lawyers" className="bg-gray-50 dark:bg-gray-800 p-3 rounded-md flex flex-col items-center justify-center text-center hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                      <Briefcase className="h-6 w-6 mb-2" />
-                      <span className="text-sm">Find Lawyer</span>
-                    </Link>
-                    <Link to="/legal-documentation" className="bg-gray-50 dark:bg-gray-800 p-3 rounded-md flex flex-col items-center justify-center text-center hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                      <BookOpen className="h-6 w-6 mb-2" />
-                      <span className="text-sm">Legal Resources</span>
-                    </Link>
-                  </div>
                 </CardContent>
               </Card>
             </div>

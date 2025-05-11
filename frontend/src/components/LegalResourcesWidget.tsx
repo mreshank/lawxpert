@@ -172,12 +172,6 @@ const LegalResourcesWidget = () => {
             <TranslatedText textKey="askQuestion" />
           </Link>
         </div>
-        <div className="flex items-center text-blue-600 text-sm">
-          <Search className="h-4 w-4 mr-1" />
-          <Link to="/legal-documentation" className="hover:underline">
-            <TranslatedText textKey="search" /> <TranslatedText textKey="documents" as="span" className="lowercase" />
-          </Link>
-        </div>
       </CardFooter>
     </Card>
   );
