@@ -46,7 +46,7 @@ const ChatMessage = ({ content, role, timestamp = new Date(), compact = false }:
 
   return (
     <div className={cn(
-      "flex flex-col max-w-[85%] md:max-w-[70%] rounded-lg mb-3",
+      "flex flex-col w-full rounded-lg mb-3",
       compact ? "p-3" : "p-4 mb-4",
       isUser 
         ? "bg-lawxpert-navy text-white self-end rounded-br-none" 

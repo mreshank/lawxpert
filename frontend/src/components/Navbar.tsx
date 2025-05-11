@@ -1,5 +1,7 @@
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -104,9 +106,10 @@ const ScaleIcon = () => (
   </svg>
 );
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { language, cycleLanguage } = useLanguage();
   const { t } = useTranslation();
 
@@ -121,7 +124,10 @@ const Navbar = () => {
     }
   };
 
-  // This would come from auth context in the real implementation
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <nav className="bg-white shadow-sm border-b fixed--x w-full z-50">
@@ -145,12 +151,14 @@ const Navbar = () => {
               >
                 <TranslatedText textKey="home" />
               </Link>
-              <Link
-                to="/chat"
-                className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
-              >
-                <TranslatedText textKey="aiAssistant" />
-              </Link>
+              {user && (
+                <Link
+                  to="/chat"
+                  className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
+                >
+                  <TranslatedText textKey="aiAssistant" />
+                </Link>
+              )}
               <Link
                 to="/lawyers"
                 className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
@@ -204,46 +212,30 @@ const Navbar = () => {
               </div>
             </Button>
 
-            {isLoggedIn ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <UserIcon />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem>
-                    <Link to="/profile" className="w-full">
-                      <TranslatedText textKey="profile" />
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link to="/admin" className="w-full">
-                      <TranslatedText textKey="adminDashboard" />
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <button
-                      className="w-full text-left"
-                      onClick={() => setIsLoggedIn(false)}
-                    >
-                      <TranslatedText textKey="logout" />
-                    </button>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+            {user ? (
+              <div className="flex items-center space-x-4">
+                <span className="text-gray-500">{user.user.name}</span>
+                <button
+                  onClick={handleLogout}
+                  className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  <TranslatedText textKey="logout" />
+                </button>
+              </div>
             ) : (
-              <div className="flex items-center space-x-2">
-                <Button variant="outline" asChild className="border-gray-300">
-                  <Link to="/login">
-                    <TranslatedText textKey="login" />
-                  </Link>
-                </Button>
-                <Button className="bg-blue-600 hover:bg-blue-700" asChild>
-                  <Link to="/register">
-                    <TranslatedText textKey="signup" />
-                  </Link>
-                </Button>
+              <div className="flex items-center space-x-4">
+                <Link
+                  to="/login"
+                  className="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  <TranslatedText textKey="login" />
+                </Link>
+                <Link
+                  to="/register"
+                  className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  <TranslatedText textKey="signup" />
+                </Link>
               </div>
             )}
           </div>
@@ -274,13 +266,15 @@ const Navbar = () => {
           >
             <TranslatedText textKey="home" />
           </Link>
-          <Link
-            to="/chat"
-            className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-            onClick={() => setIsOpen(false)}
-          >
-            <TranslatedText textKey="aiAssistant" />
-          </Link>
+          {user && (
+            <Link
+              to="/chat"
+              className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+              onClick={() => setIsOpen(false)}
+            >
+              <TranslatedText textKey="aiAssistant" />
+            </Link>
+          )}
           <Link
             to="/lawyers"
             className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
@@ -310,7 +304,7 @@ const Navbar = () => {
             <TranslatedText textKey="dashboard" />
           </Link>
 
-          {isLoggedIn ? (
+          {user ? (
             <>
               <Link
                 to="/profile"
@@ -329,7 +323,7 @@ const Navbar = () => {
               <button
                 className="block w-full text-left px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                 onClick={() => {
-                  setIsLoggedIn(false);
+                  handleLogout();
                   setIsOpen(false);
                 }}
               >

@@ -17,6 +17,7 @@ import aiService, {
   isLegalQuestion,
 } from "@/services/aiService";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { translate } from "@/utils/translations";
 
 // Legal resource categories
@@ -118,6 +119,7 @@ interface ChatInterfaceProps {
 
 const ChatInterface = ({ compact = false }: ChatInterfaceProps) => {
   const { language } = useLanguage();
+  const { user, loading } = useAuth();
   const [messages, setMessages] = useState<ChatMessageType[]>(() =>
     getInitialChatHistory(language)
   );
@@ -160,6 +162,17 @@ const ChatInterface = ({ compact = false }: ChatInterfaceProps) => {
     e?.preventDefault();
 
     if (!inputMessage.trim()) return;
+
+    if (!user) {
+      toast.error(
+        language === "en"
+          ? "Please log in to use the chat feature"
+          : language === "hi"
+          ? "चैट सुविधा का उपयोग करने के लिए कृपया लॉग इन करें"
+          : "Chat feature use karne ke liye please login karein"
+      );
+      return;
+    }
 
     // Add user message
     const userMessage: ChatMessageType = {
@@ -308,7 +321,7 @@ const ChatInterface = ({ compact = false }: ChatInterfaceProps) => {
   };
 
   return (
-    <div className="chat-container bg-white dark:bg-gray-900 border rounded-lg shadow-lg h-full">
+    <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg ${compact ? 'h-[500px]' : 'h-[600px]'} flex flex-col`}>
       <Tabs
         defaultValue="chat"
         value={activeTab}
