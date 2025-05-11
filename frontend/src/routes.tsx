@@ -14,8 +14,6 @@ import Dashboard from './pages/Dashboard';
 import LegalDocumentation from './pages/LegalDocumentation';
 import TestMarkdown from './test-markdown';
 import NotFound from './pages/NotFound';
-import ProtectedRoute from './components/ProtectedRoute';
-
 
 const AppRoutes = () => {
   return (
@@ -24,39 +22,11 @@ const AppRoutes = () => {
         <Route index element={<Index />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route
-          path="/chat"
-          element={
-            <ProtectedRoute>
-              <Chat />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/chat" element={<Chat />} />
         <Route path="/lawyers" element={<LawyerMarketplace />} />
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute requireAdmin>
-              <Admin />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/documents"
-          element={
-            <ProtectedRoute>
-              <Documents />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/documents" element={<Documents />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/legal-documentation" element={<LegalDocumentation />} />
         <Route path="/test-markdown" element={<TestMarkdown />} />
         <Route path="*" element={<NotFound />} />

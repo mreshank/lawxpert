@@ -13,65 +13,33 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Mock user data
+const mockUser: AuthResponse = {
+  token: 'mock-token',
+  user: {
+    id: '1',
+    firstName: 'Demo',
+    lastName: 'User',
+    email: 'demo@example.com',
+    role: 'user'
+  }
+};
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<AuthResponse | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<AuthResponse | null>(mockUser);
+  const [loading, setLoading] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  useEffect(() => {
-    const initAuth = async () => {
-      try {
-        const user = authService.getCurrentUser();
-        if (user?.token) {
-          // Set default authorization header
-          axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
-          setUser(user);
-          setIsAdmin(authService.isAdmin());
-        }
-      } catch (error) {
-        console.error('Auth initialization error:', error);
-        authService.logout();
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    initAuth();
-  }, []);
-
   const login = async (email: string, password: string) => {
-    try {
-      const response = await authService.login({ email, password });
-      if (response.token) {
-        axios.defaults.headers.common['Authorization'] = `Bearer ${response.token}`;
-        setUser(response);
-        setIsAdmin(authService.isAdmin());
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      throw error;
-    }
+    setUser(mockUser);
   };
 
   const register = async (data: RegisterData) => {
-    try {
-      const response = await authService.register(data);
-      if (response.token) {
-        axios.defaults.headers.common['Authorization'] = `Bearer ${response.token}`;
-        setUser(response);
-        setIsAdmin(authService.isAdmin());
-      }
-    } catch (error) {
-      console.error('Registration error:', error);
-      throw error;
-    }
+    setUser(mockUser);
   };
 
   const logout = () => {
-    authService.logout();
-    delete axios.defaults.headers.common['Authorization'];
-    setUser(null);
-    setIsAdmin(false);
+    setUser(mockUser);
   };
 
   return (
