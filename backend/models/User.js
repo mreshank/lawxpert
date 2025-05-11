@@ -1,7 +1,16 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-  // Basic Information
+  firstName: { 
+    type: String, 
+    required: true,
+    trim: true
+  },
+  lastName: { 
+    type: String, 
+    required: true,
+    trim: true
+  },
   email: { 
     type: String, 
     required: true, 
@@ -10,73 +19,59 @@ const userSchema = new mongoose.Schema({
     lowercase: true,
     match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email']
   },
+  phone: {
+    type: String,
+    required: true,
+    trim: true,
+    match: [/^[0-9]{10,12}$/, 'Please enter a valid phone number (10-12 digits)']
+  },
   password: { 
     type: String, 
     required: true,
     minlength: [8, 'Password must be at least 8 characters long']
   },
-  name: { 
-    type: String, 
-    required: true,
-    trim: true
-  },
-  
-  // Contact Information
-  phoneNumber: {
-    type: String,
-    trim: true,
-    match: [/^[0-9]{10}$/, 'Please enter a valid 10-digit phone number']
-  },
-  alternatePhoneNumber: {
-    type: String,
-    trim: true,
-    match: [/^[0-9]{10}$/, 'Please enter a valid 10-digit phone number']
-  },
-  
-  // Personal Information
   dateOfBirth: {
-    type: Date
+    type: Date,
+    required: true
   },
   gender: {
     type: String,
-    enum: ['male', 'female', 'other', 'prefer_not_to_say']
+    enum: ['male', 'female', 'other', 'prefer-not-to-say'],
+    required: true
   },
-  
-  // Address Information
   address: {
-    street: String,
-    city: String,
-    state: String,
-    pincode: {
-      type: String,
-      match: [/^[0-9]{6}$/, 'Please enter a valid 6-digit pincode']
-    },
-    country: {
-      type: String,
-      default: 'India'
-    }
-  },
-  
-  // Professional Information
-  occupation: String,
-  organization: String,
-  designation: String,
-  
-  // Legal Information
-  aadharNumber: {
     type: String,
-    match: [/^[0-9]{12}$/, 'Please enter a valid 12-digit Aadhar number']
+    required: true,
+    trim: true
   },
-  panNumber: {
+  city: {
     type: String,
-    match: [/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, 'Please enter a valid PAN number']
+    required: true,
+    trim: true
   },
-  
-  // Account Settings
+  state: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  pincode: {
+    type: String,
+    required: true,
+    match: [/^[0-9]{6}$/, 'Please enter a valid 6-digit pincode']
+  },
+  occupation: {
+    type: String,
+    trim: true
+  },
+  userType: {
+    type: String,
+    enum: ['client', 'lawyer'],
+    required: true
+  },
   role: {
     type: String,
-    enum: ['user', 'lawyer', 'admin'],
-    default: 'user'
+    enum: ['citizen', 'admin'],
+    default: 'citizen'
   },
   isVerified: {
     type: Boolean,
@@ -86,8 +81,25 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
-  
-  // Preferences
+  alternatePhoneNumber: {
+    type: String,
+    trim: true,
+    match: [/^[0-9]{10}$/, 'Please enter a valid 10-digit phone number']
+  },
+  country: {
+    type: String,
+    default: 'India'
+  },
+  organization: String,
+  designation: String,
+  aadharNumber: {
+    type: String,
+    match: [/^[0-9]{12}$/, 'Please enter a valid 12-digit Aadhar number']
+  },
+  panNumber: {
+    type: String,
+    match: [/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, 'Please enter a valid PAN number']
+  },
   preferredLanguage: {
     type: String,
     enum: ['en', 'hi', 'hinglish'],
@@ -107,8 +119,6 @@ const userSchema = new mongoose.Schema({
       default: true
     }
   },
-  
-  // Legal History
   legalHistory: [{
     caseType: String,
     caseNumber: String,
@@ -116,15 +126,11 @@ const userSchema = new mongoose.Schema({
     status: String,
     description: String
   }],
-  
-  // Emergency Contact
   emergencyContact: {
     name: String,
     relationship: String,
     phoneNumber: String
   },
-  
-  // Document Verification
   documents: [{
     type: {
       type: String,
@@ -138,15 +144,11 @@ const userSchema = new mongoose.Schema({
     },
     verificationDate: Date
   }],
-  
-  // Last Login Information
   lastLogin: {
     timestamp: Date,
     ipAddress: String,
     deviceInfo: String
   },
-  
-  // Account Security
   securityQuestions: [{
     question: String,
     answer: String
@@ -156,8 +158,6 @@ const userSchema = new mongoose.Schema({
     default: false
   },
   twoFactorSecret: String,
-  
-  // Social Media Links
   socialMedia: {
     linkedin: String,
     twitter: String,
@@ -175,9 +175,9 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-// Index for faster queries
-userSchema.index({ email: 1 });
-userSchema.index({ phoneNumber: 1 });
+// Create indexes
+userSchema.index({ email: 1 }, { unique: true });
+userSchema.index({ phone: 1 });
 userSchema.index({ aadharNumber: 1 });
 userSchema.index({ panNumber: 1 });
 

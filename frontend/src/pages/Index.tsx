@@ -1,15 +1,12 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MessageSquare, FileText, BarChart2, Shield, Users, Building, GraduationCap, FileCheck } from "lucide-react";
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
-      
-      <main className="flex-grow pt-16">
+      <main className="flex-grow">
         {/* Hero Section */}
         <section className="bg-gradient-to-r from-blue-800 to-red-900 py-20 px-4 text-white">
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">

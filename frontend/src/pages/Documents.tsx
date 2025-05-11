@@ -1,6 +1,4 @@
-
 import { useState } from "react";
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DocumentGenerator from "@/components/DocumentGenerator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -18,8 +16,6 @@ const Documents = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
-      
       <main className="flex-grow py-8 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="mb-8">

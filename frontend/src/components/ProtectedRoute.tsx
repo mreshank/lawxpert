@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { Loader2 } from "lucide-react";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -8,24 +9,33 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requireAdmin = false }) => {
-  const { user, loading, isAdmin } = useAuth();
+  const { isAuthenticated, user, loading, isAdmin } = useAuth();
+
   const location = useLocation();
+
+  console.log("user : ", user);
+  console.log("isAdmin : ", isAdmin);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+        <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
       </div>
     );
   }
 
   if (!user) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }
 
-  if (requireAdmin && !isAdmin) {
-    return <Navigate to="/" replace />;
+  if (requireAdmin && user?.user.role !== 'admin') {
+    return <Navigate to="/dashboard" replace />;
   }
+
+  // if (!user) {
+  //   // Save the attempted URL for redirecting after login
+  //   return <Navigate to="/login" state={{ from: location.pathname }} replace />;
+  // }
 
   return <>{children}</>;
 };
