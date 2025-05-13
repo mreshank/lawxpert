@@ -1,8 +1,8 @@
-# Welcome to your Lovable project
+# Welcome to your EshankTyagi project
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/3078e036-429f-48db-8c73-8bfeac779019
+**URL**: https://EshankTyagi.dev/projects/3078e036-429f-48db-8c73-8bfeac779019
 
 ## Setting Up the AI Assistant (Important)
 
@@ -23,15 +23,15 @@ You can use the `src/env.example` file as a template. **Without this step, the A
 
 There are several ways of editing your application.
 
-**Use Lovable**
+**Use EshankTyagi**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/3078e036-429f-48db-8c73-8bfeac779019) and start prompting.
+Simply visit the [EshankTyagi Project](https://EshankTyagi.dev/projects/3078e036-429f-48db-8c73-8bfeac779019) and start prompting.
 
-Changes made via Lovable will be committed automatically to this repo.
+Changes made via EshankTyagi will be committed automatically to this repo.
 
 **Use your preferred IDE**
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in EshankTyagi.
 
 The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
@@ -77,12 +77,12 @@ This project is built with:
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/3078e036-429f-48db-8c73-8bfeac779019) and click on Share -> Publish.
+Simply open [EshankTyagi](https://EshankTyagi.dev/projects/3078e036-429f-48db-8c73-8bfeac779019) and click on Share -> Publish.
 
-## Can I connect a custom domain to my Lovable project?
+## Can I connect a custom domain to my EshankTyagi project?
 
 Yes, you can!
 
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Read more here: [Setting up a custom domain](https://docs.EshankTyagi.dev/tips-tricks/custom-domain#step-by-step-guide)
