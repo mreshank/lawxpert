@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // MongoDB connection
-const MONGO_URI = process.env.CONNECTION_STRING || 'mongodb+srv://mreshanktyagi:GgmLEQcxBZzU1OVD@hackathons.1of9jzo.mongodb.net/?retryWrites=true&w=majority&appName=hackathons';
+const MONGO_URI = process.env.CONNECTION_STRING ;
 
 mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,
@@ -27,7 +27,7 @@ mongoose.connect(MONGO_URI, {
 
 // Routes
 const authRoutes = require('./routes/authRoutes');
-app.use('/api/auth', authRoutes);
+app.use('/auth', authRoutes);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
