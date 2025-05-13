@@ -1,0 +1,11 @@
+# LawXpert Frontend Environment Variables
+
+# OpenRouter API Key (required for AI assistant functionality)
+# VITE_OPENROUTER_API_KEY=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
+
+# VITE_OPENROUTER_API_KEY=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
+VITE_OPENROUTER_API_KEY_BACKUP=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
+
+VITE_OPENROUTER_API_KEY=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
+
+# Other configuration options - - -

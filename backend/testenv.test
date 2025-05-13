@@ -1,0 +1,4 @@
+MONGO_URI=mongodb+srv://mreshanktyagi:GgmLEQcxBZzU1OVD@hackathons.1of9jzo.mongodb.net/?retryWrites=true&w=majority&appName=hackathons
+CONNECTION_STRING=mongodb+srv://mreshanktyagi:GgmLEQcxBZzU1OVD@hackathons.1of9jzo.mongodb.net/?retryWrites=true&w=majority&appName=hackathons
+JWT_SECRET="9NUG9mteauGQbEKGAqbehYZDeqwTP3WZJzuNQtYf"
+PORT=5000
