@@ -155,7 +155,7 @@ const ChatInterface = ({ compact = false }: ChatInterfaceProps) => {
 
   // Check if the API key is configured in the environment
   const isApiKeyConfigured = (): boolean => {
-    return !!(import.meta.env.VITE_OPENROUTER_API_KEY || "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");
+    return !!(import.meta.env.VITE_OPENROUTER_API_KEY);
   };
 
   const handleSendMessage = async (e?: React.FormEvent) => {
