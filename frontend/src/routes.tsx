@@ -15,7 +15,7 @@ import LegalDocumentation from './pages/LegalDocumentation';
 import TestMarkdown from './test-markdown';
 import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/ProtectedRoute';
-
+import AnalyzeDocument from './components/AnalyzeDocument';
 
 const AppRoutes = () => {
   return (
@@ -58,6 +58,7 @@ const AppRoutes = () => {
           }
         />
         <Route path="/legal-documentation" element={<LegalDocumentation />} />
+        <Route path="/analyze" element={<AnalyzeDocument />} />
         <Route path="/test-markdown" element={<TestMarkdown />} />
         <Route path="*" element={<NotFound />} />
       </Route>
