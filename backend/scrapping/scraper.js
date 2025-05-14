@@ -99,16 +99,63 @@ async function scrapeLawyerProfile(url) {
     let contact_number = $('span:contains("Contact Number")').parent().text().replace('Contact Number:', '').trim() ||
                         $('span:contains("Phone")').parent().text().replace('Phone:', '').trim();
     
+    // Try to find contact number in other parts of the page
+    if (!contact_number) {
+      // Look for contact numbers in view contact number links or buttons
+      const contactLink = $('a:contains("VIEW CONTACT NUMBER"), a:contains("CONTACT"), a:contains("Phone")');
+      if (contactLink.length > 0) {
+        const contactText = contactLink.text().trim();
+        const phoneMatch = contactText.match(/[0-9]+[*]+[0-9]+/);
+        if (phoneMatch) {
+          contact_number = phoneMatch[0];
+        }
+      }
+    }
+    
     // Languages
     const languagesElem = $('span:contains("Languages")').parent();
     let languages = languagesElem.text().replace('Languages:', '').trim();
+    
+    // Try alternative method to find languages
+    if (!languages) {
+      $('div.item-info').each((_, el) => {
+        const text = $(el).text().trim();
+        if (text.includes('Languages')) {
+          languages = text.replace(/Languages:?/i, '').trim();
+        }
+      });
+    }
     
     // Practice areas
     const practiceAreasElem = $('span:contains("Practice Area")').parent();
     let practice_areas = practiceAreasElem.text().replace('Practice Area:', '').trim();
     
+    // Try alternative methods to find practice areas
+    if (!practice_areas) {
+      // Look in item-info divs
+      $('div.item-info').each((_, el) => {
+        const text = $(el).text().trim();
+        if (text.includes('Practice area') || text.includes('Practice Area')) {
+          practice_areas = text.replace(/Practice areas?:?/i, '').trim();
+        }
+      });
+
+      // Try mobile-info divs
+      if (!practice_areas) {
+        $('div.mobile-info').each((_, el) => {
+          const label = $(el).find('.label-detail').text().trim();
+          if (label === 'Practice Areas') {
+            practice_areas = $(el).text().replace(label, '').trim();
+          }
+        });
+      }
+    }
+    
     // About section - looking for lawyer bio
     const aboutParagraphs = [];
+    
+    // Try multiple ways to find the about text
+    // Method 1: Box cards with About heading
     $('div.box-card').each((_, el) => {
       const heading = $(el).find('h3, h2').text().trim();
       if (heading && heading.includes('About')) {
@@ -124,18 +171,86 @@ async function scrapeLawyerProfile(url) {
         }
       }
     });
+
+    // Method 2: Profile summary section
+    if (aboutParagraphs.length === 0) {
+      $('.profile-summary').each((_, el) => {
+        const text = $(el).text().trim();
+        if (text) {
+          // Split by line breaks to create paragraphs
+          const paragraphs = text.split(/\n+/).filter(p => p.trim().length > 0);
+          if (paragraphs.length > 0) {
+            aboutParagraphs.push(...paragraphs);
+          } else {
+            aboutParagraphs.push(text);
+          }
+        }
+      });
+    }
+
+    // Method 3: About sections in mobile view
+    if (aboutParagraphs.length === 0) {
+      $('div.mobile-info').each((_, el) => {
+        const label = $(el).find('.label-detail').text().trim();
+        if (label === 'About') {
+          const text = $(el).text().replace(label, '').trim();
+          if (text) aboutParagraphs.push(text);
+        }
+      });
+    }
     
     // Specialization
     let specialization = '';
+    
+    // Try multiple ways to find the specialization
+    // Method 1: Box cards with Specialization heading
     $('div.box-card').each((_, el) => {
       const heading = $(el).find('h3, h2').text().trim();
       if (heading && (heading.includes('Specialization') || heading.includes('Expertise'))) {
         specialization = $(el).text().replace(heading, '').trim();
       }
     });
+
+    // Method 2: Specialization in label-detail sections
+    if (!specialization) {
+      $('div.label-detail').each((_, el) => {
+        const text = $(el).text().trim();
+        if (text.includes('Specialization')) {
+          // Find the div that follows this label
+          const specContent = $(el).next('div');
+          if (specContent.length > 0) {
+            specialization = specContent.text().trim();
+          } else {
+            // Try parent's next sibling
+            const parentNext = $(el).parent().next();
+            if (parentNext.length > 0) {
+              specialization = parentNext.text().trim();
+            }
+          }
+        }
+      });
+    }
+
+    // Method 3: Mobile view specialization sections
+    if (!specialization) {
+      $('div.mobile-info').each((_, el) => {
+        const label = $(el).find('.label-detail').text().trim();
+        if (label === 'Specialization') {
+          const panel = $(el).find('.panel1').text().trim();
+          if (panel) {
+            specialization = panel;
+          } else {
+            specialization = $(el).text().replace(label, '').trim();
+          }
+        }
+      });
+    }
     
     // Courts
     const courts = [];
+    
+    // Try multiple ways to find the courts
+    // Method 1: Box cards with Court heading
     $('div.box-card').each((_, el) => {
       const heading = $(el).find('h3, h2').text().trim();
       if (heading && heading.includes('Court')) {
@@ -151,16 +266,41 @@ async function scrapeLawyerProfile(url) {
         }
       }
     });
+
+    // Method 2: Courts in label-detail sections
+    if (courts.length === 0) {
+      $('div.label-detail').each((_, el) => {
+        const text = $(el).text().trim();
+        if (text.includes('Courts')) {
+          const courtsList = $(el).next('div').text().trim();
+          if (courtsList) {
+            const courtItems = courtsList.split(',').map(item => item.trim()).filter(item => item);
+            courts.push(...courtItems);
+          }
+        }
+      });
+    }
+
+    // Method 3: Courts list in lists
+    if (courts.length === 0) {
+      $('ul.list-court li').each((_, li) => {
+        const text = $(li).text().trim();
+        if (text) courts.push(text);
+      });
+    }
     
     // Reviews
     const popular_reviews = [];
+    
+    // Try multiple ways to find reviews
+    // Method 1: Box cards with Review heading
     $('div.box-card').each((_, el) => {
       const heading = $(el).find('h3, h2').text().trim();
       if (heading && (heading.includes('Review') || heading.includes('Testimonial'))) {
         $(el).find('.review-box, .review-item, .testimonial').each((_, review) => {
           const name = $(review).find('.reviewer-name, .client-name, .author').text().trim();
           const review_text = $(review).find('.review-text, .testimonial-text, .review-content').text().trim();
-          const age = $(review).find('.review-date, .date, .time-ago').text().trim();
+          const age = $(review).find('.review-date, .date, .time-ago, .review-timestamp').text().trim();
           const verified_client = $(review).find('.verified-client, .verified, .is-verified').length > 0;
           
           if (name || review_text) {
@@ -174,9 +314,31 @@ async function scrapeLawyerProfile(url) {
         });
       }
     });
+
+    // Method 2: Individual reviews in review sections
+    if (popular_reviews.length === 0) {
+      $('.review-item, .review-box, .testimonial, .client-review').each((_, review) => {
+        const name = $(review).find('.reviewer-name, .client-name, .author').text().trim();
+        const review_text = $(review).find('.review-text, .testimonial-text, .review-content').text().trim();
+        const age = $(review).find('.review-date, .date, .time-ago, .review-timestamp').text().trim();
+        const verified_client = $(review).find('.verified-client, .verified, .is-verified').length > 0;
+        
+        if (name || review_text) {
+          popular_reviews.push({
+            name,
+            verified_client,
+            review: review_text,
+            age
+          });
+        }
+      });
+    }
     
     // Questions and Answers
     const questions_answered = [];
+    
+    // Try multiple ways to find Q&As
+    // Method 1: Box cards with Question or Answer heading
     $('div.box-card').each((_, el) => {
       const heading = $(el).find('h3, h2').text().trim();
       if (heading && (heading.includes('Question') || heading.includes('Answer'))) {
@@ -191,9 +353,41 @@ async function scrapeLawyerProfile(url) {
         });
       }
     });
+
+    // Method 2: Question and answers in sections with h5/b/p structure
+    if (questions_answered.length === 0) {
+      const qaSection = $('h2:contains("Questions Answered")').parent().parent();
+      if (qaSection.length > 0) {
+        const questionHeadings = qaSection.find('h5');
+        questionHeadings.each((_, qh) => {
+          const question = $(qh).text().replace(/Q:|Question:/i, '').trim();
+          let detail = '';
+          let answer = '';
+          
+          // Look for the next paragraph for details
+          const nextP = $(qh).next('p');
+          if (nextP.length > 0) {
+            detail = nextP.text().trim();
+            
+            // Look for the answer paragraph
+            const answerP = nextP.next('p');
+            if (answerP.length > 0 && answerP.text().includes('answered')) {
+              answer = answerP.text().replace(/.*answered[:\s]*/i, '').trim();
+            }
+          }
+          
+          if (question) {
+            questions_answered.push([question, detail, answer]);
+          }
+        });
+      }
+    }
     
     // FAQ
     const faq = [];
+    
+    // Try multiple ways to find FAQs
+    // Method 1: Box cards with FAQ heading
     $('div.box-card').each((_, el) => {
       const heading = $(el).find('h3, h2').text().trim();
       if (heading && heading.includes('FAQ')) {
@@ -207,6 +401,39 @@ async function scrapeLawyerProfile(url) {
         });
       }
     });
+
+    // Method 2: Schema.org FAQ sections
+    if (faq.length === 0) {
+      $('[itemtype*="Question"]').each((_, el) => {
+        const question = $(el).find('[itemprop="name"]').text().trim();
+        const answer = $(el).find('[itemprop="text"]').text().trim();
+        
+        if (question && answer) {
+          faq.push([question, answer]);
+        }
+      });
+    }
+
+    // Method 3: FAQ headings with following text
+    if (faq.length === 0) {
+      const faqSection = $('h2:contains("FAQ")').parent().parent();
+      if (faqSection.length > 0) {
+        const faqHeadings = faqSection.find('h2.faq-question');
+        faqHeadings.each((_, fh) => {
+          const question = $(fh).text().trim();
+          const answerDiv = $(fh).next('div');
+          let answer = '';
+          
+          if (answerDiv.length > 0) {
+            answer = answerDiv.text().trim();
+          }
+          
+          if (question && answer) {
+            faq.push([question, answer]);
+          }
+        });
+      }
+    }
     
     // Create structured data matching the sample.json format
     const lawyerData = {
