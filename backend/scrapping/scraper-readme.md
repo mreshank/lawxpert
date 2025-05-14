@@ -13,7 +13,7 @@ This scraper uses Node.js, Axios, and Cheerio to extract detailed information ab
 - `sample-page-analysis.js` - A tool to analyze a sample page structure
 - `analyze-results.js` - A script to analyze the scraped data
 - `test-single-scrape.js` - A tool to test the scraper on a single lawyer profile
-- `fix-test-js.js` - A utility to ensure the ./test.json file is correctly formatted
+- `fix-test-js.js` - A utility to ensure the ./allLawyersList.json file is correctly formatted
 
 ## Data Structure
 
@@ -102,7 +102,7 @@ node backend/run-scraper.js
 ```
 
 This will:
-- Process each URL in the ./test.json file
+- Process each URL in the ./allLawyersList.json file
 - Extract lawyer information from each profile page
 - Save the data to `lawyers_data.json`
 - Add a delay between requests to avoid being blocked

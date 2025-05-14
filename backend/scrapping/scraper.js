@@ -15,16 +15,16 @@ try {
   console.log("Could not load sample.json:", error.message);
 }
 
-// Read the URLs from test.json
-const urlsFilePath = path.join(__dirname, 'test.json');
+// Read the URLs from allLawyersList.json
+const urlsFilePath = path.join(__dirname, 'allLawyersList.json');
 let urls = [];
 try {
-  console.log('Reading URLs from test.json');
+  console.log('Reading URLs from allLawyersList.json');
   const urlsFileContent = fs.readFileSync(urlsFilePath, 'utf8');
   urls = JSON.parse(urlsFileContent);
   console.log(`Loaded ${urls.length} URLs`);
 } catch (error) {
-  console.error('Error loading test.json:', error.message);
+  console.error('Error loading allLawyersList.json:', error.message);
   process.exit(1);
 }
 
@@ -298,7 +298,9 @@ async function scrapeLawyerProfile(url) {
       const heading = $(el).find('h3, h2').text().trim();
       if (heading && (heading.includes('Review') || heading.includes('Testimonial'))) {
         $(el).find('.review-box, .review-item, .testimonial').each((_, review) => {
-          const name = $(review).find('.reviewer-name, .client-name, .author').text().trim();
+          let name = $(review).find('.reviewer-name, .client-name, .author').text().trim();
+          name = name.replace(/\s*-\s*Verified Client.*$/i, '').trim();
+          
           const review_text = $(review).find('.review-text, .testimonial-text, .review-content').text().trim();
           const age = $(review).find('.review-date, .date, .time-ago, .review-timestamp').text().trim();
           const verified_client = $(review).find('.verified-client, .verified, .is-verified').length > 0;
@@ -318,7 +320,9 @@ async function scrapeLawyerProfile(url) {
     // Method 2: Individual reviews in review sections
     if (popular_reviews.length === 0) {
       $('.review-item, .review-box, .testimonial, .client-review').each((_, review) => {
-        const name = $(review).find('.reviewer-name, .client-name, .author').text().trim();
+        let name = $(review).find('.reviewer-name, .client-name, .author').text().trim();
+        name = name.replace(/\s*-\s*Verified Client.*$/i, '').trim();
+        
         const review_text = $(review).find('.review-text, .testimonial-text, .review-content').text().trim();
         const age = $(review).find('.review-date, .date, .time-ago, .review-timestamp').text().trim();
         const verified_client = $(review).find('.verified-client, .verified, .is-verified').length > 0;

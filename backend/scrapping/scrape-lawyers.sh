@@ -19,17 +19,17 @@ SCRIPT_DIR="$(pwd)"
 echo "Working directory: $SCRIPT_DIR"
 echo ""
 
-# Check if test.json exists
-if [ ! -f "./test.json" ]; then
-  echo -e "${RED}Error: test.json file not found in the current directory.${NC}"
+# Check if allLawyersList.json exists
+if [ ! -f "./allLawyersList.json" ]; then
+  echo -e "${RED}Error: allLawyersList.json file not found in the current directory.${NC}"
   exit 1
 fi
 
 # Step 1: Fix the test.js file format
-echo -e "${YELLOW}Step 1: Checking test.json file format...${NC}"
+echo -e "${YELLOW}Step 1: Checking allLawyersList.json file format...${NC}"
 node fix-test-js.js
 if [ $? -ne 0 ]; then
-  echo -e "${RED}Error fixing test.json file. Please check the file manually.${NC}"
+  echo -e "${RED}Error fixing allLawyersList.json file. Please check the file manually.${NC}"
   exit 1
 fi
 echo ""
@@ -64,7 +64,7 @@ echo ""
 
 # Step 4: Run the main scraper
 echo -e "${YELLOW}Step 4: Running the full scraper for all lawyers...${NC}"
-echo "This will scrape data for all lawyers in the test.json file."
+echo "This will scrape data for all lawyers in the allLawyersList.json file."
 echo "WARNING: This may take a long time depending on the number of profiles."
 read -p "Do you want to run the full scraper now? (y/n): " run_full
 if [[ $run_full == "y" || $run_full == "Y" ]]; then

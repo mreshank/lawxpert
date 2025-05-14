@@ -2,10 +2,10 @@ const fs = require('fs');
 const path = require('path');
 
 // Path to the URLs file
-const urlsFilePath = path.join(__dirname, './test.json');
+const urlsFilePath = path.join(__dirname, './allLawyersList.json');
 
 try {
-  console.log('Reading ./test.jsonfile...');
+  console.log('Reading ./allLawyersList.json file...');
   const content = fs.readFileSync(urlsFilePath, 'utf8');
   
   // Check if the file ends with a semicolon after the closing bracket

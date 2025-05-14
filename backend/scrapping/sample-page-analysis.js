@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Path to the URLs file
-const urlsFilePath = path.join(__dirname, './test.json');
+const urlsFilePath = path.join(__dirname, './allLawyersList.json');
 const urlsFileContent = fs.readFileSync(urlsFilePath, 'utf8');
 const urls = JSON.parse(urlsFileContent.replace(/];$/, ']'));
 

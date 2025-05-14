@@ -328,7 +328,12 @@ async function scrapeLawyerProfile(url) {
       const heading = $(el).find('h3, h2').text().trim();
       if (heading && (heading.includes('Review') || heading.includes('Testimonial'))) {
         $(el).find('.review-box, .review-item, .testimonial').each((_, review) => {
-          const name = $(review).find('.reviewer-name, .client-name, .author').text().trim();
+          // Fix the name extraction to remove the dash and "Verified Client" text
+          let name = $(review).find('.reviewer-name, .client-name, .author').text().trim();
+          // Clean up the name by removing the dash and "Verified Client" text
+          name = name.replace(/\s*-\s*Verified Client.*$/i, '').trim();
+          console.log("DEBUG - Found review name (cleaned):", name);
+          
           const review_text = $(review).find('.review-text, .testimonial-text, .review-content').text().trim();
           const age = $(review).find('.review-date, .date, .time-ago, .review-timestamp').text().trim();
           const verified_client = $(review).find('.verified-client, .verified, .is-verified').length > 0;
@@ -348,7 +353,12 @@ async function scrapeLawyerProfile(url) {
     // Method 2: Individual reviews in review sections
     if (popular_reviews.length === 0) {
       $('.review-item, .review-box, .testimonial, .client-review').each((_, review) => {
-        const name = $(review).find('.reviewer-name, .client-name, .author').text().trim();
+        // Fix the name extraction to remove the dash and "Verified Client" text
+        let name = $(review).find('.reviewer-name, .client-name, .author').text().trim();
+        // Clean up the name by removing the dash and "Verified Client" text
+        name = name.replace(/\s*-\s*Verified Client.*$/i, '').trim();
+        console.log("DEBUG - Found review name (cleaned):", name);
+        
         const review_text = $(review).find('.review-text, .testimonial-text, .review-content').text().trim();
         const age = $(review).find('.review-date, .date, .time-ago, .review-timestamp').text().trim();
         const verified_client = $(review).find('.verified-client, .verified, .is-verified').length > 0;
