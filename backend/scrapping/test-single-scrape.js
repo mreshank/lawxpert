@@ -39,6 +39,22 @@ async function scrapeLawyerProfile(url) {
               $('.lawyer-profile h1').text().trim();
     console.log("DEBUG - Found name:", name);
     
+    // Get image URL from img tag with class "media-object img-responsive"
+    let img_url = '';
+    const imgTag = $('img.media-object.img-responsive');
+    if (imgTag.length > 0) {
+      img_url = imgTag.attr('src');
+      // Ensure the URL is absolute
+      if (img_url && !img_url.startsWith('http')) {
+        if (img_url.startsWith('//')) {
+          img_url = 'https:' + img_url;
+        } else {
+          img_url = new URL(img_url, 'https://lawrato.com').href;
+        }
+      }
+    }
+    console.log("DEBUG - Found image URL:", img_url);
+    
     // Try to find verified badge
     let is_verified = $('.verified-badge, .badge-verified, .lawyer-verified').length > 0 ||
                      $('.verified').length > 0;
@@ -569,6 +585,7 @@ async function scrapeLawyerProfile(url) {
     const lawyerData = {
       is_verified,
       name,
+      img_url,
       rating,
       rating_count,
       contact_number,

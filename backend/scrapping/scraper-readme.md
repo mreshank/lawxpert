@@ -1,157 +1,144 @@
 # Lawyer Profile Scraper
 
-A set of tools to scrape lawyer profiles from lawrato.com and analyze the extracted data.
+This scraper extracts lawyer profile information from lawrato.com. It's designed to collect comprehensive details about lawyers including their contact information, expertise, reviews, and more.
 
-## Overview
+## Features
 
-This scraper uses Node.js, Axios, and Cheerio to extract detailed information about lawyers from their profile pages on lawrato.com. The URLs are read from the `test.js` file in the root directory, and the data is structured to match the format in `sample.json`.
+The scraper extracts the following information from lawyer profiles:
 
-## Files in this Directory
+- **Basic Information**:
+  - Name
+  - Profile Image URL
+  - Verification Status
+  - Rating and Rating Count
+  - Contact Number
+  - Location
+  - Experience
+  - Languages
+  - Practice Areas
 
-- `scraper.js` - The main scraper script that extracts lawyer information
-- `run-scraper.js` - A utility script to run the scraper
-- `sample-page-analysis.js` - A tool to analyze a sample page structure
-- `analyze-results.js` - A script to analyze the scraped data
-- `test-single-scrape.js` - A tool to test the scraper on a single lawyer profile
-- `fix-test-js.js` - A utility to ensure the ./allLawyersList.json file is correctly formatted
+- **Detailed Information**:
+  - About (Lawyer Bio)
+  - Specialization
+  - Courts
+  - Popular Reviews
+  - Questions Answered
+  - FAQs
 
-## Data Structure
+## Files and Scripts
 
-The scraper extracts data to match the structure in the sample.json file, which includes:
+- `scraper.js`: Main scraper script that extracts lawyer information and saves it to JSON
+- `run-scraper.js`: Simple script to execute the main scraper
+- `test-single-scrape.js`: Tool to test scraping on a single profile
+- `sample-page-analysis.js`: Script to analyze HTML structure of profile pages
+- `sample-page-analysis-new.js`: Script focused on analyzing profile image elements
+- `analyze-results.js`: Script to analyze scraped data
+- `fix-test-js.js`: Utility to ensure URLs file is formatted correctly
+- `scrape-lawyers.sh`: Shell script to automate the scraping process
 
-```json
-{
-  "is_verified": true,
-  "name": "Lawyer Name",
-  "rating": 4.5,
-  "rating_count": "100+",
-  "contact_number": "9876****43",
-  "location": "Location",
-  "experience": "10 years",
-  "languages": "English, Hindi",
-  "practice_areas": "Criminal, Civil, Property",
-  "about": ["Paragraph 1", "Paragraph 2"],
-  "specialization": "Divorce, Property, Criminal",
-  "courts": ["Court 1", "Court 2"],
-  "popular_reviews": [
-    {
-      "name": "Reviewer Name",
-      "verified_client": true,
-      "review": "Review text",
-      "age": "2 months ago"
-    }
-  ],
-  "questions_answered": [
-    ["Question Title", "Question Details", "Lawyer's Answer"]
-  ],
-  "faq": [
-    ["FAQ Question", "FAQ Answer"]
-  ]
-}
+## Setup
+
+1. Make sure you have Node.js installed
+2. Install required dependencies:
+   ```
+   npm install axios cheerio
+   ```
+
+## URL Input
+
+The scraper expects a JSON file with URLs to lawyer profiles. The default file is `allLawyersList.json`, which should contain an array of URLs.
+
+## Usage
+
+### Test on a Single Profile
+
+To test the scraper on a single profile:
+
+```
+node test-single-scrape.js
 ```
 
-## How to Use
+This will scrape a sample profile and save the result to `test_lawyer_data.json`.
 
-### Step 0: Prepare Your URL List
+### Run the Full Scraper
 
-Make sure your `test.js` file in the root directory is properly formatted as a valid JSON array. You can run the fix-test-js script to ensure correct formatting:
+To scrape all lawyer profiles from the URL list:
 
-```bash
-node backend/fix-test-js.js
+```
+node run-scraper.js
 ```
 
-### Step 1: Analyze a Sample Page
+Or, to use the shell script with more options:
 
-Before running the full scraper, it's recommended to analyze a sample page to verify the HTML structure:
-
-```bash
-node backend/sample-page-analysis.js
+```
+./scrape-lawyers.sh
 ```
 
-This will:
-- Fetch the first URL from test.js
-- Save the raw HTML to `sample_page.html`
-- Log information about the page structure
-- Help identify the correct CSS selectors for different pieces of information
+### Analyze HTML Structure
 
-### Step 2: Test on a Single Profile
+Before scraping, you can analyze the HTML structure of sample pages:
 
-Test the scraper on a single lawyer profile to verify it works correctly:
-
-```bash
-node backend/test-single-scrape.js
+```
+node sample-page-analysis.js
 ```
 
-Or specify a specific URL:
+For a focused analysis on profile images:
 
-```bash
-node backend/test-single-scrape.js https://lawrato.com/advocate-some-name
+```
+node sample-page-analysis-new.js
 ```
 
-This will:
-- Scrape the specified profile
-- Save the extracted data to `test_lawyer_data.json`
-- Display a summary of the extracted data
+### Analyze Results
 
-### Step 3: Run the Full Scraper
+After scraping, analyze the collected data:
 
-To scrape all lawyer profiles:
-
-```bash
-node backend/run-scraper.js
+```
+node analyze-results.js
 ```
 
-This will:
-- Process each URL in the ./allLawyersList.json file
-- Extract lawyer information from each profile page
-- Save the data to `lawyers_data.json`
-- Add a delay between requests to avoid being blocked
-- Save intermediate results for every 5 lawyers scraped
+## Output
 
-### Step 4: Analyze the Results
+The scraper saves data to these files:
+- `lawyers_data.json`: Main output with all scraped profiles
+- `test_lawyer_data.json`: Output from single profile test
+- `debug_page.html`: HTML content of the last scraped page for debugging
 
-After scraping is complete, analyze the results:
+## Error Handling
 
-```bash
-node backend/analyze-results.js
-```
+The scraper includes robust error handling:
+- If data can't be extracted directly, it falls back to sample data
+- Failed profiles are logged with error messages
+- Progress is saved regularly during execution
 
-This will:
-- Provide statistics about the scraped data
-- Count successful vs. failed scrapes
-- Analyze data completeness for different fields
-- Show top specializations and locations
-- Export a clean version of the data to `lawyers_clean_data.json`
+## Image URL Extraction
 
-## Extracted Information
+The scraper now extracts the lawyer's profile image URL and stores it as `img_url` in the output. It uses the following approach:
 
-The scraper extracts the following information for each lawyer:
+1. Looks for an `<img>` element with class `media-object img-responsive`
+2. Extracts the `src` attribute from the found element
+3. Ensures the URL is absolute by converting relative URLs to absolute
+4. Falls back to sample data if the image can't be found
 
-- Verification status
-- Name
-- Rating and rating count
-- Contact number
-- Location
-- Experience
-- Languages
-- Practice areas
-- About/bio (paragraphs)
-- Specialization
-- Courts
-- Reviews (with reviewer name, verification status, review text, and age)
-- Answered questions (question title, details, and answer)
-- FAQs
+This extraction is implemented in both the main scraper and the test scraper.
 
-## Troubleshooting
+## Regenerating Data with Image URLs
 
-If the scraper fails to extract certain information, consider:
+To update your existing data with image URLs, follow these steps:
 
-1. Check the HTML structure in `sample_page.html`
-2. Modify the CSS selectors in `scraper.js`
-3. Run on a smaller batch of URLs first
-4. Increase delay time between requests
-5. Check for any potential IP blocking issues
+1. Make sure your URL list is up-to-date in `allLawyersList.json`
+2. Run the scraper again:
+   ```
+   node run-scraper.js
+   ```
+3. After scraping completes, run the analysis to verify image URLs were extracted:
+   ```
+   node analyze-results.js
+   ```
 
-## Note
+The analysis will show what percentage of profiles have valid image URLs and what domains they come from.
 
-Web scraping should be performed responsibly and ethically. Always respect the website's robots.txt file and terms of service. This scraper includes intentional delays between requests to minimize server load. 
+## Notes
+
+- The scraper adds random delays between requests to avoid being blocked
+- It creates absolute URLs for images that have relative paths
+- It attempts to extract data using multiple selectors to handle different page structures 
