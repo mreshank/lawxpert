@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
-const { createProxyMiddleware } = require('http-proxy-middleware');
 
 // Load environment variables
 dotenv.config();
@@ -32,17 +31,8 @@ app.use('/api/auth', authRoutes);
 
 // Root route for health check
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', message: 'LawXpert API is running' });
+  res.json({ status: 'ok', message: 'LawXpert Express API is running' });
 });
-
-// Proxy requests to /analyze to the Python FastAPI service
-app.use('/analyze', createProxyMiddleware({
-  target: 'http://localhost:8000',
-  changeOrigin: true,
-  pathRewrite: {
-    '^/analyze': '/analyze'
-  }
-}));
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`Express server running on port ${PORT}`));

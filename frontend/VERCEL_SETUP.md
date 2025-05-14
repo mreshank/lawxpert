@@ -18,7 +18,7 @@ This guide will help you deploy your React/Vite frontend on Vercel and configure
 
 4. Set environment variables:
    - `VITE_API_BASE_URL`: `https://lawxpert-wqkm.onrender.com/api`
-   - `VITE_PYTHON_API_URL`: `https://lawxpert-wqkm.onrender.com`
+   - `VITE_PYTHON_API_URL`: `https://lawxpert-py.onrender.com`
 
 5. Deploy the project
 
@@ -28,13 +28,13 @@ After deployment, your application should be available at `https://lawexpert.ver
 
 The frontend should now correctly communicate with:
 - Express API at `https://lawxpert-wqkm.onrender.com/api/*`  
-- Python document analysis at `https://lawxpert-wqkm.onrender.com/analyze`
+- Python document analysis at `https://lawxpert-py.onrender.com/analyze`
 
 ## Troubleshooting
 
 If you encounter CORS issues or other connection problems:
 
-1. Ensure the backend CORS settings include your Vercel domain
+1. Ensure both backends' CORS settings include your Vercel domain (`https://lawexpert.vercel.app`)
 2. Check if environment variables are correctly set in Vercel
 3. Verify network requests in the browser's developer tools
 4. Test the API endpoints using tools like Postman or Insomnia 

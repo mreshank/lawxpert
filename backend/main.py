@@ -21,7 +21,7 @@ app = FastAPI()
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, replace with your frontend domain
+    allow_origins=["https://lawexpert.vercel.app", "http://localhost:5173", "*"],  # In production, use your frontend domain
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
