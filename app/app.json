@@ -9,7 +9,7 @@
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splash/splash-screen.png",
-      "resizeMode": "fill",
+      "resizeMode": "cover",
       "backgroundColor": "#2c2a56"
     },
     "newArchEnabled": true,
@@ -21,6 +21,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "package": "com.lawxpert.app",
+      "permissions": [],
       "edgeToEdgeEnabled": true
     },
     "web": {
@@ -33,7 +35,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-screen.png",
+          "image": "./assets/splash/splash-screen.png",
           "resizeMode": "cover",
           "backgroundColor": "#2c2a56"
         }
