@@ -12,18 +12,63 @@ The scraper extracts the following information from lawyer profiles:
   - Verification Status
   - Rating and Rating Count
   - Contact Number
+  - Page URL
   - Location
   - Experience
-  - Languages
-  - Practice Areas
+  - Languages (array)
+  - Practice Areas (array)
 
 - **Detailed Information**:
   - About (Lawyer Bio)
-  - Specialization
-  - Courts
+  - Specialization (array)
+  - Courts (array)
   - Popular Reviews
   - Questions Answered
   - FAQs
+
+## Data Format
+
+The scraper outputs data in the following JSON format:
+
+```json
+{
+  "is_verified": true,
+  "name": "Advocate Name",
+  "img_url": "https://example.com/image.jpg",
+  "rating": 4.7,
+  "rating_count": "200+",
+  "contact_number": "9876****43",
+  "page_url": "https://lawrato.com/advocate-name",
+  "location": "Location",
+  "experience": "10 years",
+  "languages": ["English", "Hindi"],
+  "practice_areas": ["Criminal", "Civil", "Property"],
+  "about": ["Paragraph 1", "Paragraph 2"],
+  "specialization": ["Divorce", "Property", "Criminal"],
+  "courts": ["Supreme Court", "High Court"],
+  "popular_reviews": [
+    {
+      "name": "Reviewer Name",
+      "verified_client": true,
+      "review": "Review text",
+      "age": "2 months ago"
+    }
+  ],
+  "questions_answered": [
+    {
+      "question": "Question Title",
+      "details": "Question Details",
+      "answer": "Lawyer's Answer"
+    }
+  ],
+  "faq": [
+    {
+      "question": "FAQ Question",
+      "answer": "FAQ Answer"
+    }
+  ]
+}
+```
 
 ## Files and Scripts
 
@@ -141,4 +186,6 @@ The analysis will show what percentage of profiles have valid image URLs and wha
 
 - The scraper adds random delays between requests to avoid being blocked
 - It creates absolute URLs for images that have relative paths
-- It attempts to extract data using multiple selectors to handle different page structures 
+- It attempts to extract data using multiple selectors to handle different page structures
+- String fields like 'languages', 'practice_areas', and 'specialization' are now stored as arrays
+- FAQ and questions_answered are now stored as arrays of objects instead of arrays of arrays 

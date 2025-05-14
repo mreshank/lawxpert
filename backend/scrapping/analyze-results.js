@@ -17,6 +17,7 @@ const stats = {
     rating: 0,
     rating_count: 0,
     contact_number: 0,
+    page_url: 0,
     location: 0,
     experience: 0,
     languages: 0,
@@ -74,10 +75,31 @@ lawyersData.forEach(lawyer => {
           // Invalid URL
         }
       }
-    } else if (field === 'about' || field === 'courts' || field === 'popular_reviews' || 
-              field === 'questions_answered' || field === 'faq') {
+    } else if (field === 'page_url') {
+      // Check if page_url exists and is a valid URL
+      hasValue = lawyer.page_url && lawyer.page_url.startsWith('http');
+    } else if (field === 'about' || field === 'courts' || field === 'languages' || 
+              field === 'practice_areas' || field === 'specialization') {
       // Arrays should have at least one item
       hasValue = Array.isArray(lawyer[field]) && lawyer[field].length > 0;
+    } else if (field === 'popular_reviews' || field === 'questions_answered' || field === 'faq') {
+      // Arrays of objects should have at least one item
+      hasValue = Array.isArray(lawyer[field]) && lawyer[field].length > 0;
+      
+      // Validate that the array items are objects with the required keys
+      if (hasValue) {
+        const firstItem = lawyer[field][0];
+        if (field === 'popular_reviews') {
+          hasValue = firstItem && typeof firstItem === 'object' && 
+                    ('name' in firstItem || 'review' in firstItem);
+        } else if (field === 'questions_answered') {
+          hasValue = firstItem && typeof firstItem === 'object' && 
+                    ('question' in firstItem || 'answer' in firstItem);
+        } else if (field === 'faq') {
+          hasValue = firstItem && typeof firstItem === 'object' && 
+                    ('question' in firstItem || 'answer' in firstItem);
+        }
+      }
     } else if (field === 'rating') {
       hasValue = typeof lawyer[field] === 'number' && lawyer[field] > 0;
       
@@ -103,15 +125,11 @@ lawyersData.forEach(lawyer => {
   }
   
   // Track specializations
-  if (lawyer.specialization) {
-    // Parse comma-separated or newline-separated specializations
-    const specializations = lawyer.specialization
-      .split(/,|\n/)
-      .map(s => s.trim())
-      .filter(s => s);
-    
-    specializations.forEach(spec => {
-      stats.specializations[spec] = (stats.specializations[spec] || 0) + 1;
+  if (Array.isArray(lawyer.specialization) && lawyer.specialization.length > 0) {
+    lawyer.specialization.forEach(spec => {
+      if (spec && typeof spec === 'string') {
+        stats.specializations[spec] = (stats.specializations[spec] || 0) + 1;
+      }
     });
   }
   

@@ -129,41 +129,53 @@ async function scrapeLawyerProfile(url) {
     
     // Languages
     const languagesElem = $('span:contains("Languages")').parent();
-    let languages = languagesElem.text().replace('Languages:', '').trim();
+    let languagesText = languagesElem.text().replace('Languages:', '').trim();
     
     // Try alternative method to find languages
-    if (!languages) {
+    if (!languagesText) {
       $('div.item-info').each((_, el) => {
         const text = $(el).text().trim();
         if (text.includes('Languages')) {
-          languages = text.replace(/Languages:?/i, '').trim();
+          languagesText = text.replace(/Languages:?/i, '').trim();
         }
       });
     }
     
+    // Convert languages from string to array
+    let languages = [];
+    if (languagesText) {
+      languages = languagesText.split(',').map(lang => lang.trim()).filter(lang => lang);
+    }
+    
     // Practice areas
     const practiceAreasElem = $('span:contains("Practice Area")').parent();
-    let practice_areas = practiceAreasElem.text().replace('Practice Area:', '').trim();
+    let practiceAreasText = practiceAreasElem.text().replace('Practice Area:', '').trim();
     
     // Try alternative methods to find practice areas
-    if (!practice_areas) {
+    if (!practiceAreasText) {
       // Look in item-info divs
       $('div.item-info').each((_, el) => {
         const text = $(el).text().trim();
         if (text.includes('Practice area') || text.includes('Practice Area')) {
-          practice_areas = text.replace(/Practice areas?:?/i, '').trim();
+          practiceAreasText = text.replace(/Practice areas?:?/i, '').trim();
         }
       });
 
       // Try mobile-info divs
-      if (!practice_areas) {
+      if (!practiceAreasText) {
         $('div.mobile-info').each((_, el) => {
           const label = $(el).find('.label-detail').text().trim();
           if (label === 'Practice Areas') {
-            practice_areas = $(el).text().replace(label, '').trim();
+            practiceAreasText = $(el).text().replace(label, '').trim();
           }
         });
       }
+    }
+    
+    // Convert practice areas from string to array
+    let practice_areas = [];
+    if (practiceAreasText) {
+      practice_areas = practiceAreasText.split(',').map(area => area.trim()).filter(area => area);
     }
     
     // About section - looking for lawyer bio
@@ -215,31 +227,31 @@ async function scrapeLawyerProfile(url) {
     }
     
     // Specialization
-    let specialization = '';
+    let specializationText = '';
     
     // Try multiple ways to find the specialization
     // Method 1: Box cards with Specialization heading
     $('div.box-card').each((_, el) => {
       const heading = $(el).find('h3, h2').text().trim();
       if (heading && (heading.includes('Specialization') || heading.includes('Expertise'))) {
-        specialization = $(el).text().replace(heading, '').trim();
+        specializationText = $(el).text().replace(heading, '').trim();
       }
     });
 
     // Method 2: Specialization in label-detail sections
-    if (!specialization) {
+    if (!specializationText) {
       $('div.label-detail').each((_, el) => {
         const text = $(el).text().trim();
         if (text.includes('Specialization')) {
           // Find the div that follows this label
           const specContent = $(el).next('div');
           if (specContent.length > 0) {
-            specialization = specContent.text().trim();
+            specializationText = specContent.text().trim();
           } else {
             // Try parent's next sibling
             const parentNext = $(el).parent().next();
             if (parentNext.length > 0) {
-              specialization = parentNext.text().trim();
+              specializationText = parentNext.text().trim();
             }
           }
         }
@@ -247,18 +259,26 @@ async function scrapeLawyerProfile(url) {
     }
 
     // Method 3: Mobile view specialization sections
-    if (!specialization) {
+    if (!specializationText) {
       $('div.mobile-info').each((_, el) => {
         const label = $(el).find('.label-detail').text().trim();
         if (label === 'Specialization') {
           const panel = $(el).find('.panel1').text().trim();
           if (panel) {
-            specialization = panel;
+            specializationText = panel;
           } else {
-            specialization = $(el).text().replace(label, '').trim();
+            specializationText = $(el).text().replace(label, '').trim();
           }
         }
       });
+    }
+    
+    // Convert specialization from string to array
+    let specialization = [];
+    if (specializationText) {
+      specialization = specializationText.split(/,|\n/)
+        .map(spec => spec.trim())
+        .filter(spec => spec);
     }
     
     // Courts
@@ -277,7 +297,14 @@ async function scrapeLawyerProfile(url) {
         // If no list items found, get all text
         if (courts.length === 0) {
           const text = $(el).text().replace(heading, '').trim();
-          if (text) courts.push(text);
+          if (text) {
+            // Split by commas if text contains commas
+            if (text.includes(',')) {
+              courts.push(...text.split(',').map(t => t.trim()).filter(t => t));
+            } else {
+              courts.push(text);
+            }
+          }
         }
       }
     });
@@ -363,11 +390,15 @@ async function scrapeLawyerProfile(url) {
       if (heading && (heading.includes('Question') || heading.includes('Answer'))) {
         $(el).find('.qa-item, .question-answer, .answered-question').each((_, qa) => {
           const question = $(qa).find('.question-title, .q-title, .question-heading').text().trim();
-          const detail = $(qa).find('.question-detail, .q-text, .question-content').text().trim();
+          const details = $(qa).find('.question-detail, .q-text, .question-content').text().trim();
           const answer = $(qa).find('.answer-text, .a-text, .lawyer-answer').text().trim();
           
           if (question || answer) {
-            questions_answered.push([question, detail, answer]);
+            questions_answered.push({
+              question,
+              details,
+              answer
+            });
           }
         });
       }
@@ -380,13 +411,13 @@ async function scrapeLawyerProfile(url) {
         const questionHeadings = qaSection.find('h5');
         questionHeadings.each((_, qh) => {
           const question = $(qh).text().replace(/Q:|Question:/i, '').trim();
-          let detail = '';
+          let details = '';
           let answer = '';
           
           // Look for the next paragraph for details
           const nextP = $(qh).next('p');
           if (nextP.length > 0) {
-            detail = nextP.text().trim();
+            details = nextP.text().trim();
             
             // Look for the answer paragraph
             const answerP = nextP.next('p');
@@ -396,7 +427,11 @@ async function scrapeLawyerProfile(url) {
           }
           
           if (question) {
-            questions_answered.push([question, detail, answer]);
+            questions_answered.push({
+              question,
+              details,
+              answer
+            });
           }
         });
       }
@@ -415,7 +450,10 @@ async function scrapeLawyerProfile(url) {
           const answer = $(faqItem).find('.faq-answer, .a-text, .answer').text().trim();
           
           if (question || answer) {
-            faq.push([question, answer]);
+            faq.push({
+              question,
+              answer
+            });
           }
         });
       }
@@ -428,7 +466,10 @@ async function scrapeLawyerProfile(url) {
         const answer = $(el).find('[itemprop="text"]').text().trim();
         
         if (question && answer) {
-          faq.push([question, answer]);
+          faq.push({
+            question,
+            answer
+          });
         }
       });
     }
@@ -448,13 +489,16 @@ async function scrapeLawyerProfile(url) {
           }
           
           if (question && answer) {
-            faq.push([question, answer]);
+            faq.push({
+              question,
+              answer
+            });
           }
         });
       }
     }
     
-    // Create structured data matching the sample.json format
+    // Create structured data matching the sample_clean.json format
     const lawyerData = {
       is_verified,
       name,
@@ -462,6 +506,7 @@ async function scrapeLawyerProfile(url) {
       rating,
       rating_count,
       contact_number,
+      page_url: url,
       location,
       experience,
       languages,
@@ -486,13 +531,22 @@ async function scrapeLawyerProfile(url) {
       if (!contact_number && sampleData.contact_number) lawyerData.contact_number = sampleData.contact_number;
       if (!location && sampleData.location) lawyerData.location = sampleData.location;
       if (!experience && sampleData.experience) lawyerData.experience = sampleData.experience;
-      if (!languages && sampleData.languages) lawyerData.languages = sampleData.languages;
-      if (!practice_areas && sampleData.practice_areas) lawyerData.practice_areas = sampleData.practice_areas;
-      if (!specialization && sampleData.specialization) lawyerData.specialization = sampleData.specialization;
       
-      // Arrays
+      // Arrays - use sample data if our arrays are empty
+      if (languages.length === 0 && sampleData.languages && sampleData.languages.length > 0) {
+        lawyerData.languages = sampleData.languages;
+      }
+      
+      if (practice_areas.length === 0 && sampleData.practice_areas && sampleData.practice_areas.length > 0) {
+        lawyerData.practice_areas = sampleData.practice_areas;
+      }
+      
       if (aboutParagraphs.length === 0 && sampleData.about && sampleData.about.length > 0) {
         lawyerData.about = sampleData.about;
+      }
+      
+      if (specialization.length === 0 && sampleData.specialization && sampleData.specialization.length > 0) {
+        lawyerData.specialization = sampleData.specialization;
       }
       
       if (courts.length === 0 && sampleData.courts && sampleData.courts.length > 0) {
@@ -504,11 +558,28 @@ async function scrapeLawyerProfile(url) {
       }
       
       if (questions_answered.length === 0 && sampleData.questions_answered && sampleData.questions_answered.length > 0) {
-        lawyerData.questions_answered = sampleData.questions_answered;
+        // Convert array form to object form if needed
+        if (Array.isArray(sampleData.questions_answered[0])) {
+          lawyerData.questions_answered = sampleData.questions_answered.map(qa => ({
+            question: qa[0] || '',
+            details: qa[1] || '',
+            answer: qa[2] || ''
+          }));
+        } else {
+          lawyerData.questions_answered = sampleData.questions_answered;
+        }
       }
       
       if (faq.length === 0 && sampleData.faq && sampleData.faq.length > 0) {
-        lawyerData.faq = sampleData.faq;
+        // Convert array form to object form if needed
+        if (Array.isArray(sampleData.faq[0])) {
+          lawyerData.faq = sampleData.faq.map(f => ({
+            question: f[0] || '',
+            answer: f[1] || ''
+          }));
+        } else {
+          lawyerData.faq = sampleData.faq;
+        }
       }
     }
     
