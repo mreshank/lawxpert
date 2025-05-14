@@ -1,17 +1,136 @@
 {
-  "is_verified": false,
-  "name": "",
-  "rating": 0,
-  "rating_count": "0",
+  "is_verified": true,
+  "name": "Advocate Rajesh K.S",
+  "rating": 4.7,
+  "rating_count": "200+",
   "contact_number": "",
-  "location": "",
-  "experience": "",
-  "languages": "",
-  "practice_areas": "",
-  "about": [],
-  "specialization": "",
-  "courts": [],
-  "popular_reviews": [],
-  "questions_answered": [],
-  "faq": []
+  "location": "Subedar Chatram Road (SC Road), Bangalore / Bengaluru",
+  "experience": "19 years\n                                    19 years Experience",
+  "languages": "English, Hindi, Kannada, Telugu",
+  "practice_areas": "Anti Corruption, Anticipatory Bail, Arbitration, Bankruptcy / Insolvency, Breach of Contract, Cheque Bounce, Child Custody, Consumer Court, Corporate, Court Marriage, Criminal, Cyber Crime, Divorce, Documentation, Domestic Violence, Dowry Case, Family, Fraud Case, High Court, Insurance, Labour & Service, Landlord/Tenant, Media and Entertainment, Medical Negligence, Motor Accident, NCLT, NRI, Pmla, Pocso Act, Property, Recovery, RERA, Succession Certificate, Supreme Court, Wills / Trusts",
+  "about": [
+    "Advocate Rajesh K.S has been practicing and handling cases independently with a result oriented approach, both professionally and ethically and has acquired excellent professional experience in providing legal consultancy and advisory services in various fields of law.",
+    "Advocate Rajesh provides legal services in a variety of legal areas including, Family Disputes, Property related Matters, Matrimonial Disputes, and Drafting and vetting of various agreements and connected matters, Writ Jurisdiction, Service matters, Civil matters, Criminal matters, and other miscellaneous matters. He has extensive knowledge and expertise in criminal law and has appeared in a variety of criminal matters in various courts in and around Bangalore. He is also very competent in handling divorce and family disputes in original as well as appellate side to achieve excellent results for his clients.",
+    "Advocate Rajesh is enrolled with the Bar Council of Karnataka. He has a significant amount of professional experience in providing all kinds of legal consultancy and advisory services. Advocate Rajesh's professional experience has led him to gain proficiency, not only in arguing before the Honorable Courts, but also in consulting clients and even in the art of drafting and pleading."
+  ],
+  "specialization": "File for Divorce, Reply / Send Legal Notice for Divorce, Contest / Appeal in Divorce Case, Dowry Demand / Domestic Violence / Abuse, Alimony / Maintenance Issue, Child Custody Issue, Extramarital Affair / Cheating, Marital Finance / Property Issues, Family / In-law Problems, Property Documentation / Verification, Illegal Possession, Illegal Construction, Landlord / Tenant Issues, Builder Delay / Fraud, Transfer of Ownership / Name Change, Gifting of Property, Municipal Corporation Issues, Divorce / Matrimonial Issue, Succession of Property / Assets, Legal Heir Certificate, Property Dispute / Partition, Family Dispute, Wills / Trusts, Gift of Assets, Adoption / Surrogacy, Loaned Money Recovery, Bank issues, Reply / Send Legal Notice in Financial Case, Illegal Termination, Sexual Harrasment, Lawyer for Summons / Warrants, Wrongful Arrest, Bail / Anticipatory Bail, Physical / Sexual Abuse, FIR Filing / Quashing, Cyber Crime, Threat / Injury, Financial Fraud, Theft / Robbery, Defamation, Murder / Attempt to Murder, Narcotics / Drugs, Corruption, Child Abuse / POCSO, Forgery / Fraud, Refund Related Issue, Medical Negligence, Online Fraud, Motor Accident, Insurance Claim, Recovery of Dues, Breach of Contract, Contract Drafting / Review, Consumer Complaint Case, Sexual Harassment at work, Venture Capital / Funding Related, Business / Trade License, Arbitration & Mediation, Mergers & Acquisitions, Matrimonial / Divorce Related, Property Issue, Supreme Court / SLP Related, Cheque Bounce, Builder Delay / Fraud, Family Dispute , File Mutual Consent Divorce, Transfer Petition, Supreme Court Appeal, RERA, NRI Property Issue, Central Administrative Tribunal (CAT), Complaint in NCLT / NCLAT, Transfer Petition, NRI Divorce, SLP, Business Compliances",
+  "courts": [
+    "Karnataka High Court",
+    "Supreme Court Of India"
+  ],
+  "popular_reviews": [
+    {
+      "name": "Sudan",
+      "verified_client": true,
+      "review": "Was able too comprehend handle my legal matter wel with the assistance of the Advocate.",
+      "age": "Over 3 months ago"
+    },
+    {
+      "name": "Krishnasamy",
+      "verified_client": true,
+      "review": "Was able to make proper decision cos legal advice that was provided me.",
+      "age": "2 months ago"
+    },
+    {
+      "name": "Venkoba Rao A",
+      "verified_client": true,
+      "review": "Was able to make proper decision because of the legal advice that provided by Adv Rajesh K.S...!",
+      "age": "Over 3 months ago"
+    },
+    {
+      "name": "Utsav Abhishek",
+      "verified_client": true,
+      "review": "The lawyer was able to understnd my issue nicely. The advice provided by the lawyer guided me in the right direction.",
+      "age": "Over 3 months ago"
+    },
+    {
+      "name": "Madhav",
+      "verified_client": true,
+      "review": "The Lawyer is patient. He took his time and listen all my problems and given right guidance. Am looking forward to work with him.",
+      "age": "Over 3 months ago"
+    },
+    {
+      "name": "Karthikeyan",
+      "verified_client": true,
+      "review": "The lawyer has good understanding of my issue. Adv.Rajesh help me in resolving my legal matter successfuly. As result of the advocate guidance and advice I was able to choose the best option possible in my legal problem.",
+      "age": "2 months ago"
+    },
+    {
+      "name": "Saif Ahmed",
+      "verified_client": true,
+      "review": "The lawyer correctly advised me on my case. The lawyer had helped me in understanding the case and the guidance also help me in taking the correct steps for my case.",
+      "age": "Over 3 months ago"
+    },
+    {
+      "name": "Gitesh Kumar Jha",
+      "verified_client": true,
+      "review": "The lawyer advised into taking the correct path...",
+      "age": "2 months ago"
+    },
+    {
+      "name": "Sona",
+      "verified_client": true,
+      "review": "Thank you, for helping in takin right decision and your sugestions on the right time.",
+      "age": "Over 3 months ago"
+    },
+    {
+      "name": "Manoj Bhatt",
+      "verified_client": true,
+      "review": "offered the right advice which helps me in my legal issue.",
+      "age": "2 months ago"
+    }
+  ],
+  "questions_answered": [
+    [
+      "How to deal with harassing husband ?",
+      "I have been married for 7 years now. Since, the marriage it was trouble. my husband is harassing me mentally. in the early phases of marriage, He used to tell me that he married me because of his mother who forced him to do so and he scolds his mother. He also said to return the thali and go back home. He also left me in the railway statement in the mid night after a fight all alone. I was pleading him not to leave me, but he left. He gets angry uncontrollably. He blames me for everything. If there is traffic jam, he blames. If kid is little cranky, he blames me. If kid supports me, he starts abusing kid also. He shows face everytime when he comes home and keeps blaming me everytime and scolds me. He threatens me saying that he will snatch the kid from me and he will leave. In case if my parents come to stop him, he will kill them. All this is increasing my tension day by day. I am staying with him only because of kid. I want to get out of this marriage. But, I want my kid also .Please help",
+      "You can file divorce case and you can also file dowry harassment case if you want because there is a chance of arresting your husband. You can file domestic violence case and you can also claim maintenance. Don't minor kid custody first preference will be given to mother by the court. Contact us to proceed further."
+    ],
+    [
+      "Limitation to challenge registered partition deed ?",
+      "Our Family executed a Partition deed between 4 brothers in 1999.Of the 4 parts, 2 brothers were given 1 share each and the 2 shares were clubbed together and allocated to the remaining 2 brothers because one of the person was disabled and the other brother was looking after this disabled bachelor brother. Now the remaining 2 brothers are claiming 1/3 of share from the disabled brother's share since he did not execute any will to the brother who looked after him. The case has been filed after 12 years the partition was executed. can registered partition deed be challenged ?",
+      "As you have mentioned it is family property your disabled brother will also get his right in the property with siblings and hence no one can grab it without his consent and he has to decide to dispose his right through his wish. As there is a misunderstanding about the partition that can be challenged whomever who is aggrieved among you by making your disabled brother as a party at civil court. Usually civil suits have 30 years time limitation. As there is a illegality you can challenge the partition deed as it came to your knowledge now or depending upon the recent developments by explaining the same to court. Consult any advocate."
+    ],
+    [
+      "I have a query regarding Sale deed and car parking, can builder sell parking, What are my option ?",
+      "I booked a ready to move in flat. The builder included 3 lacs for car parking in cost sheet. I agreed to that. He sent me a draft copy of sale deed on which he mentioned the car parking number along with house details. After I gave him the first 20 percent check for first installment he provided me the modified sale deed on which the car parking not mentioned in sale deed. He also got 0.1 percent for franking charges. Kindly advice me whether the car parking details should be mentioned in sale deed or not? Still I have not signed the sale deed.Kindly let me know whether the builder can complete the franking formalities without my signature in sale deed. Thank you.",
+      "Discuss with him about the change of agreed clause if he doesn't accept or replies in vague manner then cancel the purchase as you have not signed on the sale deed there is nothing to worry because you have to be present at Sub Registrar office while entering into an sale deed with your signature. As I mentioned if you don't get proper solution the issue a legal notice by cancelling the sale transaction with him, If you have entered into an sale agreement then go through the clause and conditions of the same and find out whether the act of builder comes under violation of the agreement even otherwise he has to comply as he has taken Rs.3 Lakh by mentioning in the cost sheet. Without your signature franking done on any document is not valid. Hence Contact advocate after cautioning the builder about his unlawful act."
+    ],
+    [
+      "What is the procedure to revoke a gift deed of property once it is made? Can a gift deed be revoked?",
+      "My wife has gifted a property to her sister through a gift deed just 10 days ago. Now, she wants to take back that property. On what grounds can she fight the case, and please tell us, can a gift deed be revoked? Specifically, can a gift deed be revoked, and how can a gift deed be revoked?",
+      "If the Gift deed is registered then your wife has to file a civil suit before the jurisdictional city civil court for revocation of gift. It cannot be done through Sub Registrar Court. So contact any advocate if it is an registered deed to revoke the same before court"
+    ],
+    [
+      "Ex girlfriend threatening to kill herself and blackmailing me",
+      "I was in a relationship with a girl and we brokeup. Now I am getting married but the girl is threatening me of defamation and that she will commit suicide. She doesn't want to marry me but only creating an issue. She has mental issues and I have sufficient proofs of it. The only problem is she has pictures of a fight with me (only she is visible) where she was both of us were injured. But only her injuries are there in the pictures. She is blackmailing for more than a year. I have call records which prove that she is threatening falsely. She has already started defaming me on social media by messaging relatives. what to do if someone is blackmailing you? Should I apply for anticipatory bail? What will be the consequences if I do so?",
+      "You file a complaint against her for threatening and defaming in social networks on her first. If you think she is going to file any case the procure all the said documents as evidence then you can take anticipatory bail and fight the case to prove your innocence."
+    ]
+  ],
+  "faq": [
+    [
+      "Can Advocate Rajesh K.S represent me in court?",
+      "Yes, Advocate Rajesh K.S can represent you in court. The lawyer is trained to present your case in the most effective way possible."
+    ],
+    [
+      "What should I bring to my initial consultation with Advocate Rajesh K.S?",
+      "When you meet with Advocate Rajesh K.S for an initial consultation, it is important to bring any relevant documents or information with you. This may include documents related to your legal issue, such as contracts or court orders, as well as any other relevant information, such as a list of questions or concerns you have about your case."
+    ],
+    [
+      "How do I prepare for my initial consultation with Advocate Rajesh K.S?",
+      "Before your initial consultation with Advocate Rajesh K.S, it can be helpful to think about the specific legal issue you are facing and any questions or concerns you have about your case. You should also gather any relevant documents or information that you think may be helpful in understanding your situation."
+    ],
+    [
+      "What should I expect during my initial consultation with Advocate Rajesh K.S?",
+      "During your initial consultation with Advocate Rajesh K.S, you can expect to discuss the specific legal issue you are facing and the details of your situation. Lawyer will ask you questions to get a better understanding of your case and will provide you with information about your legal options and any potential outcomes."
+    ],
+    [
+      "How do I communicate with Advocate Rajesh K.S?",
+      "It is important to communicate with Advocate Rajesh K.S regularly to stay updated on the progress of your case and to discuss any new developments or concerns you may have. You can communicate with the lawyer through phone calls, emails, or in-person meetings."
+    ],
+    [
+      "How much does it cost to hire Advocate Rajesh K.S?",
+      "The cost of hiring Advocate Rajesh K.S can vary widely. Some lawyers charge hourly rates, while others charge a flat fee for their services. Some also offer free initial consultations to discuss your case. Kindly contact the lawyer directly to enquire about the fee."
+    ]
+  ]
 }
