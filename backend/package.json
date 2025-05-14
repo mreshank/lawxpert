@@ -6,7 +6,7 @@
     "i": "npm run install:all",
     "py": "pip install -r requirements.txt",
     "install:all": "npm install && pip install -r requirements.txt",
-    "start": "node server.js && uvicorn main:app --reload --host 0.0.0.0 --port 8000",
+    "start": "node server.js",
     "dev": "uvicorn main:app --reload --host 0.0.0.0 --port 8000 && nodemon server.js",
     "server": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
