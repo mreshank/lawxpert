@@ -12,13 +12,22 @@ export default function App() {
   const webViewRef = useRef<WebView>(null);
   const PRODUCTION_URL = "https://lawexpert.vercel.app/";
 
-  const handleNavigationStateChange = (navState: any) => {
-    // If the URL is not the root URL, navigate back to root
-    if (navState.url !== PRODUCTION_URL) {
+  // This useEffect will run only when the component mounts (app opens or refreshes)
+  useEffect(() => {
+    // Small delay to ensure WebView is properly loaded
+    const timer = setTimeout(() => {
       webViewRef.current?.injectJavaScript(`
         window.location.href = '${PRODUCTION_URL}';
       `);
-    }
+    }, 300);
+    
+    return () => clearTimeout(timer);
+  }, []);
+  
+  // Remove the URL check from navigation state change
+  const handleNavigationStateChange = (navState: any) => {
+    // Now this function just monitors navigation without redirecting
+    console.log("Current URL:", navState.url);
   };
 
   return (

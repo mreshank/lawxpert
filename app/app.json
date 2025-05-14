@@ -7,6 +7,11 @@
     "icon": "./assets/images/icon.png",
     "scheme": "LawXpert",
     "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash/splash-screen.png",
+      "resizeMode": "fill",
+      "backgroundColor": "#2c2a56"
+    },
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
@@ -28,10 +33,9 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "image": "./assets/images/splash-screen.png",
+          "resizeMode": "cover",
+          "backgroundColor": "#2c2a56"
         }
       ]
     ],
