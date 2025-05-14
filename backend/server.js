@@ -3,20 +3,21 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
 // Load environment variables
 dotenv.config();
 
 const app = express();
 app.use(cors({
-  origin: true,
+  origin: ['https://lawexpert.vercel.app', 'http://localhost:5173'],
   credentials: true
 }));
 app.use(express.json());
 app.use(cookieParser());
 
 // MongoDB connection
-const MONGO_URI = process.env.CONNECTION_STRING ;
+const MONGO_URI = process.env.CONNECTION_STRING;
 
 mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,
@@ -25,9 +26,23 @@ mongoose.connect(MONGO_URI, {
 .then(() => console.log('MongoDB connected'))
 .catch((err) => console.error('MongoDB connection error:', err));
 
-// Routes
+// API routes - these will be mounted under /api
 const authRoutes = require('./routes/authRoutes');
-app.use('/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 
-const PORT = process.env.PORT;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Root route for health check
+app.get('/', (req, res) => {
+  res.json({ status: 'ok', message: 'LawXpert API is running' });
+});
+
+// Proxy requests to /analyze to the Python FastAPI service
+app.use('/analyze', createProxyMiddleware({
+  target: 'http://localhost:8000',
+  changeOrigin: true,
+  pathRewrite: {
+    '^/analyze': '/analyze'
+  }
+}));
+
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => console.log(`Express server running on port ${PORT}`));

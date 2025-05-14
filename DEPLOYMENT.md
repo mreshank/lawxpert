@@ -88,11 +88,13 @@ services:
   - type: web
     name: lawxpert-python
     env: python
-    buildCommand: pip install -r backend/requirements.txt
+    buildCommand: pip install --upgrade pip && pip install -r backend/requirements.txt
     startCommand: cd backend && uvicorn main:app --host 0.0.0.0 --port 8000
     envVars:
       - key: GEMINI_API_KEY
         fromGroup: lawxpert-env
+      - key: PYTHONUNBUFFERED
+        value: "true"
     routes:
       - type: rewrite
         source: /analyze
@@ -107,6 +109,28 @@ envVarGroups:
       - key: GEMINI_API_KEY
         sync: false
 ```
+
+## Python Dependencies
+
+The backend uses several Python packages that are listed in `backend/requirements.txt`:
+
+```
+fastapi==0.104.1
+uvicorn==0.24.0
+python-multipart==0.0.6
+google-generativeai==0.3.1
+PyPDF2==3.0.1
+python-docx==1.0.1
+python-dotenv==1.0.0
+```
+
+Additionally, a `runtime.txt` file in the backend directory specifies the Python version:
+
+```
+python-3.10
+```
+
+This ensures that Render.com uses Python 3.10 for running the application.
 
 ## Manual Deployment Alternative
 

@@ -38,7 +38,7 @@ const AnalyzeDocument: React.FC = () => {
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/analyze`, {
+      const response = await fetch(`${import.meta.env.VITE_PYTHON_API_URL}/analyze`, {
         method: 'POST',
         body: formData,
       });
@@ -68,7 +68,7 @@ const AnalyzeDocument: React.FC = () => {
       formData.append('file', file);
       formData.append('question', question);
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/analyze`, {
+      const response = await fetch(`${import.meta.env.VITE_PYTHON_API_URL}/analyze`, {
         method: 'POST',
         body: formData,
       });
