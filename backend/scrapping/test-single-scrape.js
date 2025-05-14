@@ -63,6 +63,28 @@ async function scrapeLawyerProfile(url) {
       }
     }
     
+    // Try to get rating and count from the profile section
+    if (rating === 0 || rating_count === "0") {
+      // Look for rating in the score span
+      const scoreSpan = $('.score');
+      if (scoreSpan.length > 0) {
+        const firstScore = scoreSpan.first().text().trim();
+        if (firstScore && !isNaN(parseFloat(firstScore))) {
+          rating = parseFloat(firstScore);
+          console.log("DEBUG - Found rating in score span:", rating);
+        }
+        
+        // Look for rating count in subsequent text
+        if (scoreSpan.length > 1) {
+          const secondScore = scoreSpan.eq(1).text().trim();
+          if (secondScore && secondScore.match(/[0-9]+/)) {
+            rating_count = secondScore + (secondScore.includes('+') ? '' : '+');
+            console.log("DEBUG - Found rating count in score span:", rating_count);
+          }
+        }
+      }
+    }
+    
     // Try to find location
     const locationElem = $('span:contains("Location")').parent();
     let location = locationElem.text().replace('Location:', '').trim() ||
@@ -73,6 +95,9 @@ async function scrapeLawyerProfile(url) {
     const experienceElem = $('span:contains("Experience")').parent();
     let experience = experienceElem.text().replace('Experience:', '').trim();
     console.log("DEBUG - Found experience:", experience);
+    // Clean up experience text - remove duplicate information and extra whitespace
+    experience = experience.replace(/\s+/g, ' ').replace(/([0-9]+\s*years).*$/i, '$1');
+    console.log("DEBUG - Cleaned experience:", experience);
     
     // Contact number
     let contact_number = $('span:contains("Contact Number")').parent().text().replace('Contact Number:', '').trim() ||
