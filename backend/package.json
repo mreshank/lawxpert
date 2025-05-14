@@ -4,6 +4,7 @@
   "main": "server.js",
   "scripts": {
     "i": "npm run install:all",
+    "py": "pip install -r requirements.txt",
     "install:all": "npm install && pip install -r requirements.txt",
     "start": "node server.js && uvicorn main:app --reload --host 0.0.0.0 --port 8000",
     "dev": "uvicorn main:app --reload --host 0.0.0.0 --port 8000 && nodemon server.js",
