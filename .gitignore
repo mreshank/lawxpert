@@ -28,3 +28,8 @@ dist-ssr
 *.env*
 
 legalbot
+backend/scrapping/debug_page.html
+backend/scrapping/debug_page.html
+backend/scrapping/lawyers_data.json
+backend/scrapping/lawyers_data.json
+backend/scrapping/sample_page.html
