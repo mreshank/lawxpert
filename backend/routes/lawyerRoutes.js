@@ -2,14 +2,16 @@ const express = require('express');
 const router = express.Router();
 const fs = require('fs');
 const path = require('path');
+const lawyers = require("../data/lawyers.json")
 
 // Get all lawyers with filters and pagination
 router.get('/', async (req, res) => {
   try {
     // Read the lawyers data from the JSON file
-    const lawyersData = JSON.parse(
-      fs.readFileSync(path.join(__dirname, '../data/lawyers.json'), 'utf8')
-    );
+    // const lawyersData = JSON.parse(
+    //   fs.readFileSync(path.join(__dirname, '../data/lawyers.json'), 'utf8')
+    // );
+    const lawyersData = lawyers;
 
     // Extract query parameters
     const {
