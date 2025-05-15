@@ -1,0 +1,80 @@
+{
+  "timestamp": "2025-05-14T22:06:22.868Z",
+  "url": "https://lawrato.com/advocate-rajesh-ks",
+  "title": "Consult Advocate Rajesh K.S - Lawyer in Subedar Chatram Road (SC Road), Bangalore / Bengaluru | LawRato",
+  "images": {
+    "profile_image": {
+      "count": 1,
+      "found": true,
+      "examples": [
+        {
+          "src": "https://lawrato.com/expert_images/thumb/advocate-rajesh-ks.jpg",
+          "alt": "One of the best Advocates & Lawyers in Bangalore / Bengaluru - Advocate Rajesh K.S",
+          "class": "media-object img-responsive",
+          "parentTag": "div",
+          "parentClass": "img-wrapper"
+        }
+      ]
+    },
+    "media_images": {
+      "count": 1,
+      "found": true,
+      "examples": [
+        {
+          "src": "https://lawrato.com/expert_images/thumb/advocate-rajesh-ks.jpg",
+          "alt": "One of the best Advocates & Lawyers in Bangalore / Bengaluru - Advocate Rajesh K.S",
+          "class": "media-object img-responsive",
+          "parentTag": "div",
+          "parentClass": "img-wrapper"
+        }
+      ]
+    },
+    "lawyer_profile_images": {
+      "count": 0,
+      "found": false,
+      "examples": []
+    },
+    "profile_images": {
+      "count": 0,
+      "found": false,
+      "examples": []
+    },
+    "all_images": {
+      "count": 97,
+      "found": true,
+      "examples": [
+        {
+          "src": "https://lawrato.com/assets/images/change_language.png",
+          "alt": "LawRato",
+          "parentTag": "div",
+          "parentClass": "col-sm-2"
+        },
+        {
+          "src": "https://lawrato.com/assets/img/logo.png",
+          "alt": "LawRato",
+          "parentTag": "a",
+          "parentClass": "navbar-brand text-hide hidden-xs"
+        },
+        {
+          "src": "https://lawrato.com/assets/img/logo-mobile.png",
+          "alt": "LawRato",
+          "parentTag": "a",
+          "parentClass": "navbar-brand text-hide visible-xs"
+        },
+        {
+          "src": "https://lawrato.com/assets/images/sendbtn.png",
+          "alt": "LawRato",
+          "parentTag": "button",
+          "parentClass": "sendButton ui-btn ui-shadow ui-corner-all"
+        },
+        {
+          "src": "https://lawrato.com/assets/images/chat-woman2.png",
+          "alt": "LawRato",
+          "class": "chat-icon",
+          "parentTag": "div",
+          "parentClass": "chat"
+        }
+      ]
+    }
+  }
+}

@@ -1,38 +1,90 @@
 # Lawyer Profile Scraper
 
-A set of tools to scrape lawyer profiles from lawrato.com and analyze the extracted data.
+This scraper extracts lawyer profile information from lawrato.com. It's designed to collect comprehensive details about lawyers including their contact information, expertise, reviews, and more.
 
-## Overview
+## Quick Run Scrapper
 
-This scraper uses Node.js, Axios, and Cheerio to extract detailed information about lawyers from their profile pages on lawrato.com. The URLs are read from the `test.js` file in the root directory, and the data is structured to match the format in `sample.json`.
+1. Make sure you have Node.js installed
+   ```
+   node -v
+   npm -v
+   ```
+2. Install required dependencies:
+   ```
+   cd ./backend
+   npm install
+   cd ./scrapping
+   chmod +x scrape-lawyers.sh
+   ```
+3. Confirm the list of Lawyers you need to run scrapper on
+   ```
+   cat lawyers-list-to-extract-data.json
+   ```
+4. Run Scrapper
+   ```
+   ./scrape-lawyers.sh
+   ```
+5. Copy Scrapped Data
+   ```
+   cat lawyers_clean_data.json | pbcopy
+   ```
+   <br/>
 
-## Files in this Directory
+## Quick Scrape & Copy
 
-- `scraper.js` - The main scraper script that extracts lawyer information
-- `run-scraper.js` - A utility script to run the scraper
-- `sample-page-analysis.js` - A tool to analyze a sample page structure
-- `analyze-results.js` - A script to analyze the scraped data
-- `test-single-scrape.js` - A tool to test the scraper on a single lawyer profile
-- `fix-test-js.js` - A utility to ensure the ./test.json file is correctly formatted
+make sure you're in scrapper folder [```cd backend/scrapping```]
 
-## Data Structure
+```
+chmod +x scrape-lawyers.sh
+yes | ./scrape-lawyers.sh
+cat lawyers_clean_data.json | pbcopy
+```
 
-The scraper extracts data to match the structure in the sample.json file, which includes:
+## Features
+
+The scraper extracts the following information from lawyer profiles:
+
+- **Basic Information**:
+
+  - Name
+  - Profile Image URL
+  - Verification Status
+  - Rating and Rating Count
+  - Contact Number
+  - Page URL
+  - Location
+  - Experience
+  - Languages (array)
+  - Practice Areas (array)
+
+- **Detailed Information**:
+  - About (Lawyer Bio)
+  - Specialization (array)
+  - Courts (array)
+  - Popular Reviews
+  - Questions Answered
+  - FAQs
+
+## Data Format
+
+The scraper outputs data in the following JSON format:
 
 ```json
 {
   "is_verified": true,
-  "name": "Lawyer Name",
-  "rating": 4.5,
-  "rating_count": "100+",
+  "name": "Advocate Name",
+  "img_url": "https://example.com/image.jpg",
+  "rating": 4.7,
+  "rating_count": "200+",
   "contact_number": "9876****43",
+  "page_url": "https://lawrato.com/advocate-name",
   "location": "Location",
   "experience": "10 years",
-  "languages": "English, Hindi",
-  "practice_areas": "Criminal, Civil, Property",
+  "languages": ["English", "Hindi"],
+  "practice_areas": ["Criminal", "Civil", "Property"],
   "about": ["Paragraph 1", "Paragraph 2"],
-  "specialization": "Divorce, Property, Criminal",
-  "courts": ["Court 1", "Court 2"],
+  "specialization": ["Divorce", "Property", "Criminal"],
+  "courts": ["Supreme Court", "High Court"],
   "popular_reviews": [
     {
       "name": "Reviewer Name",
@@ -42,116 +94,139 @@ The scraper extracts data to match the structure in the sample.json file, which 
     }
   ],
   "questions_answered": [
-    ["Question Title", "Question Details", "Lawyer's Answer"]
+    {
+      "question": "Question Title",
+      "details": "Question Details",
+      "answer": "Lawyer's Answer"
+    }
   ],
   "faq": [
-    ["FAQ Question", "FAQ Answer"]
+    {
+      "question": "FAQ Question",
+      "answer": "FAQ Answer"
+    }
   ]
 }
 ```
 
-## How to Use
+## Files and Scripts
 
-### Step 0: Prepare Your URL List
+- `scraper.js`: Main scraper script that extracts lawyer information and saves it to JSON
+- `run-scraper.js`: Simple script to execute the main scraper
+- `test-single-scrape.js`: Tool to test scraping on a single profile
+- `sample-page-analysis.js`: Script to analyze HTML structure of profile pages
+- `sample-page-analysis-new.js`: Script focused on analyzing profile image elements
+- `analyze-results.js`: Script to analyze scraped data
+- `fix-test-js.js`: Utility to ensure URLs file is formatted correctly
+- `scrape-lawyers.sh`: Shell script to automate the scraping process
 
-Make sure your `test.js` file in the root directory is properly formatted as a valid JSON array. You can run the fix-test-js script to ensure correct formatting:
+## Setup
 
-```bash
-node backend/fix-test-js.js
+1. Make sure you have Node.js installed
+2. Install required dependencies:
+   ```
+   npm install axios cheerio
+   ```
+
+## URL Input
+
+The scraper expects a JSON file with URLs to lawyer profiles. The default file is `lawyers-list-to-extract-data.json`, which should contain an array of URLs.
+
+## Usage
+
+### Test on a Single Profile
+
+To test the scraper on a single profile:
+
+```
+node test-single-scrape.js
 ```
 
-### Step 1: Analyze a Sample Page
+This will scrape a sample profile and save the result to `test_lawyer_data.json`.
 
-Before running the full scraper, it's recommended to analyze a sample page to verify the HTML structure:
+### Run the Full Scraper
 
-```bash
-node backend/sample-page-analysis.js
+To scrape all lawyer profiles from the URL list:
+
+```
+node run-scraper.js
 ```
 
-This will:
-- Fetch the first URL from test.js
-- Save the raw HTML to `sample_page.html`
-- Log information about the page structure
-- Help identify the correct CSS selectors for different pieces of information
+Or, to use the shell script with more options:
 
-### Step 2: Test on a Single Profile
-
-Test the scraper on a single lawyer profile to verify it works correctly:
-
-```bash
-node backend/test-single-scrape.js
+```
+./scrape-lawyers.sh
 ```
 
-Or specify a specific URL:
+### Analyze HTML Structure
 
-```bash
-node backend/test-single-scrape.js https://lawrato.com/advocate-some-name
+Before scraping, you can analyze the HTML structure of sample pages:
+
+```
+node sample-page-analysis.js
 ```
 
-This will:
-- Scrape the specified profile
-- Save the extracted data to `test_lawyer_data.json`
-- Display a summary of the extracted data
+For a focused analysis on profile images:
 
-### Step 3: Run the Full Scraper
-
-To scrape all lawyer profiles:
-
-```bash
-node backend/run-scraper.js
+```
+node sample-page-analysis-new.js
 ```
 
-This will:
-- Process each URL in the ./test.json file
-- Extract lawyer information from each profile page
-- Save the data to `lawyers_data.json`
-- Add a delay between requests to avoid being blocked
-- Save intermediate results for every 5 lawyers scraped
+### Analyze Results
 
-### Step 4: Analyze the Results
+After scraping, analyze the collected data:
 
-After scraping is complete, analyze the results:
-
-```bash
-node backend/analyze-results.js
+```
+node analyze-results.js
 ```
 
-This will:
-- Provide statistics about the scraped data
-- Count successful vs. failed scrapes
-- Analyze data completeness for different fields
-- Show top specializations and locations
-- Export a clean version of the data to `lawyers_clean_data.json`
+## Output
 
-## Extracted Information
+The scraper saves data to these files:
 
-The scraper extracts the following information for each lawyer:
+- `lawyers_data.json`: Main output with all scraped profiles
+- `test_lawyer_data.json`: Output from single profile test
+- `debug_page.html`: HTML content of the last scraped page for debugging
 
-- Verification status
-- Name
-- Rating and rating count
-- Contact number
-- Location
-- Experience
-- Languages
-- Practice areas
-- About/bio (paragraphs)
-- Specialization
-- Courts
-- Reviews (with reviewer name, verification status, review text, and age)
-- Answered questions (question title, details, and answer)
-- FAQs
+## Error Handling
 
-## Troubleshooting
+The scraper includes robust error handling:
 
-If the scraper fails to extract certain information, consider:
+- If data can't be extracted directly, it falls back to sample data
+- Failed profiles are logged with error messages
+- Progress is saved regularly during execution
 
-1. Check the HTML structure in `sample_page.html`
-2. Modify the CSS selectors in `scraper.js`
-3. Run on a smaller batch of URLs first
-4. Increase delay time between requests
-5. Check for any potential IP blocking issues
+## Image URL Extraction
 
-## Note
+The scraper now extracts the lawyer's profile image URL and stores it as `img_url` in the output. It uses the following approach:
 
-Web scraping should be performed responsibly and ethically. Always respect the website's robots.txt file and terms of service. This scraper includes intentional delays between requests to minimize server load. 
+1. Looks for an `<img>` element with class `media-object img-responsive`
+2. Extracts the `src` attribute from the found element
+3. Ensures the URL is absolute by converting relative URLs to absolute
+4. Falls back to sample data if the image can't be found
+
+This extraction is implemented in both the main scraper and the test scraper.
+
+## Regenerating Data with Image URLs
+
+To update your existing data with image URLs, follow these steps:
+
+1. Make sure your URL list is up-to-date in `lawyers-list-to-extract-data.json`
+2. Run the scraper again:
+   ```
+   node run-scraper.js
+   ```
+3. After scraping completes, run the analysis to verify image URLs were extracted:
+   ```
+   node analyze-results.js
+   ```
+
+The analysis will show what percentage of profiles have valid image URLs and what domains they come from.
+
+## Notes
+
+- The scraper adds random delays between requests to avoid being blocked
+- It creates absolute URLs for images that have relative paths
+- It attempts to extract data using multiple selectors to handle different page structures
+- String fields like 'languages', 'practice_areas', and 'specialization' are now stored as arrays
+- FAQ and questions_answered are now stored as arrays of objects instead of arrays of arrays
