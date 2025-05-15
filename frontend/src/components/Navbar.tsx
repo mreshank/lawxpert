@@ -159,6 +159,14 @@ const Navbar: React.FC = () => {
                 <TranslatedText textKey="home" />
               </Link>
 
+              {/* {user && ( */}
+                <Link
+                  to="/chat"
+                  className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
+                >
+                  <TranslatedText textKey="aiAssistant" />
+                </Link>
+              {/* )} */}
               <Link
                 to="/lawyers"
                 className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
@@ -173,27 +181,20 @@ const Navbar: React.FC = () => {
                 <TranslatedText textKey="legalResources" />
               </Link>
               <Link
-                to="/documents"
+                to="/analyze"
                 className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
               >
-                <TranslatedText textKey="documents" />
+                <TranslatedText textKey="analyzeDocument" />
               </Link>
-              {user && (
-                <Link
-                  to="/chat"
-                  className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
-                >
-                  <TranslatedText textKey="aiAssistant" />
-                </Link>
-              )}
-              {user && (
+              
+              {/* {user && (
                 <Link
                   to="/dashboard"
                   className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
                 >
                   <TranslatedText textKey="dashboard" />
                 </Link>
-              )}
+              )} */}
             </div>
           </div>
 
@@ -292,6 +293,13 @@ const Navbar: React.FC = () => {
             onClick={() => setIsOpen(false)}
           >
             <TranslatedText textKey="legalResources" />
+          </Link>
+          <Link
+            to="/analyze"
+            className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+            onClick={() => setIsOpen(false)}
+          >
+            <TranslatedText textKey="analyzeDocument" />
           </Link>
           <Link
             to="/documents"

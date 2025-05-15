@@ -13,6 +13,13 @@ export type TranslationKey =
   | 'profile'
   | 'adminDashboard'
   | 'logout'
+  | 'analyzeDocument'
+  | 'analyzing'
+  | 'analyze'
+  | 'documentSummary'
+  | 'keyClauses'
+  | 'importantTerms'
+  | 'potentialRisks'
   
   // Dashboard widgets
   | 'recentDocuments'
@@ -938,6 +945,42 @@ const translations: Record<TranslationKey, Record<Language, string>> = {
     en: 'Voice input stopped',
     hi: 'वॉयस इनपुट बंद किया गया',
     hinglish: 'Voice input band kiya gaya'
+  },
+  
+  analyzeDocument: {
+    en: 'Analyze Legal Document',
+    hi: 'कानूनी दस्तावेज़ का विश्लेषण',
+    hinglish: 'Legal Document ka Analysis'
+  },
+  analyzing: {
+    en: 'Analyzing...',
+    hi: 'विश्लेषण हो रहा है...',
+    hinglish: 'Analysis ho raha hai...'
+  },
+  analyze: {
+    en: 'Analyze',
+    hi: 'विश्लेषण करें',
+    hinglish: 'Analysis Karo'
+  },
+  documentSummary: {
+    en: 'Document Summary',
+    hi: 'दस्तावेज़ सारांश',
+    hinglish: 'Document Summary'
+  },
+  keyClauses: {
+    en: 'Key Clauses',
+    hi: 'मुख्य खंड',
+    hinglish: 'Key Clauses'
+  },
+  importantTerms: {
+    en: 'Important Terms',
+    hi: 'महत्वपूर्ण शर्तें',
+    hinglish: 'Important Terms'
+  },
+  potentialRisks: {
+    en: 'Potential Risks',
+    hi: 'संभावित जोखिम',
+    hinglish: 'Potential Risks'
   },
 };
 
