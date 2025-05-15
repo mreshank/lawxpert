@@ -58,7 +58,14 @@ const AppRoutes = () => {
           }
         />
         <Route path="/legal-documentation" element={<LegalDocumentation />} />
-        <Route path="/analyze" element={<AnalyzeDocument />} />
+        <Route 
+          path="/analyze" 
+          element={
+            <ProtectedRoute>
+              <AnalyzeDocument />
+            </ProtectedRoute>
+          } 
+        />
         <Route path="/test-markdown" element={<TestMarkdown />} />
         <Route path="*" element={<NotFound />} />
       </Route>
