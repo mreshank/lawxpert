@@ -15,16 +15,16 @@ try {
   console.log("Could not load sample.json:", error.message);
 }
 
-// Read the URLs from allLawyersList.json
-const urlsFilePath = path.join(__dirname, 'allLawyersList.json');
+// Read the URLs from lawyers-list-to-extract-data.json
+const urlsFilePath = path.join(__dirname, 'lawyers-list-to-extract-data.json');
 let urls = [];
 try {
-  console.log('Reading URLs from allLawyersList.json');
+  console.log('Reading URLs from lawyers-list-to-extract-data.json');
   const urlsFileContent = fs.readFileSync(urlsFilePath, 'utf8');
   urls = JSON.parse(urlsFileContent);
   console.log(`Loaded ${urls.length} URLs`);
 } catch (error) {
-  console.error('Error loading allLawyersList.json:', error.message);
+  console.error('Error loading lawyers-list-to-extract-data.json:', error.message);
   process.exit(1);
 }
 

@@ -2,11 +2,50 @@
 
 This scraper extracts lawyer profile information from lawrato.com. It's designed to collect comprehensive details about lawyers including their contact information, expertise, reviews, and more.
 
+## Quick Run Scrapper
+
+1. Make sure you have Node.js installed
+   ```
+   node -v
+   npm -v
+   ```
+2. Install required dependencies:
+   ```
+   cd ./backend
+   npm install
+   cd ./scrapping
+   chmod +x scrape-lawyers.sh
+   ```
+3. Confirm the list of Lawyers you need to run scrapper on
+   ```
+   cat lawyers-list-to-extract-data.json
+   ```
+4. Run Scrapper
+   ```
+   ./scrape-lawyers.sh
+   ```
+5. Copy Scrapped Data
+   ```
+   cat lawyers_clean_data.json | pbcopy
+   ```
+<br/>
+
+## Quick Scrape & Copy 
+make sure you're in scrapper folder [```cd backend/scrapping```]
+
+```
+chmod +x scrape-lawyers.sh
+./scrape-lawyers.sh
+cat lawyers_clean_data.json | pbcopy
+```
+
+
 ## Features
 
 The scraper extracts the following information from lawyer profiles:
 
 - **Basic Information**:
+
   - Name
   - Profile Image URL
   - Verification Status
@@ -91,7 +130,7 @@ The scraper outputs data in the following JSON format:
 
 ## URL Input
 
-The scraper expects a JSON file with URLs to lawyer profiles. The default file is `allLawyersList.json`, which should contain an array of URLs.
+The scraper expects a JSON file with URLs to lawyer profiles. The default file is `lawyers-list-to-extract-data.json`, which should contain an array of URLs.
 
 ## Usage
 
@@ -144,6 +183,7 @@ node analyze-results.js
 ## Output
 
 The scraper saves data to these files:
+
 - `lawyers_data.json`: Main output with all scraped profiles
 - `test_lawyer_data.json`: Output from single profile test
 - `debug_page.html`: HTML content of the last scraped page for debugging
@@ -151,6 +191,7 @@ The scraper saves data to these files:
 ## Error Handling
 
 The scraper includes robust error handling:
+
 - If data can't be extracted directly, it falls back to sample data
 - Failed profiles are logged with error messages
 - Progress is saved regularly during execution
@@ -170,7 +211,7 @@ This extraction is implemented in both the main scraper and the test scraper.
 
 To update your existing data with image URLs, follow these steps:
 
-1. Make sure your URL list is up-to-date in `allLawyersList.json`
+1. Make sure your URL list is up-to-date in `lawyers-list-to-extract-data.json`
 2. Run the scraper again:
    ```
    node run-scraper.js
@@ -188,4 +229,4 @@ The analysis will show what percentage of profiles have valid image URLs and wha
 - It creates absolute URLs for images that have relative paths
 - It attempts to extract data using multiple selectors to handle different page structures
 - String fields like 'languages', 'practice_areas', and 'specialization' are now stored as arrays
-- FAQ and questions_answered are now stored as arrays of objects instead of arrays of arrays 
+- FAQ and questions_answered are now stored as arrays of objects instead of arrays of arrays
