@@ -18,7 +18,7 @@ This guide will help you deploy both your Express.js and Python FastAPI servers 
 
 4. Set the following environment variables:
    - `NODE_ENV`: `production`
-   - `PORT`: `4000`
+   - `PORT`: `4286`
    - `CONNECTION_STRING`: Your MongoDB connection string
    - `GEMINI_API_KEY`: Your Google Gemini API key
    - `PYTHONUNBUFFERED`: `true`

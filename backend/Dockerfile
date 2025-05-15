@@ -13,19 +13,8 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 # Copy the rest of the application
 COPY . .
 
-# Create startup script
-RUN echo '#!/bin/bash\n\
-# Start Node.js Express server in the background\n\
-node server.js &\n\
-\n\
-# Start Python FastAPI server\n\
-cd /app && uvicorn main:app --host 0.0.0.0 --port 8000\n\
-' > /app/start.sh
+# Expose port
+EXPOSE $PORT_PYTHON
 
-RUN chmod +x /app/start.sh
-
-# Expose ports for Express and FastAPI
-EXPOSE 4000 8000
-
-# Start both servers
-CMD ["/app/start.sh"] 
+# Start the FastAPI server, which will use the PORT env variable
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT_PYTHON:-6569}"] 
