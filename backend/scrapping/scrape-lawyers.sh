@@ -19,17 +19,17 @@ SCRIPT_DIR="$(pwd)"
 echo "Working directory: $SCRIPT_DIR"
 echo ""
 
-# Check if test.json exists
-if [ ! -f "./test.json" ]; then
-  echo -e "${RED}Error: test.json file not found in the current directory.${NC}"
+# Check if lawyers-list-to-extract-data.json exists
+if [ ! -f "./lawyers-list-to-extract-data.json" ]; then
+  echo -e "${RED}Error: lawyers-list-to-extract-data.json file not found in the current directory.${NC}"
   exit 1
 fi
 
 # Step 1: Fix the test.js file format
-echo -e "${YELLOW}Step 1: Checking test.json file format...${NC}"
+echo -e "${YELLOW}Step 1: Checking lawyers-list-to-extract-data.json file format...${NC}"
 node fix-test-js.js
 if [ $? -ne 0 ]; then
-  echo -e "${RED}Error fixing test.json file. Please check the file manually.${NC}"
+  echo -e "${RED}Error fixing lawyers-list-to-extract-data.json file. Please check the file manually.${NC}"
   exit 1
 fi
 echo ""
@@ -51,7 +51,9 @@ echo -e "${YELLOW}Step 3: Testing scraper on a single lawyer profile...${NC}"
 read -p "Do you want to test the scraper on a single profile? (y/n): " test_single
 if [[ $test_single == "y" || $test_single == "Y" ]]; then
   read -p "Enter a specific URL (leave blank for default): " specific_url
-  if [ -z "$specific_url" ]; then
+  if [ -z "$specific_url" ] || [[ "$specific_url" == "y" || "$specific_url" == "Y" ]]; then
+    # Use default URL when no input or user accidentally enters "y" again
+    echo "Using default lawyer profile URL..."
     node test-single-scrape.js
   else
     node test-single-scrape.js "$specific_url"
@@ -64,7 +66,7 @@ echo ""
 
 # Step 4: Run the main scraper
 echo -e "${YELLOW}Step 4: Running the full scraper for all lawyers...${NC}"
-echo "This will scrape data for all lawyers in the test.json file."
+echo "This will scrape data for all lawyers in the lawyers-list-to-extract-data.json file."
 echo "WARNING: This may take a long time depending on the number of profiles."
 read -p "Do you want to run the full scraper now? (y/n): " run_full
 if [[ $run_full == "y" || $run_full == "Y" ]]; then
