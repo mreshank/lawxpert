@@ -27,12 +27,15 @@ mongoose.connect(MONGO_URI, {
 
 // API routes - these will be mounted under /api
 const authRoutes = require('./routes/authRoutes');
+const lawyerRoutes = require('./routes/lawyerRoutes');
+
 app.use('/api/auth', authRoutes);
+app.use('/api/lawyers', lawyerRoutes);
 
 // Root route for health check
 app.get('/', (req, res) => {
   res.json({ status: 'ok', message: 'LawXpert Express API is running' });
 });
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 5969;
 app.listen(PORT, () => console.log(`Express server running on port ${PORT}`));

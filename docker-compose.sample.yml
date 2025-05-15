@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  node-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.node
+    ports:
+      - "5969:5969"
+    environment:
+      - NODE_ENV=production
+      - PORT=5969
+      - CONNECTION_STRING=${CONNECTION_STRING}
+      - JWT_SECRET=${JWT_SECRET}
+    restart: always
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+  python-backend:
+    build:
+      context: ./backend/python
+      dockerfile: Dockerfile
+    ports:
+      - "5969:5969"
+    environment:
+      - PORT=5969
+      - HOST=0.0.0.0
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    restart: always
+    volumes:
+      - ./backend/python:/app
+      - /app/models
+
+# Uncomment to add MongoDB container if local development without Atlas
+#  mongodb:
+#    image: mongo:latest
+#    ports:
+#      - "27017:27017"
+#    volumes:
+#      - mongodb_data:/data/db
+#    environment:
+#      - MONGO_INITDB_ROOT_USERNAME=admin
+#      - MONGO_INITDB_ROOT_PASSWORD=password
+#
+# volumes:
+#   mongodb_data: 

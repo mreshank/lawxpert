@@ -71,17 +71,24 @@ const CheckIcon = () => (
 
 // Mock type for a lawyer
 interface Lawyer {
-  id: number;
+  id?: number;
   name: string;
-  avatar: string;
-  specialization: string;
+  avatar?: string;
+  img_url?: string;
+  specialization?: string;
+  practice_areas?: string[];
   rating: number;
-  hourlyRate: number;
-  reviews: number;
+  rating_count?: string;
+  hourlyRate?: number;
+  reviews?: number;
   experience: string;
-  description: string;
+  description?: string;
+  about?: string[];
   languages: string[];
-  available: boolean;
+  available?: boolean;
+  is_verified?: boolean;
+  location?: string;
+  courts?: string[];
   education?: string[];
   certifications?: string[];
   address?: string;
@@ -132,25 +139,39 @@ const LawyerProfile = ({ lawyer, onClose }: LawyerProfileProps) => {
       <div className="p-6 bg-blue-50 dark:bg-blue-900/20">
         <div className="flex flex-col md:flex-row gap-6">
           <Avatar className="h-24 w-24 md:h-32 md:w-32">
-            <img src={lawyer.avatar} alt={lawyer.name} />
+            <img 
+              src={lawyer.img_url || lawyer.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(lawyer.name)}&background=random`} 
+              alt={lawyer.name} 
+            />
           </Avatar>
           
           <div className="flex-1">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <h1 className="text-2xl font-bold">{lawyer.name}</h1>
-                <p className="text-gray-600 dark:text-gray-300">{lawyer.specialization}</p>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-2xl font-bold">{lawyer.name}</h1>
+                  {lawyer.is_verified && (
+                    <Badge variant="secondary" className="h-5">Verified</Badge>
+                  )}
+                </div>
+                <p className="text-gray-600 dark:text-gray-300">
+                  {lawyer.specialization || (lawyer.practice_areas && lawyer.practice_areas.length > 0 
+                    ? lawyer.practice_areas[0] 
+                    : "General Practice")}
+                </p>
                 
                 <div className="flex items-center mt-2">
                   <StarIcon />
                   <span className="ml-1 font-medium">{lawyer.rating}</span>
-                  <span className="text-sm text-gray-500 ml-1">({lawyer.reviews} reviews)</span>
+                  <span className="text-sm text-gray-500 ml-1">
+                    ({lawyer.reviews || lawyer.rating_count || "N/A"} reviews)
+                  </span>
                 </div>
               </div>
               
               <div className="flex flex-col items-start md:items-end">
                 <div className="flex items-baseline">
-                  <span className="text-2xl font-bold">${lawyer.hourlyRate}</span>
+                  <span className="text-2xl font-bold">${lawyer.hourlyRate || 150}</span>
                   <span className="text-gray-500 ml-1">/hour</span>
                 </div>
                 
@@ -163,6 +184,11 @@ const LawyerProfile = ({ lawyer, onClose }: LawyerProfileProps) => {
               {lawyer.languages.map(lang => (
                 <Badge key={lang} variant="secondary">{lang}</Badge>
               ))}
+              {lawyer.courts && lawyer.courts.length > 0 && (
+                <Badge variant="outline" className="ml-2">
+                  {lawyer.courts[0]}
+                </Badge>
+              )}
             </div>
           </div>
         </div>
@@ -180,7 +206,9 @@ const LawyerProfile = ({ lawyer, onClose }: LawyerProfileProps) => {
         {/* About tab */}
         <TabsContent value="about" className="mt-4">
           <h2 className="text-xl font-semibold mb-3">About {lawyer.name}</h2>
-          <p className="text-gray-700 dark:text-gray-300">{lawyer.bio || lawyer.description}</p>
+          <p className="text-gray-700 dark:text-gray-300">
+            {lawyer.bio || (lawyer.about && lawyer.about.join(" ")) || lawyer.description || "Experienced legal professional serving clients with dedication and expertise."}
+          </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
             <div>
@@ -188,19 +216,19 @@ const LawyerProfile = ({ lawyer, onClose }: LawyerProfileProps) => {
                 <MapPinIcon />
                 Office Location
               </h3>
-              <p className="text-gray-700 dark:text-gray-300">{lawyer.address || "123 Legal Avenue, Suite 500, New York, NY 10001"}</p>
+              <p className="text-gray-700 dark:text-gray-300">{lawyer.location || lawyer.address || "Contact for address details"}</p>
               
               <h3 className="font-medium mb-2 mt-4 flex items-center">
                 <MailIcon />
                 Email
               </h3>
-              <p className="text-gray-700 dark:text-gray-300">{lawyer.email || `${lawyer.name.toLowerCase().replace(' ', '.')}@legalconnect.com`}</p>
+              <p className="text-gray-700 dark:text-gray-300">{lawyer.email || "Contact for email details"}</p>
               
               <h3 className="font-medium mb-2 mt-4 flex items-center">
                 <PhoneIcon />
                 Phone
               </h3>
-              <p className="text-gray-700 dark:text-gray-300">{lawyer.phone || "(555) 123-4567"}</p>
+              <p className="text-gray-700 dark:text-gray-300">{lawyer.phone || "Contact for phone details"}</p>
             </div>
             
             <div>

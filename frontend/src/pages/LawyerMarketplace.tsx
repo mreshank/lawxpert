@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,125 +7,246 @@ import { Slider } from "@/components/ui/slider";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import LawyerProfile from "@/components/LawyerProfile";
+import { Pagination } from "@/components/ui/pagination";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Info, Search, Filter, AlertCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
 
-// Mock data for lawyers
-const LAWYERS = [
-  {
-    id: 1,
-    name: "Jennifer Martinez",
-    avatar: "https://randomuser.me/api/portraits/women/32.jpg",
-    specialization: "Family Law",
-    rating: 4.8,
-    hourlyRate: 150,
-    reviews: 127,
-    experience: "8 years",
-    description: "Experienced family law attorney specializing in divorce and child custody cases.",
-    languages: ["English", "Spanish"],
-    available: true,
-    bio: "With 8 years of dedicated experience in family law, I focus on helping clients navigate complex family matters with empathy and legal expertise. My approach combines strong advocacy with practical solutions to achieve the best possible outcomes for families in transition.",
-    education: ["J.D., UCLA School of Law", "B.A., Psychology, Stanford University"],
-    certifications: ["Certified Family Law Specialist", "Certified Mediator"]
-  },
-  {
-    id: 2,
-    name: "Michael Thompson",
-    avatar: "https://randomuser.me/api/portraits/men/41.jpg",
-    specialization: "Corporate Law",
-    rating: 4.9,
-    hourlyRate: 220,
-    reviews: 84,
-    experience: "12 years",
-    description: "Specializing in business formation, contracts, and corporate compliance.",
-    languages: ["English"],
-    available: true,
-    bio: "As a corporate attorney with over 12 years of experience, I help businesses of all sizes navigate legal complexities, from formation to growth and beyond. My expertise includes contract negotiation, compliance, mergers & acquisitions, and corporate governance matters."
-  },
-  {
-    id: 3,
-    name: "Sarah Johnson",
-    avatar: "https://randomuser.me/api/portraits/women/68.jpg",
-    specialization: "Criminal Defense",
-    rating: 4.7,
-    hourlyRate: 180,
-    reviews: 93,
-    experience: "10 years",
-    description: "Former prosecutor now defending clients in criminal cases with high success rate.",
-    languages: ["English", "French"],
-    available: false,
-    bio: "Drawing on my decade of experience including years as a prosecutor, I now defend individuals facing criminal charges with strategic and passionate advocacy. I handle cases ranging from misdemeanors to serious felonies, always fighting to protect my clients' rights and freedom."
-  },
-  {
-    id: 4,
-    name: "Robert Chen",
-    avatar: "https://randomuser.me/api/portraits/men/22.jpg",
-    specialization: "Intellectual Property",
-    rating: 4.6,
-    hourlyRate: 200,
-    reviews: 61,
-    experience: "7 years",
-    description: "Patent attorney with background in software engineering.",
-    languages: ["English", "Mandarin"],
-    available: true,
-    bio: "Combining my technical background in software engineering with legal expertise, I specialize in helping innovators protect their intellectual property. From patent applications to copyright issues and trademark registration, I work with creators and companies to secure and defend their creative assets."
-  },
-  {
-    id: 5,
-    name: "Emily Wilson",
-    avatar: "https://randomuser.me/api/portraits/women/45.jpg",
-    specialization: "Real Estate Law",
-    rating: 4.9,
-    hourlyRate: 175,
-    reviews: 108,
-    experience: "9 years",
-    description: "Helping clients navigate property transactions and landlord-tenant disputes.",
-    languages: ["English"],
-    available: true,
-    bio: "For the past 9 years, I've guided clients through all aspects of real estate law, from residential and commercial transactions to landlord-tenant matters and property disputes. My goal is to ensure smooth, legally sound real estate dealings while protecting my clients' investments and interests."
-  },
-  {
-    id: 6,
-    name: "David Rodriguez",
-    avatar: "https://randomuser.me/api/portraits/men/57.jpg",
-    specialization: "Immigration Law",
-    rating: 4.8,
-    hourlyRate: 160,
-    reviews: 142,
-    experience: "11 years",
-    description: "Passionate about helping families navigate the immigration process.",
-    languages: ["English", "Spanish"],
-    available: true,
-    bio: "With over 11 years dedicated to immigration law, I help individuals and families achieve their dreams of living legally in the United States. From family-based petitions to employment visas, asylum cases, and naturalization, I provide compassionate guidance through complex immigration processes."
-  }
-];
+// Interfaces
+interface Lawyer {
+  id?: number;
+  name: string;
+  avatar?: string;
+  img_url?: string;
+  specialization?: string;
+  practice_areas?: string[];
+  rating: number;
+  rating_count?: string;
+  hourlyRate?: number;
+  reviews?: number;
+  experience: string;
+  description?: string;
+  about?: string[];
+  languages: string[];
+  available?: boolean;
+  is_verified?: boolean;
+  location: string;
+  courts?: string[];
+  bio?: string;
+  education?: string[];
+  certifications?: string[];
+}
+
+interface FilterOptions {
+  locations: string[];
+  languages: string[];
+  practiceAreas: string[];
+  courts: string[];
+  experienceRange: { min: number; max: number };
+  ratingRange: { min: number; max: number };
+}
 
 const LawyerMarketplace = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [specializationFilter, setSpecializationFilter] = useState("");
-  const [priceRange, setPriceRange] = useState([0, 300]);
-  const [showFilters, setShowFilters] = useState(false);
-  const [selectedLawyer, setSelectedLawyer] = useState<typeof LAWYERS[0] | null>(null);
+  // State for lawyers data and loading status
+  const [lawyers, setLawyers] = useState<Lawyer[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   
-  // Filter lawyers based on search and filters
-  const filteredLawyers = LAWYERS.filter(lawyer => {
-    const matchesSearch = 
-      lawyer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      lawyer.specialization.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      lawyer.description.toLowerCase().includes(searchTerm.toLowerCase());
-      
-    const matchesSpecialization = 
-      specializationFilter === "" || lawyer.specialization === specializationFilter;
-      
-    const matchesPriceRange = 
-      lawyer.hourlyRate >= priceRange[0] && lawyer.hourlyRate <= priceRange[1];
-      
-    return matchesSearch && matchesSpecialization && matchesPriceRange;
+  // State for pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalResults, setTotalResults] = useState(0);
+  
+  // State for filter options (available choices)
+  const [filterOptions, setFilterOptions] = useState<FilterOptions>({
+    locations: [],
+    languages: [],
+    practiceAreas: [],
+    courts: [],
+    experienceRange: { min: 0, max: 50 },
+    ratingRange: { min: 0, max: 5 }
   });
   
-  const specializations = [...new Set(LAWYERS.map(lawyer => lawyer.specialization))];
+  // State for active filters
+  const [searchTerm, setSearchTerm] = useState("");
+  const [locationFilter, setLocationFilter] = useState("");
+  const [practiceAreaFilter, setPracticeAreaFilter] = useState("");
+  const [languageFilter, setLanguageFilter] = useState("");
+  const [courtFilter, setCourtFilter] = useState("");
+  const [verifiedFilter, setVerifiedFilter] = useState("");
+  const [ratingRange, setRatingRange] = useState([0, 5]);
+  const [experienceRange, setExperienceRange] = useState([0, 50]);
+  const [sortBy, setSortBy] = useState("rating");
+  const [sortOrder, setSortOrder] = useState("desc");
+  
+  // UI state
+  const [showFilters, setShowFilters] = useState(false);
+  const [selectedLawyer, setSelectedLawyer] = useState<Lawyer | null>(null);
+  
+  // Fetch available filter options
+  useEffect(() => {
+    const fetchFilterOptions = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/lawyers/filter-options`);
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch filter options');
+        }
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          setFilterOptions(data.data);
+          
+          // Initialize ranges based on available data
+          setRatingRange([data.data.ratingRange.min, data.data.ratingRange.max]);
+          setExperienceRange([data.data.experienceRange.min, data.data.experienceRange.max]);
+        }
+      } catch (error) {
+        console.error('Error fetching filter options:', error);
+        toast.error('Failed to load filter options');
+      }
+    };
+    
+    fetchFilterOptions();
+  }, []);
+  
+  // Fetch lawyers data with current filters
+  useEffect(() => {
+    const fetchLawyers = async () => {
+      setLoading(true);
+      setError(null);
+      
+      try {
+        // Construct query parameters
+        const params = new URLSearchParams({
+          page: currentPage.toString(),
+          limit: '10',
+          search: searchTerm,
+          location: locationFilter,
+          rating_min: ratingRange[0].toString(),
+          rating_max: ratingRange[1].toString(),
+          experience_min: experienceRange[0].toString(),
+          experience_max: experienceRange[1].toString(),
+          sort_by: sortBy,
+          sort_order: sortOrder
+        });
+        
+        // Add optional filters only if they're selected
+        if (verifiedFilter) {
+          params.append('is_verified', verifiedFilter);
+        }
+        
+        if (languageFilter) {
+          params.append('languages', languageFilter);
+        }
+        
+        if (practiceAreaFilter) {
+          params.append('practice_areas', practiceAreaFilter);
+        }
+        
+        if (courtFilter) {
+          params.append('courts', courtFilter);
+        }
+        
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/lawyers?${params.toString()}`);
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch lawyers data');
+        }
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          setLawyers(data.data);
+          setTotalPages(data.pagination.totalPages);
+          setTotalResults(data.pagination.totalResults);
+        } else {
+          throw new Error(data.message || 'Failed to fetch lawyers data');
+        }
+      } catch (error) {
+        console.error('Error fetching lawyers:', error);
+        setError('Failed to load lawyers data. Please try again.');
+        toast.error('Failed to load lawyers data');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchLawyers();
+  }, [
+    currentPage, 
+    searchTerm, 
+    locationFilter, 
+    ratingRange, 
+    experienceRange, 
+    verifiedFilter, 
+    languageFilter, 
+    practiceAreaFilter, 
+    courtFilter,
+    sortBy,
+    sortOrder
+  ]);
+  
+  // Handle reset filters
+  const handleResetFilters = () => {
+    setSearchTerm("");
+    setLocationFilter("");
+    setPracticeAreaFilter("");
+    setLanguageFilter("");
+    setCourtFilter("");
+    setVerifiedFilter("");
+    setRatingRange([filterOptions.ratingRange.min, filterOptions.ratingRange.max]);
+    setExperienceRange([filterOptions.experienceRange.min, filterOptions.experienceRange.max]);
+    setSortBy("rating");
+    setSortOrder("desc");
+    setCurrentPage(1);
+  };
+  
+  // Extract experience years as a number
+  const getExperienceYears = (experienceStr: string) => {
+    const years = parseInt(experienceStr.split(' ')[0]);
+    return isNaN(years) ? 0 : years;
+  };
+  
+  // Format a lawyer's practice areas for display
+  const formatPracticeAreas = (areas?: string[]) => {
+    if (!areas || areas.length === 0) return "General Practice";
+    if (areas.length === 1) return areas[0];
+    return `${areas[0]} & ${areas.length - 1} more`;
+  };
+  
+  // Render loading skeletons
+  const renderSkeletons = () => {
+    return Array(5).fill(0).map((_, index) => (
+      <div key={index} className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden p-4">
+        <div className="flex items-start gap-4">
+          <Skeleton className="h-20 w-20 rounded-full" />
+          <div className="flex-1">
+            <Skeleton className="h-6 w-2/3 mb-2" />
+            <Skeleton className="h-4 w-1/3 mb-4" />
+            <div className="flex gap-2">
+              <Skeleton className="h-5 w-16" />
+              <Skeleton className="h-5 w-16" />
+            </div>
+          </div>
+        </div>
+        <Skeleton className="h-4 w-full mt-4" />
+        <div className="mt-4 flex justify-between">
+          <Skeleton className="h-8 w-24" />
+          <div className="flex gap-2">
+            <Skeleton className="h-10 w-28" />
+            <Skeleton className="h-10 w-40" />
+          </div>
+        </div>
+      </div>
+    ));
+  };
   
   return (
     <div className="min-h-screen flex flex-col">
-      <main className="flex-grow">
+      <main className="flex-grow py-8 px-4">
         <div className="max-w-7xl mx-auto">
           {!selectedLawyer ? (
             <>
@@ -143,14 +264,14 @@ const LawyerMarketplace = () => {
                 <div className="w-full lg:w-1/4">
                   <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-4">
                     <div className="relative">
-                      <svg className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                      </svg>
+                      <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
                       <Input
                         placeholder="Search lawyers..."
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={(e) => {
+                          setSearchTerm(e.target.value);
+                          setCurrentPage(1); // Reset to first page on search
+                        }}
                         className="pl-8"
                       />
                     </div>
@@ -162,56 +283,201 @@ const LawyerMarketplace = () => {
                       onClick={() => setShowFilters(!showFilters)}
                     >
                       <h3 className="font-medium">Filters</h3>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-                      </svg>
+                      <Filter size={18} />
                     </div>
                     
                     {showFilters && (
                       <div className="p-4 border-t">
+                        {/* Location filter */}
                         <div className="mb-4">
-                          <label className="block text-sm font-medium mb-2">Specialization</label>
+                          <label className="block text-sm font-medium mb-2">Location</label>
                           <Select 
-                            value={specializationFilter} 
-                            onValueChange={setSpecializationFilter}
+                            value={locationFilter} 
+                            onValueChange={(value) => {
+                              setLocationFilter(value);
+                              setCurrentPage(1);
+                            }}
                           >
                             <SelectTrigger>
-                              <SelectValue placeholder="All specializations" />
+                              <SelectValue placeholder="All locations" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="">All specializations</SelectItem>
-                              {specializations.map((spec) => (
-                                <SelectItem key={spec} value={spec}>
-                                  {spec}
+                              <SelectItem value="">All locations</SelectItem>
+                              {filterOptions.locations.map((location) => (
+                                <SelectItem key={location} value={location}>
+                                  {location}
                                 </SelectItem>
                               ))}
                             </SelectContent>
                           </Select>
                         </div>
                         
+                        {/* Practice Area filter */}
+                        <div className="mb-4">
+                          <label className="block text-sm font-medium mb-2">Practice Area</label>
+                          <Select 
+                            value={practiceAreaFilter} 
+                            onValueChange={(value) => {
+                              setPracticeAreaFilter(value);
+                              setCurrentPage(1);
+                            }}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="All practice areas" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="">All practice areas</SelectItem>
+                              {filterOptions.practiceAreas.map((area) => (
+                                <SelectItem key={area} value={area}>
+                                  {area}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        
+                        {/* Language filter */}
+                        <div className="mb-4">
+                          <label className="block text-sm font-medium mb-2">Language</label>
+                          <Select 
+                            value={languageFilter} 
+                            onValueChange={(value) => {
+                              setLanguageFilter(value);
+                              setCurrentPage(1);
+                            }}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="All languages" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="">All languages</SelectItem>
+                              {filterOptions.languages.map((language) => (
+                                <SelectItem key={language} value={language}>
+                                  {language}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        
+                        {/* Courts filter */}
+                        <div className="mb-4">
+                          <label className="block text-sm font-medium mb-2">Court</label>
+                          <Select 
+                            value={courtFilter} 
+                            onValueChange={(value) => {
+                              setCourtFilter(value);
+                              setCurrentPage(1);
+                            }}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="All courts" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="">All courts</SelectItem>
+                              {filterOptions.courts.map((court) => (
+                                <SelectItem key={court} value={court}>
+                                  {court}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        
+                        {/* Verified filter */}
+                        <div className="mb-4">
+                          <label className="block text-sm font-medium mb-2">Verification Status</label>
+                          <Select 
+                            value={verifiedFilter} 
+                            onValueChange={(value) => {
+                              setVerifiedFilter(value);
+                              setCurrentPage(1);
+                            }}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="All lawyers" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="">All lawyers</SelectItem>
+                              <SelectItem value="true">Verified only</SelectItem>
+                              <SelectItem value="false">Unverified only</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        
+                        {/* Rating filter */}
                         <div className="mb-4">
                           <label className="block text-sm font-medium mb-2">
-                            Price Range: ${priceRange[0]} - ${priceRange[1]}
+                            Rating Range: {ratingRange[0]} - {ratingRange[1]}
                           </label>
                           <Slider
-                            defaultValue={[0, 300]}
-                            max={300}
-                            min={0}
-                            step={10}
-                            value={priceRange}
-                            onValueChange={setPriceRange}
+                            min={filterOptions.ratingRange.min}
+                            max={filterOptions.ratingRange.max}
+                            step={0.5}
+                            value={ratingRange}
+                            onValueChange={(value) => {
+                              setRatingRange(value);
+                              setCurrentPage(1);
+                            }}
                             className="mt-2"
                           />
+                        </div>
+                        
+                        {/* Experience filter */}
+                        <div className="mb-4">
+                          <label className="block text-sm font-medium mb-2">
+                            Experience: {experienceRange[0]} - {experienceRange[1]} years
+                          </label>
+                          <Slider
+                            min={filterOptions.experienceRange.min}
+                            max={filterOptions.experienceRange.max}
+                            step={1}
+                            value={experienceRange}
+                            onValueChange={(value) => {
+                              setExperienceRange(value);
+                              setCurrentPage(1);
+                            }}
+                            className="mt-2"
+                          />
+                        </div>
+                        
+                        {/* Sort options */}
+                        <div className="mb-4">
+                          <label className="block text-sm font-medium mb-2">Sort By</label>
+                          <div className="flex items-center gap-2">
+                            <Select 
+                              value={sortBy} 
+                              onValueChange={setSortBy}
+                            >
+                              <SelectTrigger className="flex-1">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="rating">Rating</SelectItem>
+                                <SelectItem value="name">Name</SelectItem>
+                                <SelectItem value="experience">Experience</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            
+                            <Select 
+                              value={sortOrder} 
+                              onValueChange={setSortOrder}
+                            >
+                              <SelectTrigger className="w-32">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="asc">Ascending</SelectItem>
+                                <SelectItem value="desc">Descending</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
                         </div>
                         
                         <Button 
                           variant="outline" 
                           className="w-full mt-2"
-                          onClick={() => {
-                            setSearchTerm("");
-                            setSpecializationFilter("");
-                            setPriceRange([0, 300]);
-                          }}
+                          onClick={handleResetFilters}
                         >
                           Reset Filters
                         </Button>
@@ -222,80 +488,176 @@ const LawyerMarketplace = () => {
                 
                 {/* Lawyer listings */}
                 <div className="w-full lg:w-3/4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {filteredLawyers.length > 0 ? (
-                      filteredLawyers.map((lawyer) => (
-                        <div 
-                          key={lawyer.id} 
-                          className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden"
-                        >
-                          <div className="p-4">
-                            <div className="flex items-start gap-4">
-                              <Avatar className="h-20 w-20">
-                                <img src={lawyer.avatar} alt={lawyer.name} />
-                              </Avatar>
-                              
-                              <div className="flex-1">
-                                <div className="flex justify-between items-start">
-                                  <div>
-                                    <h3 className="font-semibold text-lg">{lawyer.name}</h3>
-                                    <p className="text-sm text-gray-500">{lawyer.specialization}</p>
+                  {loading ? (
+                    <div className="grid grid-cols-1 gap-4">
+                      {renderSkeletons()}
+                    </div>
+                  ) : error ? (
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center">
+                      <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+                      <h3 className="text-lg font-medium">Error loading lawyers</h3>
+                      <p className="text-gray-500 mt-2">{error}</p>
+                      <Button onClick={() => window.location.reload()} className="mt-4">
+                        Try Again
+                      </Button>
+                    </div>
+                  ) : lawyers.length > 0 ? (
+                    <>
+                      <div className="mb-4 text-sm text-gray-500">
+                        Showing {lawyers.length} of {totalResults} lawyers
+                        {locationFilter && (
+                          <> in <span className="font-medium">{locationFilter}</span></>
+                        )}
+                        {practiceAreaFilter && (
+                          <> specializing in <span className="font-medium">{practiceAreaFilter}</span></>
+                        )}
+                      </div>
+                      
+                      <div className="grid grid-cols-1 gap-4">
+                        {lawyers.map((lawyer) => (
+                          <div 
+                            key={lawyer.name} 
+                            className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden"
+                          >
+                            <div className="p-4">
+                              <div className="flex items-start gap-4">
+                                <Avatar className="h-20 w-20">
+                                  <img 
+                                    src={lawyer.img_url || lawyer.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(lawyer.name)}&background=random`} 
+                                    alt={lawyer.name} 
+                                  />
+                                </Avatar>
+                                
+                                <div className="flex-1">
+                                  <div className="flex justify-between items-start">
+                                    <div>
+                                      <div className="flex items-center gap-1">
+                                        <h3 className="font-semibold text-lg">{lawyer.name}</h3>
+                                        {lawyer.is_verified && (
+                                          <Badge variant="secondary" className="ml-1 h-5">Verified</Badge>
+                                        )}
+                                      </div>
+                                      <p className="text-sm text-gray-500">
+                                        {formatPracticeAreas(lawyer.practice_areas)}
+                                      </p>
+                                    </div>
+                                    
+                                    <div className="flex items-center">
+                                      <svg className="h-4 w-4 fill-yellow-400 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                      </svg>
+                                      <span className="ml-1 text-sm font-medium">{lawyer.rating}</span>
+                                      <span className="text-xs text-gray-500 ml-1">({lawyer.rating_count || lawyer.reviews || "N/A"})</span>
+                                    </div>
                                   </div>
                                   
-                                  <div className="flex items-center">
-                                    <svg className="h-4 w-4 fill-yellow-400 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                                    </svg>
-                                    <span className="ml-1 text-sm font-medium">{lawyer.rating}</span>
-                                    <span className="text-xs text-gray-500 ml-1">({lawyer.reviews})</span>
+                                  <div className="mt-2 flex flex-wrap gap-1">
+                                    <Badge variant="outline" className="mr-1">{lawyer.experience}</Badge>
+                                    {lawyer.languages.slice(0, 3).map(lang => (
+                                      <Badge key={lang} variant="secondary" className="mr-1">{lang}</Badge>
+                                    ))}
+                                    {lawyer.languages.length > 3 && (
+                                      <Badge variant="secondary">+{lawyer.languages.length - 3} more</Badge>
+                                    )}
                                   </div>
                                 </div>
-                                
-                                <div className="mt-2">
-                                  <Badge variant="outline" className="mr-1">{lawyer.experience}</Badge>
-                                  {lawyer.languages.map(lang => (
-                                    <Badge key={lang} variant="secondary" className="mr-1">{lang}</Badge>
-                                  ))}
-                                </div>
-                              </div>
-                            </div>
-                            
-                            <p className="mt-3 text-sm">{lawyer.description}</p>
-                            
-                            <div className="mt-4 flex items-center justify-between">
-                              <div className="flex items-baseline">
-                                <span className="font-semibold text-lg">${lawyer.hourlyRate}</span>
-                                <span className="text-gray-500 text-sm ml-1">/hour</span>
                               </div>
                               
-                              <div className="flex gap-2">
-                                <Button 
-                                  variant="outline"
-                                  onClick={() => setSelectedLawyer(lawyer)}
-                                >
-                                  View Profile
-                                </Button>
-                                <Button disabled={!lawyer.available}>
-                                  {lawyer.available ? "Book Consultation" : "Unavailable"}
-                                </Button>
+                              <p className="mt-3 text-sm">
+                                {lawyer.description || (lawyer.about && lawyer.about[0]) || "Experienced legal professional serving clients with dedication and expertise."}
+                              </p>
+                              
+                              <div className="mt-4 flex items-center justify-between">
+                                <TooltipProvider>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <div className="flex items-baseline blur-sm hover:blur-none transition-all duration-300">
+                                        <span className="font-semibold text-lg">${lawyer.hourlyRate}</span>
+                                        <span className="text-gray-500 text-sm ml-1">/hour</span>
+                                        <Info className="h-4 w-4 ml-1 text-gray-400" />
+                                      </div>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      <p className="w-64 text-xs">
+                                        Contact the lawyer directly to verify their rates and availability. 
+                                        The rate shown is an estimate based on experience and expertise.
+                                      </p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
+                                
+                                <div className="flex gap-2">
+                                  <Button 
+                                    variant="outline"
+                                    onClick={() => setSelectedLawyer(lawyer)}
+                                  >
+                                    View Profile
+                                  </Button>
+                                  <TooltipProvider>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <Button>
+                                          Book Consultation
+                                        </Button>
+                                      </TooltipTrigger>
+                                      <TooltipContent>
+                                        <p className="w-64 text-xs">
+                                          Contact the lawyer first to check availability and discuss your legal matter before booking a consultation.
+                                        </p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="col-span-2 bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center">
-                        <h3 className="text-lg font-medium">No lawyers found</h3>
-                        <p className="text-gray-500 mt-2">Try adjusting your search or filters</p>
+                        ))}
                       </div>
-                    )}
-                  </div>
+                      
+                      {/* Pagination */}
+                      {totalPages > 1 && (
+                        <div className="mt-6 flex justify-center">
+                          <div className="flex items-center gap-1">
+                            <Button 
+                              variant="outline" 
+                              size="icon"
+                              disabled={currentPage === 1}
+                              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                            >
+                              <ChevronLeft className="h-4 w-4" />
+                            </Button>
+                            
+                            <div className="text-sm px-4">
+                              Page {currentPage} of {totalPages}
+                            </div>
+                            
+                            <Button 
+                              variant="outline" 
+                              size="icon"
+                              disabled={currentPage === totalPages}
+                              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                            >
+                              <ChevronRight className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center">
+                      <h3 className="text-lg font-medium">No lawyers found</h3>
+                      <p className="text-gray-500 mt-2">Try adjusting your search or filters</p>
+                      <Button onClick={handleResetFilters} className="mt-4">
+                        Reset Filters
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
             </>
           ) : (
             <LawyerProfile 
-              lawyer={selectedLawyer} 
+              lawyer={selectedLawyer as any} 
               onClose={() => setSelectedLawyer(null)} 
             />
           )}
