@@ -12,7 +12,7 @@ import {
 import { useLanguage } from "@/contexts/LanguageContext";
 import useTranslation from "@/hooks/useTranslation";
 import TranslatedText from "@/components/TranslatedText";
-import scaleImg from "@/assets/images/logo.png";
+import scaleImg from "@/assets/images/icon.png";
 
 // SVG Icons
 const UserIcon = () => (

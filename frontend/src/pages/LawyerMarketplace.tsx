@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,7 +7,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/components/ui/slider";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import LawyerProfile from "@/components/LawyerProfile";
 import { Pagination } from "@/components/ui/pagination";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Info, Search, Filter, AlertCircle, ChevronLeft, ChevronRight, List, Grid } from "lucide-react";
@@ -48,6 +48,7 @@ interface FilterOptions {
 }
 
 const LawyerMarketplace = () => {
+  const navigate = useNavigate();
   // State for lawyers data and loading status
   const [lawyers, setLawyers] = useState<Lawyer[]>([]);
   const [loading, setLoading] = useState(true);
@@ -82,7 +83,6 @@ const LawyerMarketplace = () => {
   
   // UI state
   const [showFilters, setShowFilters] = useState(false);
-  const [selectedLawyer, setSelectedLawyer] = useState<Lawyer | null>(null);
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
   
   // Fetch available filter options
@@ -248,457 +248,397 @@ const LawyerMarketplace = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-grow py-8 px-4">
-        <div className="max-w-7xl mx-auto">
-          {!selectedLawyer ? (
-            <>
-              <div className="mb-8">
-                <h1 className="text-3xl font-serif font-bold text-lawxpert-navy dark:text-white">
-                  Find & Hire Legal Experts
-                </h1>
-                <p className="text-lawxpert-slate dark:text-gray-300 mt-2">
-                  Connect with experienced attorneys for personalized legal assistance
-                </p>
+        <div className="container mx-auto max-w-7xl">
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-2xl font-bold">Find a Lawyer</h1>
+            <Button
+              variant="outline"
+              onClick={() => setShowFilters(!showFilters)}
+              className="md:hidden"
+            >
+              <Filter className="h-4 w-4 mr-2" />
+              Filters
+            </Button>
+          </div>
+
+          {/* Main content */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {/* Filter sidebar */}
+            <div className={`md:col-span-1 ${showFilters ? 'block' : 'hidden md:block'}`}>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-4">
+                <div className="relative">
+                  <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
+                  <Input
+                    type="text"
+                    placeholder="Search lawyers..."
+                    className="pl-8"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
               </div>
-              
-              <div className="flex flex-col lg:flex-row gap-6 mb-8">
-                {/* Search and filters */}
-                <div className="w-full lg:w-1/4">
-                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-4">
-                    <div className="relative">
-                      <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
-                      <Input
-                        placeholder="Search lawyers..."
-                        value={searchTerm}
-                        onChange={(e) => {
-                          setSearchTerm(e.target.value);
-                          setCurrentPage(1); // Reset to first page on search
-                        }}
-                        className="pl-8"
-                      />
+
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 space-y-4">
+                <h3 className="font-medium">Filters</h3>
+                
+                <div>
+                  <label className="text-sm font-medium mb-1 block">Location</label>
+                  <Select value={locationFilter} onValueChange={setLocationFilter}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="All lawyers" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All lawyers</SelectItem>
+                      {filterOptions.locations.map((location) => (
+                        <SelectItem key={location} value={location}>
+                          {location}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium mb-1 block">Practice Areas</label>
+                  <Select value={practiceAreaFilter} onValueChange={setPracticeAreaFilter}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="All practice areas" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All practice areas</SelectItem>
+                      {filterOptions.practiceAreas.map((area) => (
+                        <SelectItem key={area} value={area}>
+                          {area}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium mb-1 block">Languages</label>
+                  <Select value={languageFilter} onValueChange={setLanguageFilter}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="All languages" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All languages</SelectItem>
+                      {filterOptions.languages.map((language) => (
+                        <SelectItem key={language} value={language}>
+                          {language}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium mb-1 block">Courts</label>
+                  <Select value={courtFilter} onValueChange={setCourtFilter}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="All courts" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All courts</SelectItem>
+                      {filterOptions.courts.map((court) => (
+                        <SelectItem key={court} value={court}>
+                          {court}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium mb-1 block">Verified</label>
+                  <Select value={verifiedFilter} onValueChange={setVerifiedFilter}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="All lawyers" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All lawyers</SelectItem>
+                      <SelectItem value="true">Verified only</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium mb-1 block">Rating</label>
+                  <div className="px-2">
+                    <Slider
+                      defaultValue={ratingRange}
+                      min={filterOptions.ratingRange.min}
+                      max={filterOptions.ratingRange.max}
+                      step={0.5}
+                      onValueChange={setRatingRange}
+                    />
+                    <div className="flex justify-between text-xs text-gray-500 mt-1">
+                      <span>{ratingRange[0]}</span>
+                      <span>{ratingRange[1]}</span>
                     </div>
-                  </div>
-                  
-                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
-                    <div 
-                      className="p-4 flex justify-between items-center cursor-pointer"
-                      onClick={() => setShowFilters(!showFilters)}
-                    >
-                      <h3 className="font-medium">Filters</h3>
-                      <Filter size={18} />
-                    </div>
-                    
-                    {showFilters && (
-                      <div className="p-4 border-t">
-                        {/* Location filter */}
-                        <div className="mb-4">
-                          <label className="block text-sm font-medium mb-2">Location</label>
-                          <Select 
-                            value={locationFilter} 
-                            onValueChange={(value) => {
-                              setLocationFilter(value);
-                              setCurrentPage(1);
-                            }}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="All locations" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="all">All locations</SelectItem>
-                              {filterOptions.locations.map((location) => (
-                                <SelectItem key={location} value={location}>
-                                  {location}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        
-                        {/* Practice Area filter */}
-                        <div className="mb-4">
-                          <label className="block text-sm font-medium mb-2">Practice Area</label>
-                          <Select 
-                            value={practiceAreaFilter} 
-                            onValueChange={(value) => {
-                              setPracticeAreaFilter(value);
-                              setCurrentPage(1);
-                            }}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="All practice areas" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="all">All practice areas</SelectItem>
-                              {filterOptions.practiceAreas.map((area) => (
-                                <SelectItem key={area} value={area}>
-                                  {area}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        
-                        {/* Language filter */}
-                        <div className="mb-4">
-                          <label className="block text-sm font-medium mb-2">Language</label>
-                          <Select 
-                            value={languageFilter} 
-                            onValueChange={(value) => {
-                              setLanguageFilter(value);
-                              setCurrentPage(1);
-                            }}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="All languages" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="all">All languages</SelectItem>
-                              {filterOptions.languages.map((language) => (
-                                <SelectItem key={language} value={language}>
-                                  {language}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        
-                        {/* Courts filter */}
-                        <div className="mb-4">
-                          <label className="block text-sm font-medium mb-2">Court</label>
-                          <Select 
-                            value={courtFilter} 
-                            onValueChange={(value) => {
-                              setCourtFilter(value);
-                              setCurrentPage(1);
-                            }}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="All courts" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="all">All courts</SelectItem>
-                              {filterOptions.courts.map((court) => (
-                                <SelectItem key={court} value={court}>
-                                  {court}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        
-                        {/* Verified filter */}
-                        <div className="mb-4">
-                          <label className="block text-sm font-medium mb-2">Verification Status</label>
-                          <Select 
-                            value={verifiedFilter} 
-                            onValueChange={(value) => {
-                              setVerifiedFilter(value);
-                              setCurrentPage(1);
-                            }}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="All lawyers" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="all">All lawyers</SelectItem>
-                              <SelectItem value="true">Verified only</SelectItem>
-                              <SelectItem value="false">Unverified only</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        
-                        {/* Rating filter */}
-                        <div className="mb-4">
-                          <label className="block text-sm font-medium mb-2">
-                            Rating Range: {ratingRange[0]} - {ratingRange[1]}
-                          </label>
-                          <Slider
-                            min={filterOptions.ratingRange.min}
-                            max={filterOptions.ratingRange.max}
-                            step={0.5}
-                            value={ratingRange}
-                            onValueChange={(value) => {
-                              setRatingRange(value);
-                              setCurrentPage(1);
-                            }}
-                            className="mt-2"
-                          />
-                        </div>
-                        
-                        {/* Experience filter */}
-                        <div className="mb-4">
-                          <label className="block text-sm font-medium mb-2">
-                            Experience: {experienceRange[0]} - {experienceRange[1]} years
-                          </label>
-                          <Slider
-                            min={filterOptions.experienceRange.min}
-                            max={filterOptions.experienceRange.max}
-                            step={1}
-                            value={experienceRange}
-                            onValueChange={(value) => {
-                              setExperienceRange(value);
-                              setCurrentPage(1);
-                            }}
-                            className="mt-2"
-                          />
-                        </div>
-                        
-                        {/* Sort options */}
-                        <div className="mb-4">
-                          <label className="block text-sm font-medium mb-2">Sort By</label>
-                          <div className="flex items-center gap-2">
-                            <Select 
-                              value={sortBy} 
-                              onValueChange={setSortBy}
-                            >
-                              <SelectTrigger className="flex-1">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="rating">Rating</SelectItem>
-                                <SelectItem value="name">Name</SelectItem>
-                                <SelectItem value="experience">Experience</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            
-                            <Select 
-                              value={sortOrder} 
-                              onValueChange={setSortOrder}
-                            >
-                              <SelectTrigger className="w-32">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="asc">Ascending</SelectItem>
-                                <SelectItem value="desc">Descending</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-                        </div>
-                        
-                        <Button 
-                          variant="outline" 
-                          className="w-full mt-2"
-                          onClick={handleResetFilters}
-                        >
-                          Reset Filters
-                        </Button>
-                      </div>
-                    )}
                   </div>
                 </div>
                 
-                {/* Lawyer listings */}
-                <div className="w-full lg:w-3/4">
-                  {loading ? (
-                    <div className="grid grid-cols-1 gap-4">
-                      {renderSkeletons()}
+                <div>
+                  <label className="text-sm font-medium mb-1 block">Experience (years)</label>
+                  <div className="px-2">
+                    <Slider
+                      defaultValue={experienceRange}
+                      min={filterOptions.experienceRange.min}
+                      max={filterOptions.experienceRange.max}
+                      step={1}
+                      onValueChange={setExperienceRange}
+                    />
+                    <div className="flex justify-between text-xs text-gray-500 mt-1">
+                      <span>{experienceRange[0]} years</span>
+                      <span>{experienceRange[1]} years</span>
                     </div>
-                  ) : error ? (
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center">
-                      <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-                      <h3 className="text-lg font-medium">Error loading lawyers</h3>
-                      <p className="text-gray-500 mt-2">{error}</p>
-                      <Button onClick={() => window.location.reload()} className="mt-4">
-                        Try Again
-                      </Button>
-                    </div>
-                  ) : lawyers.length > 0 ? (
-                    <>
-                      <div className="mb-4 flex justify-between items-center">
-                        <div className="text-sm text-gray-500">
-                          Showing {lawyers.length} of {totalResults} lawyers
-                          {locationFilter !== "all" && (
-                            <> in <span className="font-medium">{locationFilter}</span></>
-                          )}
-                          {practiceAreaFilter !== "all" && (
-                            <> specializing in <span className="font-medium">{practiceAreaFilter}</span></>
-                          )}
-                        </div>
-                        
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm text-gray-500">View:</span>
-                          <Button
-                            variant={viewMode === "list" ? "default" : "outline"}
-                            size="icon"
-                            onClick={() => setViewMode("list")}
-                            className="h-8 w-8"
-                          >
-                            <List className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant={viewMode === "grid" ? "default" : "outline"}
-                            size="icon"
-                            onClick={() => setViewMode("grid")}
-                            className="h-8 w-8"
-                          >
-                            <Grid className="h-4 w-4" />
-                          </Button>
-                        </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium mb-1 block">Sort By</label>
+                  <Select value={sortBy} onValueChange={setSortBy}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Sort by" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="rating">Rating</SelectItem>
+                      <SelectItem value="experience">Experience</SelectItem>
+                      <SelectItem value="name">Name</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  
+                  <div className="flex justify-end mt-2">
+                    <Select value={sortOrder} onValueChange={setSortOrder}>
+                      <SelectTrigger className="w-32">
+                        <SelectValue placeholder="Order" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="asc">Ascending</SelectItem>
+                        <SelectItem value="desc">Descending</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                
+                <Button variant="outline" onClick={handleResetFilters} className="w-full">
+                  Reset Filters
+                </Button>
+              </div>
+            </div>
+            
+            {/* Results section */}
+            <div className="md:col-span-3">
+              <div className="space-y-4">
+                {loading ? (
+                  renderSkeletons()
+                ) : error ? (
+                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center">
+                    <h3 className="text-lg font-medium">Error loading lawyers</h3>
+                    <p className="text-gray-500 mt-2">{error}</p>
+                    <Button onClick={() => window.location.reload()} className="mt-4">
+                      Try Again
+                    </Button>
+                  </div>
+                ) : lawyers.length > 0 ? (
+                  <>
+                    <div className="mb-4 flex justify-between items-center">
+                      <div className="text-sm text-gray-500">
+                        Showing {lawyers.length} of {totalResults} lawyers
+                        {locationFilter !== "all" && (
+                          <> in <span className="font-medium">{locationFilter}</span></>
+                        )}
+                        {practiceAreaFilter !== "all" && (
+                          <> specializing in <span className="font-medium">{practiceAreaFilter}</span></>
+                        )}
                       </div>
                       
-                      <div className={viewMode === "list" ? "grid grid-cols-1 gap-4" : "grid grid-cols-1 md:grid-cols-2 gap-4"}>
-                        {lawyers.map((lawyer) => (
-                          <div 
-                            key={lawyer.name} 
-                            className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden"
-                          >
-                            <div className="p-4">
-                              <div className="flex items-start gap-4">
-                                <div className="relative h-20 w-20 rounded-full overflow-hidden flex-shrink-0">
-                                  {/* Blurred background layer */}
-                                  <div 
-                                    className="absolute inset-0" 
-                                    style={{
-                                      backgroundImage: `url(${lawyer.img_url || lawyer.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(lawyer.name)}&background=random`})`,
-                                      backgroundPosition: 'center',
-                                      backgroundSize: 'cover',
-                                      filter: 'blur(10px) brightness(0.8)',
-                                      transform: 'scale(1.2)'
-                                    }}
-                                  />
-                                  {/* Main image centered */}
-                                  <img 
-                                    src={lawyer.img_url || lawyer.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(lawyer.name)}&background=random`} 
-                                    alt={lawyer.name}
-                                    className="relative h-full w-full object-cover object-center z-10"
-                                  />
-                                </div>
-                                
-                                <div className="flex-1">
-                                  <div className="flex justify-between items-start">
-                                    <div>
-                                      <div className="flex items-center gap-1">
-                                        <h3 className="font-semibold text-lg">{lawyer.name}</h3>
-                                        {lawyer.is_verified && (
-                                          <Badge variant="secondary" className="ml-1 h-5 bg-blue-600 text-white">Verified</Badge>
-                                        )}
-                                      </div>
-                                      <p className="text-sm text-gray-500">
-                                        {formatPracticeAreas(lawyer.practice_areas)}
-                                      </p>
-                                    </div>
-                                    
-                                    <div className="flex items-center">
-                                      <svg className="h-4 w-4 fill-yellow-400 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                                      </svg>
-                                      <span className="ml-1 text-sm font-medium">{lawyer.rating}</span>
-                                      <span className="text-xs text-gray-500 ml-1">({lawyer.rating_count || lawyer.reviews || "N/A"})</span>
-                                    </div>
-                                  </div>
-                                  
-                                  <div className="mt-2 flex flex-wrap gap-1">
-                                    <Badge variant="outline" className="mr-1">{lawyer.experience}</Badge>
-                                    {lawyer.languages.slice(0, 3).map(lang => (
-                                      <Badge key={lang} variant="secondary" className="mr-1 text-white">{lang}</Badge>
-                                    ))}
-                                    {lawyer.languages.length > 3 && (
-                                      <Badge variant="secondary">+{lawyer.languages.length - 3} more</Badge>
-                                    )}
-                                  </div>
-                                </div>
+                      <div className="hidden md:flex items-center gap-2">
+                        <span className="text-sm text-gray-500">View:</span>
+                        <Button
+                          variant={viewMode === "list" ? "default" : "outline"}
+                          size="icon"
+                          onClick={() => setViewMode("list")}
+                          className="h-8 w-8"
+                        >
+                          <List className="h-4 w-4" />
+                        </Button>
+                        <Button 
+                          variant={viewMode === "grid" ? "default" : "outline"}
+                          size="icon"
+                          onClick={() => setViewMode("grid")}
+                          className="h-8 w-8"
+                        >
+                          <Grid className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    <div className={viewMode === "list" ? "grid grid-cols-1 gap-4" : "grid grid-cols-1 md:grid-cols-2 gap-4"}>
+                      {lawyers.map((lawyer) => (
+                        <div 
+                          key={lawyer.name} 
+                          className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden"
+                        >
+                          <div className="p-4">
+                            <div className="flex items-start gap-4">
+                              <div className="relative h-20 w-20 rounded-full overflow-hidden flex-shrink-0">
+                                {/* Blurred background layer */}
+                                <div 
+                                  className="absolute inset-0" 
+                                  style={{
+                                    backgroundImage: `url(${lawyer.img_url || lawyer.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(lawyer.name)}&background=random`})`,
+                                    backgroundPosition: 'center',
+                                    backgroundSize: 'cover',
+                                    filter: 'blur(10px) brightness(0.8)',
+                                    transform: 'scale(1.2)'
+                                  }}
+                                />
+                                {/* Main image centered */}
+                                <img 
+                                  src={lawyer.img_url || lawyer.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(lawyer.name)}&background=random`} 
+                                  alt={lawyer.name}
+                                  className="relative h-full w-full object-cover object-center z-10"
+                                />
                               </div>
                               
-                              {(viewMode === "list" || window.innerWidth < 768) && (
-                                <p className="mt-3 text-sm">
-                                  {lawyer.description || (lawyer.about && lawyer.about[0]) || "Experienced legal professional serving clients with dedication and expertise."}
-                                </p>
-                              )}
+                              <div className="flex-1">
+                                <div className="flex justify-between items-start">
+                                  <div>
+                                    <div className="flex items-center gap-1">
+                                      <h3 className="font-semibold text-lg">{lawyer.name}</h3>
+                                      {lawyer.is_verified && (
+                                        <Badge variant="secondary" className="ml-1 h-5 bg-blue-600 text-white">Verified</Badge>
+                                      )}
+                                    </div>
+                                    <p className="text-sm text-gray-500">
+                                      {formatPracticeAreas(lawyer.practice_areas)}
+                                    </p>
+                                  </div>
+                                  
+                                  <div className="flex items-center">
+                                    <svg className="h-4 w-4 fill-yellow-400 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                    </svg>
+                                    <span className="ml-1 text-sm font-medium">{lawyer.rating}</span>
+                                    <span className="text-xs text-gray-500 ml-1">({lawyer.rating_count || lawyer.reviews || "N/A"})</span>
+                                  </div>
+                                </div>
+                                
+                                <div className="mt-2 flex flex-wrap gap-1">
+                                  <Badge variant="outline" className="mr-1">{lawyer.experience}</Badge>
+                                  {lawyer.languages.slice(0, 3).map(lang => (
+                                    <Badge key={lang} variant="secondary" className="mr-1 text-white">{lang}</Badge>
+                                  ))}
+                                  {lawyer.languages.length > 3 && (
+                                    <Badge variant="secondary">+{lawyer.languages.length - 3} more</Badge>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                            
+                            {(viewMode === "list" || window.innerWidth < 768) && (
+                              <p className="mt-3 text-sm">
+                                {lawyer.description || (lawyer.about && lawyer.about[0]) || "Experienced legal professional serving clients with dedication and expertise."}
+                              </p>
+                            )}
+                            
+                            <div className="mt-4 flex items-center justify-between">
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <div className="flex items-baseline cursor-pointer">
+                                      <span className="font-semibold text-lg blur-sm">${lawyer.hourlyRate}</span>
+                                      <span className="text-gray-500 text-sm ml-1 blur-sm">/hour</span>
+                                      <Info className="h-4 w-4 ml-1 text-gray-400" />
+                                    </div>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p className="w-64 text-xs">
+                                      Contact the lawyer directly first to verify their rates and availability. 
+                                      The rate shown would be updated as an estimate based on your deal, their experience and expertise.
+                                    </p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
                               
-                              <div className="mt-4 flex items-center justify-between">
+                              <div className="flex gap-2">
+                                <Button 
+                                  variant="outline"
+                                  onClick={() => navigate(`/lawyers/${lawyer.id || lawyer.name.replace(/\s+/g, '-').toLowerCase()}`)}
+                                >
+                                  View Profile
+                                </Button>
                                 <TooltipProvider>
                                   <Tooltip>
                                     <TooltipTrigger asChild>
-                                      <div className="flex items-baseline cursor-pointer">
-                                        <span className="font-semibold text-lg blur-sm">${lawyer.hourlyRate}</span>
-                                        <span className="text-gray-500 text-sm ml-1 blur-sm">/hour</span>
-                                        <Info className="h-4 w-4 ml-1 text-gray-400" />
-                                      </div>
+                                      <Button
+                                        onClick={(e) => {
+                                          e.preventDefault();
+                                          toast.info("Booking functionality will be implemented soon. Please view the lawyer's profile for contact information.", {
+                                            duration: 3000
+                                          });
+                                        }}
+                                      >
+                                        Book Consultation
+                                      </Button>
                                     </TooltipTrigger>
                                     <TooltipContent>
                                       <p className="w-64 text-xs">
-                                        Contact the lawyer directly first to verify their rates and availability. 
-                                        The rate shown would be updated as an estimate based on your deal, their experience and expertise.
+                                        Contact the lawyer first to check availability and discuss your legal matter before booking a consultation.
                                       </p>
                                     </TooltipContent>
                                   </Tooltip>
                                 </TooltipProvider>
-                                
-                                <div className="flex gap-2">
-                                  <Button 
-                                    variant="outline"
-                                    onClick={() => setSelectedLawyer(lawyer)}
-                                  >
-                                    View Profile
-                                  </Button>
-                                  <TooltipProvider>
-                                    <Tooltip>
-                                      <TooltipTrigger asChild>
-                                        <Button>
-                                          Book Consultation
-                                        </Button>
-                                      </TooltipTrigger>
-                                      <TooltipContent>
-                                        <p className="w-64 text-xs">
-                                          Contact the lawyer first to check availability and discuss your legal matter before booking a consultation.
-                                        </p>
-                                      </TooltipContent>
-                                    </Tooltip>
-                                  </TooltipProvider>
-                                </div>
                               </div>
                             </div>
                           </div>
-                        ))}
-                      </div>
-                      
-                      {/* Pagination */}
-                      {totalPages > 1 && (
-                        <div className="mt-6 flex justify-center">
-                          <div className="flex items-center gap-1">
-                            <Button 
-                              variant="outline" 
-                              size="icon"
-                              disabled={currentPage === 1}
-                              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                            >
-                              <ChevronLeft className="h-4 w-4" />
-                            </Button>
-                            
-                            <div className="text-sm px-4">
-                              Page {currentPage} of {totalPages}
-                            </div>
-                            
-                            <Button 
-                              variant="outline" 
-                              size="icon"
-                              disabled={currentPage === totalPages}
-                              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                            >
-                              <ChevronRight className="h-4 w-4" />
-                            </Button>
-                          </div>
                         </div>
-                      )}
-                    </>
-                  ) : (
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center">
-                      <h3 className="text-lg font-medium">No lawyers found</h3>
-                      <p className="text-gray-500 mt-2">Try adjusting your search or filters</p>
-                      <Button onClick={handleResetFilters} className="mt-4">
-                        Reset Filters
-                      </Button>
+                      ))}
                     </div>
-                  )}
-                </div>
+                    
+                    {/* Pagination */}
+                    {totalPages > 1 && (
+                      <div className="mt-6 flex justify-center">
+                        <div className="flex items-center gap-1">
+                          <Button 
+                            variant="outline" 
+                            size="icon"
+                            disabled={currentPage === 1}
+                            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                          >
+                            <ChevronLeft className="h-4 w-4" />
+                          </Button>
+                          
+                          <div className="text-sm px-4">
+                            Page {currentPage} of {totalPages}
+                          </div>
+                          
+                          <Button 
+                            variant="outline" 
+                            size="icon"
+                            disabled={currentPage === totalPages}
+                            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                          >
+                            <ChevronRight className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center">
+                    <h3 className="text-lg font-medium">No lawyers found</h3>
+                    <p className="text-gray-500 mt-2">Try adjusting your search or filters</p>
+                    <Button onClick={handleResetFilters} className="mt-4">
+                      Reset Filters
+                    </Button>
+                  </div>
+                )}
               </div>
-            </>
-          ) : (
-            <LawyerProfile 
-              lawyer={selectedLawyer as Lawyer} 
-              onClose={() => setSelectedLawyer(null)} 
-            />
-          )}
+            </div>
+          </div>
         </div>
       </main>
       

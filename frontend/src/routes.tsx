@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Chat from './pages/Chat';
 import LawyerMarketplace from './pages/LawyerMarketplace';
+import LawyerProfilePage from './pages/LawyerProfilePage';
 import Admin from './pages/Admin';
 import Documents from './pages/Documents';
 import Dashboard from './pages/Dashboard';
@@ -33,6 +34,7 @@ const AppRoutes = () => {
           }
         />
         <Route path="/lawyers" element={<LawyerMarketplace />} />
+        <Route path="/lawyers/:id" element={<LawyerProfilePage />} />
         <Route
           path="/admin"
           element={
