@@ -1,3 +1,4 @@
+import { endpoints } from '@/lib/api';
 import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
@@ -46,7 +47,7 @@ export interface AuthResponse {
 const authService = {
   async register(data: RegisterData): Promise<AuthResponse> {
     try {
-      const response = await axios.post(`${API_URL}/auth/register`, data);
+      const response = await axios.post(`${API_URL}${endpoints.auth.register}`, data);
       if (response.data.token) {
         localStorage.setItem('user', JSON.stringify(response.data));
       }
@@ -59,7 +60,7 @@ const authService = {
 
   async login(data: LoginData): Promise<AuthResponse> {
     try {
-      const response = await axios.post(`${API_URL}/auth/login`, data);
+      const response = await axios.post(`${API_URL}${endpoints.auth.login}`, data);
       if (response.data.token) {
         localStorage.setItem('user', JSON.stringify(response.data));
       }

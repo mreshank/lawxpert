@@ -35,7 +35,7 @@ api.interceptors.response.use(
       
       try {
         // Attempt to refresh token
-        const response = await api.post('/auth/refresh');
+        const response = await api.post(endpoints.auth.refresh);
         const { token } = response.data;
         
         // Store new token
@@ -59,15 +59,19 @@ api.interceptors.response.use(
 // API endpoints
 export const endpoints = {
   auth: {
-    login: '/auth/login',
-    register: '/auth/register',
-    logout: '/auth/logout',
-    refresh: '/auth/refresh',
+    login: '/api/auth/login',
+    register: '/api/auth/register',
+    logout: '/api/auth/logout',
+    refresh: '/api/auth/refresh',
   },
   user: {
-    profile: '/user/profile',
-    update: '/user/update',
+    profile: '/api/user/profile',
+    update: '/api/user/update',
   },
+  lawyers: {
+    data: "/api/lawyers",
+
+  }
   // Add more endpoints as needed
 };
 

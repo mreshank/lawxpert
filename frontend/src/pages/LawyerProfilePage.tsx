@@ -4,6 +4,7 @@ import LawyerProfile from "@/components/LawyerProfile";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
+import { endpoints } from "@/lib/api";
 
 interface Lawyer {
   id?: number;
@@ -57,75 +58,85 @@ const LawyerProfilePage = () => {
   const [lawyer, setLawyer] = useState<Lawyer | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   useEffect(() => {
     const fetchLawyerData = async () => {
       setLoading(true);
       setError(null);
-      
+
       try {
         // Check if we're dealing with a numeric ID or a name-based ID
-        const isNumericId = /^\d+$/.test(id || '');
-        
+        const isNumericId = /^\d+$/.test(id || "");
+
         // Fetch lawyer data based on ID type
-        const endpoint = isNumericId 
-          ? `${import.meta.env.VITE_API_BASE_URL}/api/lawyers/${id}`
-          : `${import.meta.env.VITE_API_BASE_URL}/api/lawyers?name=${id?.replace(/-/g, ' ')}`;
-        
+        const endpoint = isNumericId
+          ? `${import.meta.env.VITE_API_BASE_URL}${
+              endpoints.lawyers.data
+            }/${id}`
+          : `${import.meta.env.VITE_API_BASE_URL}${
+              endpoints.lawyers.data
+            }?name=${id?.replace(/-/g, " ")}`;
+
         const response = await fetch(endpoint);
-        
+
         if (!response.ok) {
-          throw new Error('Failed to fetch lawyer data');
+          throw new Error("Failed to fetch lawyer data");
         }
-        
+
         const data = await response.json();
-        
+
         if (data.success) {
           // If we used the name-based endpoint, we'll get an array of lawyers
           // We need to find the one that matches our ID
           if (!isNumericId && Array.isArray(data.data)) {
-            const matchedLawyer = data.data.find(lawyer => 
-              lawyer.name.replace(/\s+/g, '-').toLowerCase() === id
+            const matchedLawyer = data.data.find(
+              (lawyer) => lawyer.name.replace(/\s+/g, "-").toLowerCase() === id
             );
             if (matchedLawyer) {
               setLawyer(matchedLawyer);
             } else {
-              throw new Error('Lawyer not found');
+              throw new Error("Lawyer not found");
             }
           } else {
             setLawyer(data.data);
           }
         } else {
-          throw new Error(data.message || 'Failed to fetch lawyer data');
+          throw new Error(data.message || "Failed to fetch lawyer data");
         }
       } catch (error) {
-        console.error('Error fetching lawyer:', error);
-        setError('Failed to load lawyer data. Please try again.');
-        toast.error('Failed to load lawyer data');
+        console.error("Error fetching lawyer:", error);
+        setError("Failed to load lawyer data. Please try again.");
+        toast.error("Failed to load lawyer data");
       } finally {
         setLoading(false);
       }
     };
-    
+
     if (id) {
       fetchLawyerData();
     }
   }, [id]);
-  
+
   const handleGoBack = () => {
-    navigate('/lawyers');
+    navigate("/lawyers");
   };
-  
+
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto p-6">
-        <Button 
-          variant="ghost" 
-          onClick={handleGoBack}
-          className="mb-4"
-        >
-          <svg className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        <Button variant="ghost" onClick={handleGoBack} className="mb-4">
+          <svg
+            className="h-5 w-5 mr-1"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
           </svg>
           Back to results
         </Button>
@@ -149,33 +160,38 @@ const LawyerProfilePage = () => {
       </div>
     );
   }
-  
+
   if (error || !lawyer) {
     return (
       <div className="max-w-7xl mx-auto p-6">
-        <Button 
-          variant="ghost" 
-          onClick={handleGoBack}
-          className="mb-4"
-        >
-          <svg className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        <Button variant="ghost" onClick={handleGoBack} className="mb-4">
+          <svg
+            className="h-5 w-5 mr-1"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
           </svg>
           Back to results
         </Button>
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 text-center">
           <h2 className="text-xl font-bold mb-4">Lawyer Not Found</h2>
           <p className="text-gray-600 dark:text-gray-300 mb-6">
-            {error || "The lawyer profile you're looking for could not be found."}
+            {error ||
+              "The lawyer profile you're looking for could not be found."}
           </p>
-          <Button onClick={handleGoBack}>
-            Return to Lawyer Marketplace
-          </Button>
+          <Button onClick={handleGoBack}>Return to Lawyer Marketplace</Button>
         </div>
       </div>
     );
   }
-  
+
   return (
     <div className="max-w-7xl mx-auto p-6">
       <LawyerProfile lawyer={lawyer} onClose={handleGoBack} />
@@ -183,4 +199,4 @@ const LawyerProfilePage = () => {
   );
 };
 
-export default LawyerProfilePage; 
+export default LawyerProfilePage;
