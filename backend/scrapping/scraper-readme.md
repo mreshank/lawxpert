@@ -28,17 +28,17 @@ This scraper extracts lawyer profile information from lawrato.com. It's designed
    ```
    cat lawyers_clean_data.json | pbcopy
    ```
-<br/>
+   <br/>
 
-## Quick Scrape & Copy 
+## Quick Scrape & Copy
+
 make sure you're in scrapper folder [```cd backend/scrapping```]
 
 ```
 chmod +x scrape-lawyers.sh
-./scrape-lawyers.sh
+yes | ./scrape-lawyers.sh
 cat lawyers_clean_data.json | pbcopy
 ```
-
 
 ## Features
 
