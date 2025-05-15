@@ -91,28 +91,10 @@ const AnalyzeDocument: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
-      <aside className="w-64 bg-white shadow-lg hidden md:flex flex-col p-6 border-r">
-        <div className="flex items-center mb-8">
-          <FileText className="h-8 w-8 text-blue-600 mr-2" />
-          <span className="text-2xl font-bold text-blue-700">LawXpert</span>
-        </div>
-        <nav className="flex flex-col gap-4">
-          <a href="/analyze" className="text-blue-600 font-semibold flex items-center gap-2">
-            <FileText className="h-5 w-5" /> Analyze
-          </a>
-          <a href="/resources" className="text-gray-600 flex items-center gap-2">
-            <ListChecks className="h-5 w-5" /> Resources
-          </a>
-        </nav>
-        <div className="mt-auto pt-8 text-xs text-gray-400">© 2024 LawXpert</div>
-      </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 p-4 md:p-10">
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-3xl font-bold mb-8 flex items-center gap-3">
+    <div className="min-h-screen flex flex-col">
+      <main className="flex-grow py-8 px-4">
+        <div className="max-w-6xl mx-auto">
+          <h1 className="text-3xl font-serif font-bold text-lawxpert-navy dark:text-white mb-8 flex items-center gap-3">
             <FileText className="h-7 w-7 text-blue-600" />
             <TranslatedText textKey="analyzeDocument" />
           </h1>

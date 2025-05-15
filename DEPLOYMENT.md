@@ -76,7 +76,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: 4000
+        value: 5969
       - key: CONNECTION_STRING
         fromGroup: lawxpert-env
     routes:

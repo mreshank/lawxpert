@@ -4,7 +4,12 @@ import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ButtonProps, buttonVariants } from "@/components/ui/button"
 
-const Pagination = ({ className, ...props }: React.ComponentProps<"nav">) => (
+const Pagination = ({
+  className,
+  ...props
+}: React.ComponentProps<"nav"> & {
+  className?: string
+}) => (
   <nav
     role="navigation"
     aria-label="pagination"
@@ -14,24 +19,27 @@ const Pagination = ({ className, ...props }: React.ComponentProps<"nav">) => (
 )
 Pagination.displayName = "Pagination"
 
-const PaginationContent = React.forwardRef<
-  HTMLUListElement,
-  React.ComponentProps<"ul">
->(({ className, ...props }, ref) => (
+const PaginationContent = ({
+  className,
+  ...props
+}: React.ComponentProps<"ul"> & {
+  className?: string
+}) => (
   <ul
-    ref={ref}
     className={cn("flex flex-row items-center gap-1", className)}
     {...props}
   />
-))
+)
 PaginationContent.displayName = "PaginationContent"
 
-const PaginationItem = React.forwardRef<
-  HTMLLIElement,
-  React.ComponentProps<"li">
->(({ className, ...props }, ref) => (
-  <li ref={ref} className={cn("", className)} {...props} />
-))
+const PaginationItem = ({
+  className,
+  ...props
+}: React.ComponentProps<"li"> & {
+  className?: string
+}) => (
+  <li className={cn("", className)} {...props} />
+)
 PaginationItem.displayName = "PaginationItem"
 
 type PaginationLinkProps = {
@@ -94,7 +102,9 @@ PaginationNext.displayName = "PaginationNext"
 const PaginationEllipsis = ({
   className,
   ...props
-}: React.ComponentProps<"span">) => (
+}: React.ComponentProps<"span"> & {
+  className?: string
+}) => (
   <span
     aria-hidden
     className={cn("flex h-9 w-9 items-center justify-center", className)}

@@ -17,4 +17,4 @@ COPY . .
 EXPOSE $PORT_PYTHON
 
 # Start the FastAPI server, which will use the PORT env variable
-CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT_PYTHON:-6569}"] 
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT_PYTHON:-8000}"] 
