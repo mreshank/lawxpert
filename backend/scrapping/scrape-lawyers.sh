@@ -51,7 +51,9 @@ echo -e "${YELLOW}Step 3: Testing scraper on a single lawyer profile...${NC}"
 read -p "Do you want to test the scraper on a single profile? (y/n): " test_single
 if [[ $test_single == "y" || $test_single == "Y" ]]; then
   read -p "Enter a specific URL (leave blank for default): " specific_url
-  if [ -z "$specific_url" ]; then
+  if [ -z "$specific_url" ] || [[ "$specific_url" == "y" || "$specific_url" == "Y" ]]; then
+    # Use default URL when no input or user accidentally enters "y" again
+    echo "Using default lawyer profile URL..."
     node test-single-scrape.js
   else
     node test-single-scrape.js "$specific_url"
