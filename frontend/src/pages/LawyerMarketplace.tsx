@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import LawyerProfile from "@/components/LawyerProfile";
 import { Pagination } from "@/components/ui/pagination";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Info, Search, Filter, AlertCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { Info, Search, Filter, AlertCircle, ChevronLeft, ChevronRight, List, Grid } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 
@@ -70,11 +70,11 @@ const LawyerMarketplace = () => {
   
   // State for active filters
   const [searchTerm, setSearchTerm] = useState("");
-  const [locationFilter, setLocationFilter] = useState("");
-  const [practiceAreaFilter, setPracticeAreaFilter] = useState("");
-  const [languageFilter, setLanguageFilter] = useState("");
-  const [courtFilter, setCourtFilter] = useState("");
-  const [verifiedFilter, setVerifiedFilter] = useState("");
+  const [locationFilter, setLocationFilter] = useState("all");
+  const [practiceAreaFilter, setPracticeAreaFilter] = useState("all");
+  const [languageFilter, setLanguageFilter] = useState("all");
+  const [courtFilter, setCourtFilter] = useState("all");
+  const [verifiedFilter, setVerifiedFilter] = useState("all");
   const [ratingRange, setRatingRange] = useState([0, 5]);
   const [experienceRange, setExperienceRange] = useState([0, 50]);
   const [sortBy, setSortBy] = useState("rating");
@@ -83,6 +83,7 @@ const LawyerMarketplace = () => {
   // UI state
   const [showFilters, setShowFilters] = useState(false);
   const [selectedLawyer, setSelectedLawyer] = useState<Lawyer | null>(null);
+  const [viewMode, setViewMode] = useState<"list" | "grid">("list");
   
   // Fetch available filter options
   useEffect(() => {
@@ -124,7 +125,7 @@ const LawyerMarketplace = () => {
           page: currentPage.toString(),
           limit: '10',
           search: searchTerm,
-          location: locationFilter,
+          location: locationFilter === "all" ? "" : locationFilter,
           rating_min: ratingRange[0].toString(),
           rating_max: ratingRange[1].toString(),
           experience_min: experienceRange[0].toString(),
@@ -134,19 +135,19 @@ const LawyerMarketplace = () => {
         });
         
         // Add optional filters only if they're selected
-        if (verifiedFilter) {
+        if (verifiedFilter !== "all") {
           params.append('is_verified', verifiedFilter);
         }
         
-        if (languageFilter) {
+        if (languageFilter !== "all") {
           params.append('languages', languageFilter);
         }
         
-        if (practiceAreaFilter) {
+        if (practiceAreaFilter !== "all") {
           params.append('practice_areas', practiceAreaFilter);
         }
         
-        if (courtFilter) {
+        if (courtFilter !== "all") {
           params.append('courts', courtFilter);
         }
         
@@ -192,11 +193,11 @@ const LawyerMarketplace = () => {
   // Handle reset filters
   const handleResetFilters = () => {
     setSearchTerm("");
-    setLocationFilter("");
-    setPracticeAreaFilter("");
-    setLanguageFilter("");
-    setCourtFilter("");
-    setVerifiedFilter("");
+    setLocationFilter("all");
+    setPracticeAreaFilter("all");
+    setLanguageFilter("all");
+    setCourtFilter("all");
+    setVerifiedFilter("all");
     setRatingRange([filterOptions.ratingRange.min, filterOptions.ratingRange.max]);
     setExperienceRange([filterOptions.experienceRange.min, filterOptions.experienceRange.max]);
     setSortBy("rating");
@@ -302,7 +303,7 @@ const LawyerMarketplace = () => {
                               <SelectValue placeholder="All locations" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="">All locations</SelectItem>
+                              <SelectItem value="all">All locations</SelectItem>
                               {filterOptions.locations.map((location) => (
                                 <SelectItem key={location} value={location}>
                                   {location}
@@ -326,7 +327,7 @@ const LawyerMarketplace = () => {
                               <SelectValue placeholder="All practice areas" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="">All practice areas</SelectItem>
+                              <SelectItem value="all">All practice areas</SelectItem>
                               {filterOptions.practiceAreas.map((area) => (
                                 <SelectItem key={area} value={area}>
                                   {area}
@@ -350,7 +351,7 @@ const LawyerMarketplace = () => {
                               <SelectValue placeholder="All languages" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="">All languages</SelectItem>
+                              <SelectItem value="all">All languages</SelectItem>
                               {filterOptions.languages.map((language) => (
                                 <SelectItem key={language} value={language}>
                                   {language}
@@ -374,7 +375,7 @@ const LawyerMarketplace = () => {
                               <SelectValue placeholder="All courts" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="">All courts</SelectItem>
+                              <SelectItem value="all">All courts</SelectItem>
                               {filterOptions.courts.map((court) => (
                                 <SelectItem key={court} value={court}>
                                   {court}
@@ -398,7 +399,7 @@ const LawyerMarketplace = () => {
                               <SelectValue placeholder="All lawyers" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="">All lawyers</SelectItem>
+                              <SelectItem value="all">All lawyers</SelectItem>
                               <SelectItem value="true">Verified only</SelectItem>
                               <SelectItem value="false">Unverified only</SelectItem>
                             </SelectContent>
@@ -503,17 +504,39 @@ const LawyerMarketplace = () => {
                     </div>
                   ) : lawyers.length > 0 ? (
                     <>
-                      <div className="mb-4 text-sm text-gray-500">
-                        Showing {lawyers.length} of {totalResults} lawyers
-                        {locationFilter && (
-                          <> in <span className="font-medium">{locationFilter}</span></>
-                        )}
-                        {practiceAreaFilter && (
-                          <> specializing in <span className="font-medium">{practiceAreaFilter}</span></>
-                        )}
+                      <div className="mb-4 flex justify-between items-center">
+                        <div className="text-sm text-gray-500">
+                          Showing {lawyers.length} of {totalResults} lawyers
+                          {locationFilter !== "all" && (
+                            <> in <span className="font-medium">{locationFilter}</span></>
+                          )}
+                          {practiceAreaFilter !== "all" && (
+                            <> specializing in <span className="font-medium">{practiceAreaFilter}</span></>
+                          )}
+                        </div>
+                        
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm text-gray-500">View:</span>
+                          <Button
+                            variant={viewMode === "list" ? "default" : "outline"}
+                            size="icon"
+                            onClick={() => setViewMode("list")}
+                            className="h-8 w-8"
+                          >
+                            <List className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant={viewMode === "grid" ? "default" : "outline"}
+                            size="icon"
+                            onClick={() => setViewMode("grid")}
+                            className="h-8 w-8"
+                          >
+                            <Grid className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                       
-                      <div className="grid grid-cols-1 gap-4">
+                      <div className={viewMode === "list" ? "grid grid-cols-1 gap-4" : "grid grid-cols-1 md:grid-cols-2 gap-4"}>
                         {lawyers.map((lawyer) => (
                           <div 
                             key={lawyer.name} 
@@ -521,12 +544,25 @@ const LawyerMarketplace = () => {
                           >
                             <div className="p-4">
                               <div className="flex items-start gap-4">
-                                <Avatar className="h-20 w-20">
+                                <div className="relative h-20 w-20 rounded-full overflow-hidden flex-shrink-0">
+                                  {/* Blurred background layer */}
+                                  <div 
+                                    className="absolute inset-0" 
+                                    style={{
+                                      backgroundImage: `url(${lawyer.img_url || lawyer.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(lawyer.name)}&background=random`})`,
+                                      backgroundPosition: 'center',
+                                      backgroundSize: 'cover',
+                                      filter: 'blur(10px) brightness(0.8)',
+                                      transform: 'scale(1.2)'
+                                    }}
+                                  />
+                                  {/* Main image centered */}
                                   <img 
                                     src={lawyer.img_url || lawyer.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(lawyer.name)}&background=random`} 
-                                    alt={lawyer.name} 
+                                    alt={lawyer.name}
+                                    className="relative h-full w-full object-cover object-center z-10"
                                   />
-                                </Avatar>
+                                </div>
                                 
                                 <div className="flex-1">
                                   <div className="flex justify-between items-start">
@@ -534,7 +570,7 @@ const LawyerMarketplace = () => {
                                       <div className="flex items-center gap-1">
                                         <h3 className="font-semibold text-lg">{lawyer.name}</h3>
                                         {lawyer.is_verified && (
-                                          <Badge variant="secondary" className="ml-1 h-5">Verified</Badge>
+                                          <Badge variant="secondary" className="ml-1 h-5 bg-blue-600 text-white">Verified</Badge>
                                         )}
                                       </div>
                                       <p className="text-sm text-gray-500">
@@ -554,7 +590,7 @@ const LawyerMarketplace = () => {
                                   <div className="mt-2 flex flex-wrap gap-1">
                                     <Badge variant="outline" className="mr-1">{lawyer.experience}</Badge>
                                     {lawyer.languages.slice(0, 3).map(lang => (
-                                      <Badge key={lang} variant="secondary" className="mr-1">{lang}</Badge>
+                                      <Badge key={lang} variant="secondary" className="mr-1 text-white">{lang}</Badge>
                                     ))}
                                     {lawyer.languages.length > 3 && (
                                       <Badge variant="secondary">+{lawyer.languages.length - 3} more</Badge>
@@ -563,24 +599,26 @@ const LawyerMarketplace = () => {
                                 </div>
                               </div>
                               
-                              <p className="mt-3 text-sm">
-                                {lawyer.description || (lawyer.about && lawyer.about[0]) || "Experienced legal professional serving clients with dedication and expertise."}
-                              </p>
+                              {(viewMode === "list" || window.innerWidth < 768) && (
+                                <p className="mt-3 text-sm">
+                                  {lawyer.description || (lawyer.about && lawyer.about[0]) || "Experienced legal professional serving clients with dedication and expertise."}
+                                </p>
+                              )}
                               
                               <div className="mt-4 flex items-center justify-between">
                                 <TooltipProvider>
                                   <Tooltip>
                                     <TooltipTrigger asChild>
-                                      <div className="flex items-baseline blur-sm hover:blur-none transition-all duration-300">
-                                        <span className="font-semibold text-lg">${lawyer.hourlyRate}</span>
-                                        <span className="text-gray-500 text-sm ml-1">/hour</span>
+                                      <div className="flex items-baseline cursor-pointer">
+                                        <span className="font-semibold text-lg blur-sm">${lawyer.hourlyRate}</span>
+                                        <span className="text-gray-500 text-sm ml-1 blur-sm">/hour</span>
                                         <Info className="h-4 w-4 ml-1 text-gray-400" />
                                       </div>
                                     </TooltipTrigger>
                                     <TooltipContent>
                                       <p className="w-64 text-xs">
-                                        Contact the lawyer directly to verify their rates and availability. 
-                                        The rate shown is an estimate based on experience and expertise.
+                                        Contact the lawyer directly first to verify their rates and availability. 
+                                        The rate shown would be updated as an estimate based on your deal, their experience and expertise.
                                       </p>
                                     </TooltipContent>
                                   </Tooltip>
@@ -657,7 +695,7 @@ const LawyerMarketplace = () => {
             </>
           ) : (
             <LawyerProfile 
-              lawyer={selectedLawyer as any} 
+              lawyer={selectedLawyer as Lawyer} 
               onClose={() => setSelectedLawyer(null)} 
             />
           )}
