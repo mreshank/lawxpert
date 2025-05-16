@@ -70,7 +70,7 @@ export const endpoints = {
   },
   lawyers: {
     data: "/api/lawyers",
-
+    details: "/api/lawyers/details"
   }
   // Add more endpoints as needed
 };

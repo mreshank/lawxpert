@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -214,7 +214,18 @@ const LawyerProfile = ({ lawyer, onClose }: LawyerProfileProps) => {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
   const [showAllPracticeAreas, setShowAllPracticeAreas] = useState(false);
   const [showAllReviews, setShowAllReviews] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   
+  // Handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // Mock time slots
   const timeSlots = [
     "9:00 AM",
@@ -254,18 +265,12 @@ const LawyerProfile = ({ lawyer, onClose }: LawyerProfileProps) => {
     else return 5;                 // 25% chance - less common
   };
 
-  // Determine which practice areas to show
-  const practiceAreas = lawyer.specialization && lawyer.specialization.length > 0
-    ? [...lawyer.specialization]
-    : lawyer.practice_areas && lawyer.practice_areas.length > 0
-    ? [...lawyer.practice_areas]
-    : ["General Practice"];
-  
+  // Process practice areas
+  const practiceAreas = lawyer.practice_areas || lawyer.specialization || ["General Practice"];
+  const hasMorePracticeAreas = Array.isArray(practiceAreas) && practiceAreas.length > (isMobile ? 2 : 3);
   const displayedPracticeAreas = showAllPracticeAreas 
     ? practiceAreas 
-    : practiceAreas.slice(0, 3);
-  
-  const hasMorePracticeAreas = practiceAreas.length > 3;
+    : (Array.isArray(practiceAreas) ? practiceAreas.slice(0, isMobile ? 2 : 3) : [practiceAreas]);
 
   // Determine which reviews to show
   const reviews = lawyer.popular_reviews || [];
@@ -275,13 +280,13 @@ const LawyerProfile = ({ lawyer, onClose }: LawyerProfileProps) => {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
       {/* Back button */}
-      <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+      <div className="p-3 sm:p-4 border-b border-gray-100 dark:border-gray-700">
         <button
           onClick={onClose}
-          className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 flex items-center"
+          className="flex items-center text-sm sm:text-base font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
         >
           <svg
-            className="h-5 w-5 mr-1"
+            className="h-4 w-4 mr-1"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -298,9 +303,9 @@ const LawyerProfile = ({ lawyer, onClose }: LawyerProfileProps) => {
       </div>
 
       {/* Lawyer header */}
-      <div className="p-6 bg-blue-50 dark:bg-blue-900/20">
-        <div className="flex flex-col md:flex-row gap-6">
-          <div className="relative h-24 w-24 md:h-32 md:w-32 rounded-full overflow-hidden flex-shrink-0 mx-auto md:mx-0">
+      <div className="p-3 sm:p-5 bg-blue-50 dark:bg-blue-900/20">
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="relative h-20 w-20 sm:h-24 sm:w-24 md:h-32 md:w-32 rounded-full overflow-hidden flex-shrink-0 mx-auto sm:mx-0">
             {/* Blurred background layer */}
             <div
               className="absolute inset-0"
@@ -333,27 +338,27 @@ const LawyerProfile = ({ lawyer, onClose }: LawyerProfileProps) => {
           </div>
 
           <div className="flex-1">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div>
-                <div className="flex items-center gap-2">
-                  <h1 className="text-2xl font-bold">{lawyer.name}</h1>
+            <div className="flex flex-col gap-3">
+              <div className="text-center sm:text-left">
+                <div className="flex items-center justify-center sm:justify-start gap-2 flex-wrap">
+                  <h1 className="text-xl sm:text-2xl font-bold">{lawyer.name}</h1>
                   {lawyer.is_verified && (
                     <Badge
                       variant="secondary"
-                      className="h-5 bg-blue-600 text-white"
+                      className="h-5 bg-blue-600 text-white text-xs"
                     >
                       Verified
                     </Badge>
                   )}
                 </div>
-                <p className="text-gray-600 dark:text-gray-300">
-                  <div className="flex flex-wrap gap-x-2 gap-y-1 items-center mt-1">
+                <div className="mt-1">
+                  <div className="flex flex-wrap gap-x-1.5 gap-y-1 items-center justify-center sm:justify-start">
                     {displayedPracticeAreas.map((v) => {
                       return (
                         <Badge
                           key={v}
                           variant="outline"
-                          className="bg-blue-50 dark:bg-blue-900/20 text-blue-950 dark:text-blue-300"
+                          className="bg-blue-50 dark:bg-blue-900/20 text-blue-950 dark:text-blue-300 text-xs py-0 h-5"
                         >
                           {v}
                         </Badge>
@@ -363,141 +368,148 @@ const LawyerProfile = ({ lawyer, onClose }: LawyerProfileProps) => {
                     {hasMorePracticeAreas && (
                       <button 
                         onClick={() => setShowAllPracticeAreas(!showAllPracticeAreas)}
-                        className="text-sm text-blue-600 dark:text-blue-400 ml-1"
+                        className="text-xs text-blue-600 dark:text-blue-400 ml-1"
                       >
-                        {showAllPracticeAreas ? "Show less" : `+${practiceAreas.length - 3} more`}
+                        {showAllPracticeAreas ? "Show less" : `+${practiceAreas.length - (isMobile ? 2 : 3)} more`}
                       </button>
                     )}
                   </div>
-                </p>
+                </div>
 
-                <div className="flex items-center mt-2">
+                <div className="flex items-center justify-center sm:justify-start mt-1.5">
                   <StarIcon />
-                  <span className="ml-1 font-medium">{lawyer.rating}</span>
-                  <span className="text-sm text-gray-500 ml-1">
+                  <span className="ml-1 font-medium text-sm">{lawyer.rating}</span>
+                  <span className="text-xs text-gray-500 ml-1">
                     ({lawyer.reviews || lawyer.rating_count || "N/A"} reviews)
                   </span>
                 </div>
               </div>
 
-              <div className="flex flex-col items-start md:items-end">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div className="flex flex-nowrap text-nowrap items-center gap-2">
-                        <Badge
-                          variant="outline"
-                          className="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
-                        >
-                          Contact for pricing
-                        </Badge>
-                        <Info className="h-4 w-4 text-blue-500" />
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p className="w-64 text-xs">
-                        Contact the lawyer directly first to verify their rates
-                        and availability. The rate shown would be updated as an
-                        estimate based on your deal, their experience and
-                        expertise.
-                      </p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+              <div className="flex flex-col items-center sm:items-start mt-1 sm:mt-0">
+                <div className="flex flex-wrap gap-1.5 justify-center sm:justify-start">
+                  <Badge variant="outline" className="text-xs py-0 h-5">{lawyer.experience}</Badge>
+                  {lawyer.languages.slice(0, isMobile ? 2 : 3).map((lang) => (
+                    <Badge key={lang} variant="secondary" className="text-white text-xs py-0 h-5">
+                      {lang}
+                    </Badge>
+                  ))}
+                  {lawyer.languages.length > (isMobile ? 2 : 3) && (
+                    <Badge variant="secondary" className="text-white text-xs py-0 h-5">
+                      +{lawyer.languages.length - (isMobile ? 2 : 3)} more
+                    </Badge>
+                  )}
+                  {lawyer.courts && lawyer.courts.length > 0 && !isMobile && (
+                    <Badge variant="outline" className="text-xs py-0 h-5">
+                      {lawyer.courts[0]}
+                    </Badge>
+                  )}
+                </div>
+                
+                <div className="flex flex-col sm:flex-row items-center gap-2 mt-3 w-full sm:w-auto">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className="flex items-center gap-1 text-xs">
+                          <Badge
+                            variant="outline"
+                            className="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 text-xs"
+                          >
+                            Contact for pricing
+                          </Badge>
+                          <Info className="h-3.5 w-3.5 text-blue-500" />
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p className="w-64 text-xs">
+                          Contact the lawyer directly first to verify their rates
+                          and availability. The rate shown would be updated as an
+                          estimate based on your deal, their experience and
+                          expertise.
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
 
-                <Button className="mt-2">Book Consultation</Button>
+                  <Button className="mt-2 sm:mt-0 text-sm h-8 px-3 w-full sm:w-auto">Book Consultation</Button>
+                </div>
               </div>
-            </div>
-
-            <div className="mt-4 flex flex-wrap gap-2">
-              <Badge variant="outline">{lawyer.experience}</Badge>
-              {lawyer.languages.map((lang) => (
-                <Badge key={lang} variant="secondary" className="text-white">
-                  {lang}
-                </Badge>
-              ))}
-              {lawyer.courts && lawyer.courts.length > 0 && (
-                <Badge variant="outline" className="ml-2">
-                  {lawyer.courts[0]}
-                </Badge>
-              )}
             </div>
           </div>
         </div>
       </div>
 
       {/* Content tabs */}
-      <Tabs defaultValue="about" className="p-6">
-        <TabsList className="grid w-full grid-cols-4 mb-4">
+      <Tabs defaultValue="about" className="p-3 sm:p-5">
+        <TabsList className="grid w-full grid-cols-4 mb-3 sm:mb-4">
           <TabsTrigger
             value="about"
-            className="data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:font-medium"
+            className="text-xs sm:text-sm py-1.5 data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:font-medium"
           >
             About
           </TabsTrigger>
           <TabsTrigger
             value="experience"
-            className="data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:font-medium"
+            className="text-xs sm:text-sm py-1.5 data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:font-medium"
           >
             Experience
           </TabsTrigger>
           <TabsTrigger
             value="reviews"
-            className="data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:font-medium"
+            className="text-xs sm:text-sm py-1.5 data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:font-medium"
           >
             Reviews
           </TabsTrigger>
           <TabsTrigger
             value="booking"
-            className="data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:font-medium"
+            className="text-xs sm:text-sm py-1.5 data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:font-medium"
           >
             Book
           </TabsTrigger>
         </TabsList>
 
         {/* About tab */}
-        <TabsContent value="about" className="mt-4">
-          <h2 className="text-xl font-semibold mb-3">About {lawyer.name}</h2>
-          <div className="space-y-4">
+        <TabsContent value="about" className="mt-3">
+          <h2 className="text-lg sm:text-xl font-semibold mb-2">About {lawyer.name}</h2>
+          <div className="space-y-3">
             {lawyer.about && lawyer.about.map((paragraph, index) => (
-              <p key={index} className="text-gray-700 dark:text-gray-300">
+              <p key={index} className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
                 {paragraph}
               </p>
             ))}
             {(!lawyer.about || lawyer.about.length === 0) && (
-              <p className="text-gray-700 dark:text-gray-300">
+              <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
                 Experienced legal professional serving clients with dedication and expertise.
               </p>
             )}
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div>
-              <h3 className="font-medium mb-2 flex items-center">
+              <h3 className="font-medium mb-1.5 flex items-center text-sm sm:text-base">
                 <MapPinIcon />
                 Office Location
               </h3>
-              <p className="text-gray-700 dark:text-gray-300">
+              <p className="text-sm text-gray-700 dark:text-gray-300">
                 {lawyer.location || "Contact for address details"}
               </p>
               
-              <h3 className="font-medium mb-2 mt-4 flex items-center">
+              <h3 className="font-medium mb-1.5 mt-3 flex items-center text-sm sm:text-base">
                 <MailIcon />
                 Contact Information
               </h3>
-              <p className="text-gray-700 dark:text-gray-300">
+              <p className="text-sm text-gray-700 dark:text-gray-300">
                 Contact through LawXpert platform to connect with this lawyer
               </p>
               
               {lawyer.courts && lawyer.courts.length > 0 && (
                 <>
-                  <h3 className="font-medium mb-2 mt-4 flex items-center">
+                  <h3 className="font-medium mb-1.5 mt-3 flex items-center text-sm sm:text-base">
                     <BriefcaseIcon />
                     Courts
                   </h3>
-                  <ul className="space-y-1">
+                  <ul className="space-y-0.5">
                     {lawyer.courts.map((court, index) => (
-                      <li key={index} className="text-gray-700 dark:text-gray-300">
+                      <li key={index} className="text-sm text-gray-700 dark:text-gray-300">
                         {court}
                       </li>
                     ))}
@@ -507,22 +519,22 @@ const LawyerProfile = ({ lawyer, onClose }: LawyerProfileProps) => {
             </div>
             
             <div>
-              <h3 className="font-medium mb-2 flex items-center">
+              <h3 className="font-medium mb-1.5 flex items-center text-sm sm:text-base">
                 <AwardIcon />
                 Experience & Education
               </h3>
               <ul className="space-y-1">
-                <li className="text-gray-700 dark:text-gray-300">
+                <li className="text-sm text-gray-700 dark:text-gray-300">
                   <span className="font-medium">Experience:</span> {lawyer.experience}
                 </li>
                 {lawyer.education && lawyer.education.map((edu, index) => (
-                  <li key={index} className="text-gray-700 dark:text-gray-300">{edu}</li>
+                  <li key={index} className="text-sm text-gray-700 dark:text-gray-300">{edu}</li>
                 ))}
               </ul>
               
               {lawyer.questions_answered && lawyer.questions_answered.length > 0 && (
                 <>
-                  <h3 className="font-medium mb-2 mt-4 flex items-center">
+                  <h3 className="font-medium mb-1.5 mt-3 flex items-center text-sm sm:text-base">
                     <BriefcaseIcon />
                     Sample Case Questions
                   </h3>
@@ -541,13 +553,13 @@ const LawyerProfile = ({ lawyer, onClose }: LawyerProfileProps) => {
               
               {lawyer.certifications && lawyer.certifications.length > 0 && (
                 <>
-                  <h3 className="font-medium mb-2 mt-4 flex items-center">
+                  <h3 className="font-medium mb-1.5 mt-3 flex items-center text-sm sm:text-base">
                     <BriefcaseIcon />
                     Certifications
                   </h3>
                   <ul className="space-y-1">
                     {lawyer.certifications.map((cert, index) => (
-                      <li key={index} className="text-gray-700 dark:text-gray-300">{cert}</li>
+                      <li key={index} className="text-sm text-gray-700 dark:text-gray-300">{cert}</li>
                     ))}
                   </ul>
                 </>
