@@ -781,7 +781,7 @@ const LawyerMarketplace = () => {
                                 </Badge>
                               ))}
                               {lawyer.languages.length > (isMobile ? 2 : 3) && (
-                                <Badge variant="secondary" className="text-[10px] sm:text-xs px-1.5 py-0 h-5">
+                                <Badge variant="secondary" className="text-[10px] sm:text-xs px-1.5 py-0 h-5 text-white">
                                   +{lawyer.languages.length - (isMobile ? 2 : 3)} more
                                 </Badge>
                               )}
