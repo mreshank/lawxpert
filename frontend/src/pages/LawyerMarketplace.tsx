@@ -308,7 +308,7 @@ const LawyerMarketplace = () => {
   
   return (
     <div className="min-h-screen flex flex-col">
-      <main className="flex-1 w-full max-w-7xl mx-auto px-2 sm:px-4 md:px-6">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-2 sm:px-4 md:px-6 pb-4">
         <div className="mt-4 mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
             Find a Lawyer
@@ -323,202 +323,251 @@ const LawyerMarketplace = () => {
           <div
             className={`md:w-64 md:flex-shrink-0 ${
               showFilters
-                ? "bg-white dark:bg-gray-800 md:bg-transparent md:dark:bg-transparent fixed inset-0 z-40 overflow-y-auto md:static md:overflow-visible"
+                ? "bg-white/20 backdrop-blur-sm dark:bg-gray-800 md:bg-transparent md:dark:bg-transparent fixed inset-0 z-40 overflow-y-auto md:static md:overflow-visible"
                 : "hidden md:block"
             }`}
           >
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-4">
-              <div className="relative">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
-                <Input
-                  type="text"
-                  placeholder="Search lawyers..."
-                  className="pl-8"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
-            </div>
+            {/* Mobile overlay background */}
+            {showFilters && (
+              <div 
+                className="md:hidden fixed inset-0 bg-gray-800/20 z-40"
+                onClick={() => setShowFilters(false)}
+              />
+            )}
             
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 space-y-4">
-              <h3 className="font-medium">Filters</h3>
-
-              <div>
-                <label className="text-sm font-medium mb-1 block">
-                  Location
-                </label>
-                <Select
-                  value={locationFilter}
-                  onValueChange={setLocationFilter}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="All lawyers" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All lawyers</SelectItem>
-                    {filterOptions.locations.map((location) => (
-                      <SelectItem key={location} value={location}>
-                        {location}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium mb-1 block">
-                  Practice Areas
-                </label>
-                <Select
-                  value={practiceAreaFilter}
-                  onValueChange={setPracticeAreaFilter}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="All practice areas" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All practice areas</SelectItem>
-                    {filterOptions.practiceAreas.map((area) => (
-                      <SelectItem key={area} value={area}>
-                        {area}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div>
-                <label className="text-sm font-medium mb-1 block">
-                  Languages
-                </label>
-                <Select 
-                  value={languageFilter}
-                  onValueChange={setLanguageFilter}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="All languages" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All languages</SelectItem>
-                    {filterOptions.languages.map((language) => (
-                      <SelectItem key={language} value={language}>
-                        {language}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium mb-1 block">
-                  Courts
-                </label>
-                <Select value={courtFilter} onValueChange={setCourtFilter}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="All courts" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All courts</SelectItem>
-                    {filterOptions.courts.map((court) => (
-                      <SelectItem key={court} value={court}>
-                        {court}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div>
-                <label className="text-sm font-medium mb-1 block">
-                  Verified
-                </label>
-                <Select
-                  value={verifiedFilter}
-                  onValueChange={setVerifiedFilter}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="All lawyers" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All lawyers</SelectItem>
-                    <SelectItem value="true">Verified only</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium mb-1 block">
-                  Rating
-                </label>
-                <div className="px-2">
-                  <Slider
-                    defaultValue={ratingRange}
-                    min={filterOptions.ratingRange.min}
-                    max={filterOptions.ratingRange.max}
-                    step={0.5}
-                    onValueChange={setRatingRange}
+            {/* Filter content */}
+            <div className={`relative ${showFilters ? "z-50 h-fit md:h-auto mx-4 my-16 pt-4 md:m-0" : ""}`}>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-4">
+                <div className="relative">
+                  <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
+                  <Input
+                    type="text"
+                    placeholder="Search lawyers..."
+                    className="pl-8"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                   />
-                  <div className="flex justify-between text-xs text-gray-500 mt-1">
-                    <span>{ratingRange[0]}</span>
-                    <span>{ratingRange[1]}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium mb-1 block">
-                  Experience (years)
-                </label>
-                <div className="px-2">
-                  <Slider
-                    defaultValue={experienceRange}
-                    min={filterOptions.experienceRange.min}
-                    max={filterOptions.experienceRange.max}
-                    step={1}
-                    onValueChange={setExperienceRange}
-                  />
-                  <div className="flex justify-between text-xs text-gray-500 mt-1">
-                    <span>{experienceRange[0]} years</span>
-                    <span>{experienceRange[1]} years</span>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium mb-1 block">
-                  Sort By
-                </label>
-                <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Sort by" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="rating">Rating</SelectItem>
-                    <SelectItem value="experience">Experience</SelectItem>
-                    <SelectItem value="name">Name</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <div className="flex justify-end mt-2">
-                  <Select value={sortOrder} onValueChange={setSortOrder}>
-                    <SelectTrigger className="w-32">
-                      <SelectValue placeholder="Order" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="asc">Ascending</SelectItem>
-                      <SelectItem value="desc">Descending</SelectItem>
-                    </SelectContent>
-                  </Select>
                 </div>
               </div>
               
-              <Button 
-                variant="outline" 
-                onClick={handleResetFilters}
-                className="w-full"
-              >
-                Reset Filters
-              </Button>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="font-medium">Filters</h3>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="md:hidden h-8 w-8 p-0"
+                    onClick={() => setShowFilters(false)}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </Button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-4">
+                  <div>
+                    <label className="text-sm font-medium mb-1 block">
+                      Location
+                    </label>
+                    <Select
+                      value={locationFilter}
+                      onValueChange={setLocationFilter}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="All lawyers" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All lawyers</SelectItem>
+                        {filterOptions.locations.map((location) => (
+                          <SelectItem key={location} value={location}>
+                            {location}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium mb-1 block">
+                      Practice Areas
+                    </label>
+                    <Select
+                      value={practiceAreaFilter}
+                      onValueChange={setPracticeAreaFilter}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="All practice areas" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All practice areas</SelectItem>
+                        {filterOptions.practiceAreas.map((area) => (
+                          <SelectItem key={area} value={area}>
+                            {area}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div>
+                    <label className="text-sm font-medium mb-1 block">
+                      Languages
+                    </label>
+                    <Select 
+                      value={languageFilter}
+                      onValueChange={setLanguageFilter}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="All languages" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All languages</SelectItem>
+                        {filterOptions.languages.map((language) => (
+                          <SelectItem key={language} value={language}>
+                            {language}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium mb-1 block">
+                      Courts
+                    </label>
+                    <Select value={courtFilter} onValueChange={setCourtFilter}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="All courts" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All courts</SelectItem>
+                        {filterOptions.courts.map((court) => (
+                          <SelectItem key={court} value={court}>
+                            {court}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div>
+                    <label className="text-sm font-medium mb-1 block">
+                      Verified
+                    </label>
+                    <Select
+                      value={verifiedFilter}
+                      onValueChange={setVerifiedFilter}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="All lawyers" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All lawyers</SelectItem>
+                        <SelectItem value="true">Verified only</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* <div className="sm:col-span-2 md:col-span-1"> */}
+                  <div>
+                    <label className="text-sm font-medium mb-1 block">
+                      Sort By
+                    </label>
+                    <div className="flex justify-end mt-2--x gap-4">
+                      <Select value={sortBy} onValueChange={setSortBy}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Sort by" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="rating">Rating</SelectItem>
+                        <SelectItem value="experience">Experience</SelectItem>
+                        <SelectItem value="name">Name</SelectItem>
+                      </SelectContent>
+                    </Select>
+
+                    {/*  */}
+                      <Select value={sortOrder} onValueChange={setSortOrder}>
+                        <SelectTrigger className="w-32">
+                          <SelectValue placeholder="Order" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="asc">Ascending</SelectItem>
+                          <SelectItem value="desc">Descending</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="sm:col-span-2 md:col-span-1">
+                    <label className="text-sm font-medium mb-1 block">
+                      Rating
+                    </label>
+                    <div className="px-2">
+                      <Slider
+                        defaultValue={ratingRange}
+                        min={filterOptions.ratingRange.min}
+                        max={filterOptions.ratingRange.max}
+                        step={0.5}
+                        onValueChange={setRatingRange}
+                      />
+                      <div className="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>{ratingRange[0]}</span>
+                        <span>{ratingRange[1]}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="sm:col-span-2 md:col-span-1">
+                    <label className="text-sm font-medium mb-1 block">
+                      Experience (years)
+                    </label>
+                    <div className="px-2">
+                      <Slider
+                        defaultValue={experienceRange}
+                        min={filterOptions.experienceRange.min}
+                        max={filterOptions.experienceRange.max}
+                        step={1}
+                        onValueChange={setExperienceRange}
+                      />
+                      <div className="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>{experienceRange[0]} years</span>
+                        <span>{experienceRange[1]} years</span>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                
+                <div className="mt-4 sm:col-span-2 md:col-span-1">
+                  <Button 
+                    variant="outline" 
+                    onClick={handleResetFilters}
+                    className="w-full"
+                  >
+                    Reset Filters
+                  </Button>
+                  
+                  {/* Apply filters button - mobile only */}
+                  <Button 
+                    className="w-full mt-2 md:hidden"
+                    onClick={() => setShowFilters(false)}
+                  >
+                    Apply Filters
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -571,9 +620,9 @@ const LawyerMarketplace = () => {
                   }
                 >
                   {sortOrder === "asc" ? (
-                    <ChevronLeft className="h-4 w-4" />
+                    <ChevronLeft className="h-4 w-4 rotate-90" />
                   ) : (
-                    <ChevronRight className="h-4 w-4" />
+                    <ChevronRight className="h-4 w-4 rotate-90" />
                   )}
                 </Button>
               </div>
