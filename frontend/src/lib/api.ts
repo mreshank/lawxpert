@@ -9,6 +9,10 @@ const api = axios.create({
   withCredentials: true, // Important for handling cookies
 });
 
+// Simple in-memory cache
+const cache = new Map();
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
+
 // Request interceptor for adding auth token
 api.interceptors.request.use(
   (config) => {
@@ -16,6 +20,27 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
+    // Add cache handling
+    if (config.method?.toLowerCase() === 'get' && config.cache !== false) {
+      const cacheKey = `${config.url}${JSON.stringify(config.params || {})}`;
+      const cachedResponse = cache.get(cacheKey);
+      
+      if (cachedResponse && Date.now() - cachedResponse.timestamp < CACHE_DURATION) {
+        // Return cached response and abort the request
+        config.adapter = () => {
+          return Promise.resolve({
+            data: cachedResponse.data,
+            status: 200,
+            statusText: 'OK',
+            headers: cachedResponse.headers,
+            config: config,
+            request: null
+          });
+        };
+      }
+    }
+    
     return config;
   },
   (error) => {
@@ -23,9 +48,21 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor for handling common errors
+// Response interceptor for handling common errors and caching
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // Cache GET responses
+    if (response.config.method?.toLowerCase() === 'get' && response.config.cache !== false) {
+      const cacheKey = `${response.config.url}${JSON.stringify(response.config.params || {})}`;
+      cache.set(cacheKey, {
+        data: response.data,
+        headers: response.headers,
+        timestamp: Date.now()
+      });
+    }
+    
+    return response;
+  },
   async (error) => {
     const originalRequest = error.config;
 
@@ -56,6 +93,21 @@ api.interceptors.response.use(
   }
 );
 
+// Method to clear cache
+export const clearCache = (url = null) => {
+  if (url) {
+    // Clear specific cache entries that match the URL
+    cache.forEach((_, key) => {
+      if (key.startsWith(url)) {
+        cache.delete(key);
+      }
+    });
+  } else {
+    // Clear all cache
+    cache.clear();
+  }
+};
+
 // API endpoints
 export const endpoints = {
   auth: {
@@ -70,7 +122,7 @@ export const endpoints = {
   },
   lawyers: {
     data: "/api/lawyers",
-
+    details: "/api/lawyers/details"
   }
   // Add more endpoints as needed
 };
