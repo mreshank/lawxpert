@@ -290,7 +290,7 @@ const LawyerMarketplace = () => {
         </div>
       ));
   };
-
+  
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-grow py-8 px-4">
@@ -305,8 +305,8 @@ const LawyerMarketplace = () => {
               <Filter className="h-4 w-4 mr-2" />
               Filters
             </Button>
-          </div>
-
+              </div>
+              
           {/* Main content */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {/* Filter sidebar */}
@@ -315,19 +315,19 @@ const LawyerMarketplace = () => {
                 showFilters ? "block" : "hidden md:block"
               }`}
             >
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-4">
-                <div className="relative">
+                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-4">
+                    <div className="relative">
                   <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
-                  <Input
+                      <Input
                     type="text"
-                    placeholder="Search lawyers..."
+                        placeholder="Search lawyers..."
                     className="pl-8"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-              </div>
-
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 space-y-4">
                 <h3 className="font-medium">Filters</h3>
 
@@ -373,17 +373,17 @@ const LawyerMarketplace = () => {
                       ))}
                     </SelectContent>
                   </Select>
-                </div>
-
+                    </div>
+                    
                 <div>
                   <label className="text-sm font-medium mb-1 block">
                     Languages
                   </label>
-                  <Select
+                          <Select 
                     value={languageFilter}
                     onValueChange={setLanguageFilter}
-                  >
-                    <SelectTrigger>
+                          >
+                            <SelectTrigger>
                       <SelectValue placeholder="All languages" />
                     </SelectTrigger>
                     <SelectContent>
@@ -404,18 +404,18 @@ const LawyerMarketplace = () => {
                   <Select value={courtFilter} onValueChange={setCourtFilter}>
                     <SelectTrigger>
                       <SelectValue placeholder="All courts" />
-                    </SelectTrigger>
-                    <SelectContent>
+                            </SelectTrigger>
+                            <SelectContent>
                       <SelectItem value="all">All courts</SelectItem>
                       {filterOptions.courts.map((court) => (
                         <SelectItem key={court} value={court}>
                           {court}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        
                 <div>
                   <label className="text-sm font-medium mb-1 block">
                     Verified
@@ -456,9 +456,9 @@ const LawyerMarketplace = () => {
                 <div>
                   <label className="text-sm font-medium mb-1 block">
                     Experience (years)
-                  </label>
+                          </label>
                   <div className="px-2">
-                    <Slider
+                          <Slider
                       defaultValue={experienceRange}
                       min={filterOptions.experienceRange.min}
                       max={filterOptions.experienceRange.max}
@@ -498,16 +498,16 @@ const LawyerMarketplace = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                </div>
-
-                <Button
-                  variant="outline"
+                        </div>
+                        
+                        <Button 
+                          variant="outline" 
                   onClick={handleResetFilters}
                   className="w-full"
-                >
-                  Reset Filters
-                </Button>
-              </div>
+                        >
+                          Reset Filters
+                        </Button>
+                      </div>
             </div>
 
             {/* Results section */}
@@ -571,9 +571,9 @@ const LawyerMarketplace = () => {
                         >
                           <Grid className="h-4 w-4" />
                         </Button>
-                      </div>
-                    </div>
-
+                  </div>
+                </div>
+                
                     <div
                       className={
                         viewMode === "list"
@@ -619,7 +619,7 @@ const LawyerMarketplace = () => {
                                   className="relative h-full w-full object-cover object-center z-10"
                                 />
                               </div>
-
+                              
                               <div className="flex-1">
                                 <div className="flex justify-between items-start">
                                   <div>
@@ -642,7 +642,7 @@ const LawyerMarketplace = () => {
                                       )}
                                     </p>
                                   </div>
-
+                                  
                                   <div className="flex items-center">
                                     <svg
                                       className="h-4 w-4 fill-yellow-400 text-yellow-400"
@@ -663,7 +663,7 @@ const LawyerMarketplace = () => {
                                     </span>
                                   </div>
                                 </div>
-
+                                
                                 <div className="mt-2 flex flex-wrap gap-1">
                                   <Badge variant="outline" className="mr-1">
                                     {lawyer.experience}
@@ -685,7 +685,7 @@ const LawyerMarketplace = () => {
                                 </div>
                               </div>
                             </div>
-
+                            
                             {(viewMode === "list" ||
                               window.innerWidth < 768) && (
                               <p className="mt-3 text-sm">
@@ -694,7 +694,7 @@ const LawyerMarketplace = () => {
                                   "Experienced legal professional serving clients with dedication and expertise."}
                               </p>
                             )}
-
+                            
                             <div className="mt-4 flex items-center justify-between">
                               <TooltipProvider>
                                 <Tooltip>
@@ -707,7 +707,7 @@ const LawyerMarketplace = () => {
                                         /hour
                                       </span>
                                       <Info className="h-4 w-4 ml-1 text-gray-400" />
-                                    </div>
+                              </div>
                                   </TooltipTrigger>
                                   <TooltipContent>
                                     <p className="w-64 text-xs">
@@ -720,9 +720,9 @@ const LawyerMarketplace = () => {
                                   </TooltipContent>
                                 </Tooltip>
                               </TooltipProvider>
-
+                              
                               <div className="flex gap-2">
-                                <Button
+                                <Button 
                                   variant="outline"
                                   onClick={() =>
                                     navigate(
@@ -752,7 +752,7 @@ const LawyerMarketplace = () => {
                                         }}
                                       >
                                         Book Consultation
-                                      </Button>
+                                </Button>
                                     </TooltipTrigger>
                                     <TooltipContent>
                                       <p className="w-64 text-xs">
@@ -821,10 +821,10 @@ const LawyerMarketplace = () => {
           </div>
         </div>
       </main>
-
+      
       <Footer />
     </div>
   );
 };
 
-export default LawyerMarketplace;
+export default LawyerMarketplace; 

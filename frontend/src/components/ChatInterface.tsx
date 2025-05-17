@@ -413,18 +413,20 @@ const ChatInterface = ({ compact = false }: ChatInterfaceProps) => {
               <div className="text-sm font-medium text-blue-800 dark:text-blue-300 mb-2">
                 Common Legal Questions:
               </div>
-              <div className="flex flex-wrap gap-2">
-                {commonLegalQueries.map((query, index) => (
-                  <Button
-                    key={index}
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleCommonQuery(query[language])}
-                    className="text-xs bg-white"
-                  >
-                    {query[language]}
-                  </Button>
-                ))}
+              <div className="flex overflow-x-auto pb-2 hide-scrollbar">
+                <div className="flex flex-nowrap gap-2">
+                  {commonLegalQueries.map((query, index) => (
+                    <Button
+                      key={index}
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleCommonQuery(query[language])}
+                      className="text-xs bg-white whitespace-nowrap flex-shrink-0"
+                    >
+                      {query[language]}
+                    </Button>
+                  ))}
+                </div>
               </div>
             </div>
           )}
