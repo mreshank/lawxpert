@@ -899,7 +899,7 @@ const LawyerMarketplace = () => {
                         <React.Fragment key={page}>
                           {index > 0 &&
                             array[index - 1] !== page - 1 && (
-                              <span className="text-gray-500">...</span>
+                              <span className="text-gray-500 px-2">...</span>
                             )}
                           <Button
                             variant={
