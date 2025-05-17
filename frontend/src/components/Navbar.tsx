@@ -12,7 +12,8 @@ import {
 import { useLanguage } from "@/contexts/LanguageContext";
 import useTranslation from "@/hooks/useTranslation";
 import TranslatedText from "@/components/TranslatedText";
-import scaleImg from "@/assets/images/icon.png";
+// import scaleImg from "@/assets/images/icon.png";
+import scaleImg from "@/assets/apple-touch-icon.png";
 
 // SVG Icons
 const UserIcon = () => (
@@ -207,7 +208,7 @@ const Navbar: React.FC = () => {
 
           {/* Desktop Right Side */}
           <div className="max-md:hidden md:flex items-center space-x-4">
-            <Button variant="ghost" size="icon" className="text-gray-600">
+            <Button variant="ghost" size="icon" className="text-gray-600" aria-label="Toggle dark mode">
               <SunIcon />
             </Button>
 
@@ -217,6 +218,13 @@ const Navbar: React.FC = () => {
               className="text-gray-600"
               onClick={cycleLanguage}
               title={`Switch to ${
+                language === "en"
+                  ? "Hindi"
+                  : language === "hi"
+                  ? "Hinglish"
+                  : "English"
+              }`}
+              aria-label={`Switch to ${
                 language === "en"
                   ? "Hindi"
                   : language === "hi"
@@ -264,6 +272,8 @@ const Navbar: React.FC = () => {
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isOpen}
             >
               {isOpen ? <XIcon /> : <MenuIcon />}
             </button>

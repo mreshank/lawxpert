@@ -30,7 +30,7 @@ const Footer = () => {
           
           {/* Resources */}
           <div>
-            <h3 className="text-gray-400 uppercase text-sm font-semibold mb-4">
+            <h3 className="text-gray-600 uppercase text-sm font-semibold mb-4">
               <TranslatedText textKey="footer_resources" />
             </h3>
             <ul className="space-y-3">
@@ -59,7 +59,7 @@ const Footer = () => {
           
           {/* Legal */}
           <div>
-            <h3 className="text-gray-400 uppercase text-sm font-semibold mb-4">
+            <h3 className="text-gray-600 uppercase text-sm font-semibold mb-4">
               <TranslatedText textKey="footer_legal" />
             </h3>
             <ul className="space-y-3">
@@ -86,7 +86,7 @@ const Footer = () => {
           <p className="text-center text-gray-500 text-sm">
             {tf('footer_copyright', currentYear)}
           </p>
-          <p className="text-center text-gray-400 text-sm mt-2">
+          <p className="text-center text-gray-600 text-sm mt-2">
             <TranslatedText textKey="footer_disclaimer_text" />
           </p>
         </div>

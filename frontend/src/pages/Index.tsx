@@ -36,7 +36,7 @@ const Index = () => {
                 <div className="bg-white w-8 h-8 rounded flex items-center justify-center">
                   <span className="text-blue-600 font-bold">LX</span>
                 </div>
-                <h3 className="text-white font-medium">LawXpert AI Assistant</h3>
+                <h2 className="text-white font-medium">LawXpert AI Assistant</h2>
               </div>
               <div className="p-4">
                 <div className="bg-gray-100 rounded-xl p-4 mb-4">
