@@ -52,6 +52,30 @@ interface Lawyer {
   }[];
 }
 
+// SEO metadata component
+const PageHead = ({ lawyer }: { lawyer: Lawyer | null }) => {
+  if (!lawyer) return null;
+  
+  const title = `${lawyer.name} - Legal Professional | LawXpert`;
+  const description = lawyer.description || 
+    (lawyer.about && lawyer.about[0]) || 
+    `${lawyer.name} is a legal professional with ${lawyer.experience} of experience${lawyer.practice_areas?.length ? ` specializing in ${lawyer.practice_areas.join(', ')}` : ''}.`;
+  
+  return (
+    <head>
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <meta name="keywords" content={`lawyer, attorney, legal services, ${lawyer.practice_areas?.join(', ') || 'legal help'}, ${lawyer.location || ''}`} />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:type" content="profile" />
+      <meta property="og:url" content={`https://lawxpert.eshank.tech/lawyers/${lawyer.id || lawyer.name.replace(/\s+/g, "-").toLowerCase()}`} />
+      <meta property="og:image" content={lawyer.img_url || lawyer.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(lawyer.name)}&size=200`} />
+      <link rel="canonical" href={`https://lawxpert.eshank.tech/lawyers/${lawyer.id || lawyer.name.replace(/\s+/g, "-").toLowerCase()}`} />
+    </head>
+  );
+};
+
 const LawyerProfilePage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -209,9 +233,12 @@ const LawyerProfilePage = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 py-4">
-      <LawyerProfile lawyer={lawyer} onClose={handleGoBack} />
-    </div>
+    <>
+      <PageHead lawyer={lawyer} />
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 py-4">
+        <LawyerProfile lawyer={lawyer} onClose={handleGoBack} />
+      </div>
+    </>
   );
 };
 

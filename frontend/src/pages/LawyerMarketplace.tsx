@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -68,6 +68,16 @@ interface FilterOptions {
   ratingRange: { min: number; max: number };
 }
 
+// Add metaHead for better SEO
+const MetaHead = () => (
+  <head>
+    <title>Find Expert Lawyers | LawXpert</title>
+    <meta name="description" content="Connect with verified lawyers specializing in various practice areas. Filter by location, expertise, languages, and more to find the perfect lawyer for your needs." />
+    <meta name="keywords" content="lawyers, legal help, attorney, law firm, legal consultation, find lawyer" />
+    <link rel="canonical" href="https://lawxpert.eshank.tech/lawyers" />
+  </head>
+);
+
 const LawyerMarketplace = () => {
   const navigate = useNavigate();
   // State for lawyers data and loading status
@@ -107,6 +117,7 @@ const LawyerMarketplace = () => {
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
+  // Add a ref for the scroll position
   // Handle window resize
   useEffect(() => {
     const handleResize = () => {
