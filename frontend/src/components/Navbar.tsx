@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -131,10 +131,47 @@ const Navbar: React.FC = () => {
     }
   };
 
+  const params = useParams();
+  const { documentId = "" } = params;
+
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
+
+  const navigationData = [
+    {
+      label: "Home",
+      path: "/",
+    },
+    {
+      label: "AI Assistant",
+      path: "/chat",
+    },
+    {
+      label: "Analyze Legal Docs",
+      path: "/analyze",
+    },
+    {
+      label: "Find Lawyers",
+      path: "/lawyers",
+    },
+    {
+      label: "Legal Resources",
+      path: "/legal-documentation",
+    },
+    {
+      label: "Documents",
+      path: "/documents",
+    },
+    {
+      label: "Dashboard",
+      path: "/dashboard",
+      protected: true,
+    },
+  ];
+
+  console.log(window.location.pathname);
 
   return (
     <nav className="bg-white shadow-sm border-b fixed--x w-full z-50">
@@ -144,73 +181,42 @@ const Navbar: React.FC = () => {
             <Link to="/" className="flex items-center">
               <div className="bg-blue-600 w-10 h-10 rounded flex items-center justify-center text-white font-bold mr-2">
                 {/* <LawScaleIcon size={32} /> */}
-                <img src={scaleImg} alt="Law Scale" width={32} height={32} className="w-full h-full rounded" />
+                <img
+                  src={scaleImg}
+                  alt="Law Scale"
+                  width={32}
+                  height={32}
+                  className="w-full h-full rounded"
+                />
               </div>
-              <span className="text-gray-800 text-xl font-bold">
-                LegalConnect
-              </span>
+              <span className="text-gray-800 text-xl font-bold">LawXpert</span>
             </Link>
 
             {/* Desktop Navigation Links */}
-            <div className="max-md:hidden md:flex ml-10 space-x-4 flex-1">
-              <Link
-                to="/"
-                className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
-              >
-                <TranslatedText textKey="home" />
-              </Link>
-
-              {/* {user && ( */}
-                <Link
-                  to="/chat"
-                  className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
-                >
-                  <TranslatedText textKey="aiAssistant" />
-                </Link>
-              {/* )} */}
-              <Link
-                to="/lawyers"
-                className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
-              >
-                <TranslatedText textKey="findLawyers" />
-              </Link>
-
-              <Link
-                to="/legal-documentation"
-                className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
-              >
-                <TranslatedText textKey="legalResources" />
-              </Link>
-              <Link
-                to="/analyze"
-                className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
-              >
-                <TranslatedText textKey="analyzeDocument" />
-              </Link>
-              
-              <Link
-                to="/documents"
-                className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
-              >
-                <TranslatedText textKey="documents" />
-              </Link>
-              
-              {user && (
-                <Link
-                  to="/dashboard"
-                  className="text-gray-800 hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-blue-600"
-                >
-                  <TranslatedText textKey="dashboard" />
-                </Link>
+            <div className="max-md:hidden md:flex ml-10 space-x-2 flex-1">
+              {navigationData.map(
+                ({ label, path, protected: isProtected = false }) =>
+                  isProtected && !user ? null : (
+                    <Link
+                      to={path}
+                      className={` hover:text-blue-600 px-3 py-2 text-sm font-medium border-b-2 hover:border-blue-600 ${
+                        path === window.location.pathname
+                          ? "border-blue-600 text-blue-600"
+                          : "border-transparent text-gray-800"
+                      }`}
+                    >
+                      {label}
+                    </Link>
+                  )
               )}
             </div>
           </div>
 
           {/* Desktop Right Side */}
           <div className="max-md:hidden md:flex items-center space-x-4">
-            <Button variant="ghost" size="icon" className="text-gray-600" aria-label="Toggle dark mode">
+            {/* <Button variant="ghost" size="icon" className="text-gray-600" aria-label="Toggle dark mode">
               <SunIcon />
-            </Button>
+            </Button> */}
 
             <Button
               variant="ghost"
@@ -288,105 +294,17 @@ const Navbar: React.FC = () => {
         } md:hidden bg-white shadow-lg relative`}
       >
         <div className="pt-2 pb-4 space-y-1--x absolute top-0 left-0 w-full bg-white/50 backdrop-blur-md shadow-lg">
-          <Link
-            to="/"
-            className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-            onClick={() => setIsOpen(false)}
-          >
-            <TranslatedText textKey="home" />
-          </Link>
-
-          <Link
-            to="/lawyers"
-            className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-            onClick={() => setIsOpen(false)}
-          >
-            <TranslatedText textKey="findLawyers" />
-          </Link>
-
-          <Link
-            to="/legal-documentation"
-            className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-            onClick={() => setIsOpen(false)}
-          >
-            <TranslatedText textKey="legalResources" />
-          </Link>
-          <Link
-            to="/analyze"
-            className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-            onClick={() => setIsOpen(false)}
-          >
-            <TranslatedText textKey="analyzeDocument" />
-          </Link>
-          <Link
-            to="/documents"
-            className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-            onClick={() => setIsOpen(false)}
-          >
-            <TranslatedText textKey="documents" />
-          </Link>
-          {user && (
-            <Link
-              to="/chat"
-              className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-              onClick={() => setIsOpen(false)}
-            >
-              <TranslatedText textKey="aiAssistant" />
-            </Link>
-          )}
-          {user && (
-            <Link
-              to="/dashboard"
-              className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-              onClick={() => setIsOpen(false)}
-            >
-              <TranslatedText textKey="dashboard" />
-            </Link>
-          )}
-
-          {user ? (
-            <>
-              <Link
-                to="/profile"
-                className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-                onClick={() => setIsOpen(false)}
-              >
-                <TranslatedText textKey="profile" />
-              </Link>
-              <Link
-                to="/admin"
-                className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-                onClick={() => setIsOpen(false)}
-              >
-                <TranslatedText textKey="adminDashboard" />
-              </Link>
-              <button
-                className="block w-full text-left px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-                onClick={() => {
-                  handleLogout();
-                  setIsOpen(false);
-                }}
-              >
-                <TranslatedText textKey="logout" />
-              </button>
-            </>
-          ) : (
-            <>
-              <Link
-                to="/login"
-                className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-                onClick={() => setIsOpen(false)}
-              >
-                <TranslatedText textKey="login" />
-              </Link>
-              <Link
-                to="/register"
-                className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-                onClick={() => setIsOpen(false)}
-              >
-                <TranslatedText textKey="signup" />
-              </Link>
-            </>
+          {navigationData.map(
+            ({ label, path, protected: isProtected = false }) =>
+              isProtected && !user ? null : (
+                <Link
+                  to={path}
+                  className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {label}
+                </Link>
+              )
           )}
         </div>
         <div

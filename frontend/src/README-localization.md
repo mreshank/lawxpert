@@ -1,6 +1,6 @@
-# LegalConnect Localization System
+# LawXpert Localization System
 
-This document explains how to use the localization system in LegalConnect to make your components and pages multilingual.
+This document explains how to use the localization system in LawXpert to make your components and pages multilingual.
 
 ## Available Languages
 

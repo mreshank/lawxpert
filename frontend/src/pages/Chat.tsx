@@ -50,10 +50,10 @@ const Chat = () => {
             <div>
               <h1 className="text-3xl font-serif font-bold text-lawxpert-navy dark:text-white">
                 {language === 'en' 
-                  ? "LegalConnect AI Assistant"
+                  ? "LawXpert AI Assistant"
                   : language === 'hi'
                     ? "कानूनी सहायक AI"
-                    : "LegalConnect AI Assistant"}
+                    : "LawXpert AI Assistant"}
               </h1>
               <p className="text-lawxpert-slate dark:text-gray-300 mt-2">
                 {language === 'en' 

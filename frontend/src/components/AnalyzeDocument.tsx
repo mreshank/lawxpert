@@ -95,7 +95,7 @@ const AnalyzeDocument: React.FC = () => {
       <main className="flex-grow py-8 px-4">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-3xl font-serif font-bold text-lawxpert-navy dark:text-white mb-8 flex items-center gap-3">
-            <FileText className="h-7 w-7 text-blue-600" />
+            {/* <FileText className="h-7 w-7 text-blue-600" /> */}
             <TranslatedText textKey="analyzeDocument" />
           </h1>
 
